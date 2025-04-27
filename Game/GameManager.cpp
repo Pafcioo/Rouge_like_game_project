@@ -16,6 +16,7 @@ void GameManager::Play()
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
         inputManager.handleInput(gameWindow)->executeCommand();
+        gameWindow.draw(startButton);
         gameWindow.display();
     }
 }
