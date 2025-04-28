@@ -1,10 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <functional>
+#include "InputManager.h"
+#include "UIElement.h"
 
-class Button : public sf::Drawable {
+class Button : public UIElement {
 public:
-    Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Color& color, const std::string& text, unsigned int characterSize, const sf::Font& font);
+    Button(InputManager& inputManager, const sf::Vector2f& position, const sf::Font& font,const sf::Vector2f& size={0.f,0.f}, const sf::Color& color=sf::Color::White, const std::string& text="", unsigned int characterSize=1);
+    
+    using ClickAction = std::function<void()>;
 
     // Setters
     void setPosition(const sf::Vector2f& position);
@@ -23,17 +28,17 @@ public:
     sf::Color getTextColor() const;
     unsigned int getCharacterSize() const;
 
-    // Hover and click
-    bool isHovered(const sf::Vector2f& mousePos) const;
-    //void handleEvent(const auto event, const sf::Vector2f& mousePos);
-    bool wasClicked() const;
-    void resetClicked();
+    void setCallback(ClickAction action) {
+        onClick = std::move(action);
+    }
+
+    void update(float deltaTime) override;
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-    sf::RectangleShape m_shape;
-    sf::Text m_text;
-    bool m_clicked = false;
+    ClickAction onClick;
+    sf::RectangleShape buttonShape;
+    sf::Text buttonText;
 };

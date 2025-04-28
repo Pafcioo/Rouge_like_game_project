@@ -1,93 +1,93 @@
 #include "Button.h"
 #include <iostream>
 
-Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Color& color, const std::string& text, unsigned int characterSize, const sf::Font& font)
-    : m_text(font), m_clicked(false) // Initialize m_text with text, font, and character size
+Button::Button(InputManager& inputManager, const sf::Vector2f& position, const sf::Font& font, const sf::Vector2f& size, const sf::Color& color, const std::string& text, unsigned int characterSize)
+    : buttonText(font) // Initialize buttonText with text, font, and character size
 {
-    m_shape.setPosition(position);
-    m_shape.setSize(size);
-    m_shape.setFillColor(color);
+    buttonShape.setPosition(position);
+    buttonShape.setSize(size);
+    buttonShape.setFillColor(color);
 
-    m_text.setString(text);
-    m_text.setCharacterSize(characterSize);
-    m_text.setFillColor(sf::Color::Black);
-    m_text.setPosition(position);
+    buttonText.setString(text);
+    buttonText.setCharacterSize(characterSize);
+    buttonText.setFillColor(sf::Color::Black);
+    buttonText.setPosition(position);
+
+    inputManager.registerMousePressCallback(
+        [this](const sf::Event& event) {
+            if (const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>()) {
+                if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
+                    sf::Vector2f mousePos(
+                        static_cast<float>(mouseButtonPressed->position.x),
+                        static_cast<float>(mouseButtonPressed->position.y)
+                    );
+                    if (buttonShape.getGlobalBounds().contains(mousePos)) {
+                        if (onClick) onClick();
+                    }
+                }
+            }
+        }
+    );
 }
 
 void Button::setPosition(const sf::Vector2f& position) {
-    m_shape.setPosition(position);
-    m_text.setPosition(position);
+    buttonShape.setPosition(position);
+    buttonText.setPosition(position);
 }
 
 void Button::setSize(const sf::Vector2f& size) {
-    m_shape.setSize(size);
+    buttonShape.setSize(size);
 }
 
 void Button::setColor(const sf::Color& color) {
-    m_shape.setFillColor(color);
+    buttonShape.setFillColor(color);
 }
 
 void Button::setText(const std::string& text) {
-    m_text.setString(text);
+    buttonText.setString(text);
 }
 
 void Button::setTextColor(const sf::Color& color) {
-    m_text.setFillColor(color);
+    buttonText.setFillColor(color);
 }
 
 void Button::setFont(const sf::Font& font) {
-    m_text.setFont(font);
+    buttonText.setFont(font);
 }
 
 void Button::setCharacterSize(unsigned int size) {
-    m_text.setCharacterSize(size);
+    buttonText.setCharacterSize(size);
 }
 
 sf::Vector2f Button::getPosition() const {
-    return m_shape.getPosition();
+    return buttonShape.getPosition();
 }
 
 sf::Vector2f Button::getSize() const {
-    return m_shape.getSize();
+    return buttonShape.getSize();
 }
 
 sf::Color Button::getColor() const {
-    return m_shape.getFillColor();
+    return buttonShape.getFillColor();
 }
 
 std::string Button::getText() const {
-    return m_text.getString();
+    return buttonText.getString();
 }
 
 sf::Color Button::getTextColor() const {
-    return m_text.getFillColor();
+    return buttonText.getFillColor();
 }
 
 unsigned int Button::getCharacterSize() const {
-    return m_text.getCharacterSize();
-}
-
-bool Button::isHovered(const sf::Vector2f& mousePos) const {
-    return m_shape.getGlobalBounds().contains(mousePos);
-}
-
-// void Button::handleEvent(const auto event, const sf::Vector2f& mousePos) {
-//     if (event->is<sf::Event::MouseButtonPressed> &&
-//         event->is<sf::Mouse::Button::Left> &&
-//         isHovered(mousePos)) {
-//         m_clicked = true;
-//     }
-// }
-
-bool Button::wasClicked() const {
-    return m_clicked;
-}
-
-void Button::resetClicked() {
-    m_clicked = false;
+    return buttonText.getCharacterSize();
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    target.draw(m_shape, states);
-    target.draw(m_text, states);
+    target.draw(buttonShape, states);
+    target.draw(buttonText, states);
+}
+
+void Button::update(float /*deltaTime*/) {
+    // Tu możesz dodać logikę aktualizacji przycisku (np. animacje, hover, itp.)
 }

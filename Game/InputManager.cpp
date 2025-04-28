@@ -18,6 +18,21 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
                 return std::make_unique<DashCommand>(inputDirectionOfPlayer);
             
         }
+        else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+        {
+            if (mouseButtonPressed->button== sf::Mouse::Button::Left)
+            {
+                for (const auto& callback : mousePressCbs_)
+                {
+                    callback(*event);
+                }
+            }
+        }
+        else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
+        {
+            // Placeholder for mouse movement handling
+        }
+        else
         if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>())
         {
             switch (mouseWheelScrolled->wheel)
@@ -27,4 +42,8 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
         }
     }
     return std::make_unique<MoveCommand>(inputDirectionOfPlayer);    
+}
+
+void InputManager::registerMousePressCallback(MousePressCallback cb) {
+    mousePressCbs_.push_back(std::move(cb));
 }

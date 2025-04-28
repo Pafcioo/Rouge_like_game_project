@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "EntityManager.h"
 #include "InputManager.h"
+#include "UIContainer.h"
 #include "Button.h"
 
 class GameManager
@@ -11,11 +12,10 @@ private:
     sf::Clock gameClock;
     EntityManager entityManager;
     InputManager inputManager;
-    Button startButton;
+    UIContainer uiContainer;
     sf::Font font;
 public:
-    GameManager()
-        : font("Assets/Roboto_Condensed-Black.ttf"), startButton(sf::Vector2f(100, 100), sf::Vector2f(200, 50), sf::Color::Green, "Start", 24, font) {};
+    GameManager();
     ~GameManager(){};
 
     void Play();
