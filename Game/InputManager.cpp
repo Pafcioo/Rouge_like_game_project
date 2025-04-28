@@ -22,10 +22,7 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
         {
             if (mouseButtonPressed->button== sf::Mouse::Button::Left)
             {
-                for (const auto& callback : mousePressCbs_)
-                {
-                    callback(*event);
-                }
+                //Placeholder for left mouse button handling
             }
         }
         else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
@@ -39,6 +36,10 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
             {
                 // Placeholder for mouse wheel scroll handling
             }
+        }
+        for (const auto& callback : mousePressCbs_)
+        {
+            callback(*event);
         }
     }
     return std::make_unique<MoveCommand>(inputDirectionOfPlayer);    
