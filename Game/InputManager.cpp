@@ -34,6 +34,13 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
         }
         else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
         {
+            if (uiContainer_) {
+                sf::Vector2f mousePos(
+                    static_cast<float>(mouseMoved->position.x),
+                    static_cast<float>(mouseMoved->position.y)
+                );
+                uiContainer_->focusByMouse(mousePos);
+            }
             // Placeholder for mouse movement handling
         }
         else

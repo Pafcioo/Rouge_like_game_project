@@ -27,6 +27,7 @@ public:
     std::string getText() const;
     sf::Color getTextColor() const;
     unsigned int getCharacterSize() const;
+    sf::FloatRect getGlobalBounds() const { return buttonShape.getGlobalBounds(); }
 
     void setCallback(ClickAction action) {
         onClick = std::move(action);

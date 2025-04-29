@@ -15,6 +15,7 @@ public:
     void focusNext();
     void focusPrevious();
     void activateFocused();
+    void focusByMouse(const sf::Vector2f& mousePos);
     int getFocusedIndex() const { return focusedIndex_; }
     int getButtonCount() const { return static_cast<int>(uiElements.size()); }
 private:

@@ -59,3 +59,28 @@ void UIContainer::drawAll(sf::RenderTarget& target, sf::RenderStates states) con
         element->draw(target, states);
     }
 }
+
+void UIContainer::focusByMouse(const sf::Vector2f& mousePos) {
+    for (int i = 0; i < (int)uiElements.size(); ++i) {
+        if (auto* btn = dynamic_cast<Button*>(uiElements[i].get())) {
+            if (btn->getGlobalBounds().contains(mousePos)) {
+                if (focusedIndex_ != i) {
+                    // Unfocus previous
+                    if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements.size()) {
+                        if (auto* prevBtn = dynamic_cast<Button*>(uiElements[focusedIndex_].get()))
+                            prevBtn->setFocused(false);
+                    }
+                    btn->setFocused(true);
+                    focusedIndex_ = i;
+                }
+                return;
+            }
+        }
+    }
+    // Unfocus if mouse is not over any button
+    if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements.size()) {
+        if (auto* prevBtn = dynamic_cast<Button*>(uiElements[focusedIndex_].get()))
+            prevBtn->setFocused(false);
+        focusedIndex_ = -1;
+    }
+}
