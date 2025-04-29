@@ -34,7 +34,8 @@ void GameManager::Play()
         float deltaTime = elapsed.asSeconds();
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
-        inputManager.handleInput(gameWindow)->executeCommand();
+        if(inputManager.handleInput(gameWindow)!=nullptr){inputManager.handleInput(gameWindow)->executeCommand();}
+        
         uiContainer.drawAll(gameWindow, sf::RenderStates::Default);
         gameWindow.display();
     }

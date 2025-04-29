@@ -42,7 +42,9 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
             callback(*event);
         }
     }
-    return std::make_unique<MoveCommand>(inputDirectionOfPlayer);    
+    if(inputDirectionOfPlayer.x != 0 || inputDirectionOfPlayer.y != 0)
+        return std::make_unique<MoveCommand>(inputDirectionOfPlayer);
+    return nullptr;
 }
 
 void InputManager::registerMousePressCallback(MousePressCallback cb) {
