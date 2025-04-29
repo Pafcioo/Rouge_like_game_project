@@ -59,6 +59,16 @@ void Button::setCharacterSize(unsigned int size) {
     buttonText.setCharacterSize(size);
 }
 
+void Button::setFocused(bool focused) {
+    focused_ = focused;
+    buttonShape.setOutlineThickness(focused ? 3.f : 0.f);
+    buttonShape.setOutlineColor(sf::Color::Yellow);
+}
+
+bool Button::isFocused() const {
+    return focused_;
+}
+
 sf::Vector2f Button::getPosition() const {
     return buttonShape.getPosition();
 }

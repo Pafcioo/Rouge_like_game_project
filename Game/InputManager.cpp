@@ -14,9 +14,16 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
             window.close();
         else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
         {
+            if (uiContainer_) {
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Down)
+                    uiContainer_->focusNext();
+                else if (keyPressed->scancode == sf::Keyboard::Scancode::Up)
+                    uiContainer_->focusPrevious();
+                else if (keyPressed->scancode == sf::Keyboard::Scancode::Enter)
+                    uiContainer_->activateFocused();
+            }
             if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
                 return std::make_unique<DashCommand>(inputDirectionOfPlayer);
-            
         }
         else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
         {

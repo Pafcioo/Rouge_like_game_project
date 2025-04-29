@@ -32,13 +32,17 @@ public:
         onClick = std::move(action);
     }
 
-    void update(float deltaTime) override;
+    void setFocused(bool focused);
+    bool isFocused() const;
 
+    void update(float deltaTime) override;
+    ClickAction onClick;
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-    ClickAction onClick;
+    
     sf::RectangleShape buttonShape;
     sf::Text buttonText;
+    bool focused_ = false;
 };

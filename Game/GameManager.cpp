@@ -18,6 +18,21 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
         // Add your button click handling logic here
     });
     uiContainer.addElement(std::move(button));
+    auto button2 = std::make_unique<Button>(
+        inputManager,
+        sf::Vector2f(100.f, 200.f),
+        font,
+        sf::Vector2f(200.f, 50.f),
+        sf::Color::Green,
+        "Start",
+        24
+    );
+    button2->setCallback([]() {
+        std::cout << "Button2 clicked!" << std::endl;
+        // Add your button click handling logic here
+    });
+    uiContainer.addElement(std::move(button2));
+    inputManager.setUIContainer(&uiContainer);
 }
 
 
@@ -34,8 +49,9 @@ void GameManager::Play()
         float deltaTime = elapsed.asSeconds();
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
-        if(inputManager.handleInput(gameWindow)!=nullptr){inputManager.handleInput(gameWindow)->executeCommand();}
-        
+        if(inputManager.handleInput(gameWindow)!=nullptr){
+            inputManager.handleInput(gameWindow)->executeCommand();
+        }
         uiContainer.drawAll(gameWindow, sf::RenderStates::Default);
         gameWindow.display();
     }
