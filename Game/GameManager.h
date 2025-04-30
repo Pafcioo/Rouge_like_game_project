@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "EntityManager.h"
 #include "InputManager.h"
-#include "UIContainer.h"
+#include "UIManager.h"
 #include "Button.h"
 
 class GameManager
@@ -12,7 +12,8 @@ private:
     sf::Clock gameClock;
     EntityManager entityManager;
     InputManager inputManager;
-    UIContainer uiContainer;
+    std::shared_ptr<UIContainer> uiContainer;
+    UIManager uiManager;
     sf::Font font;
 public:
     GameManager();

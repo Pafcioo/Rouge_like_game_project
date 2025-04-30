@@ -44,7 +44,7 @@ void UIContainer::activateFocused() {
     }
 }
 
-void UIContainer::addElement(std::unique_ptr<UIElement> element) {
+void UIContainer::addElement(std::shared_ptr<UIElement> element) {
     if (uiElements.empty()) {
         if (auto* btn = dynamic_cast<Button*>(element.get())) {
             btn->setFocused(true);
