@@ -4,36 +4,14 @@
 
 GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
 {
-    auto button = std::make_unique<Button>(
+    uiManager.initMainMenuUI(
         inputManager,
-        sf::Vector2f(100.f, 100.f),
         font,
-        sf::Vector2f(200.f, 50.f),
-        sf::Color::Green,
-        "Start",
-        24
+        [this](GameState newState) { this->changeGameState(newState); }
     );
-    button->setCallback([]() {
-        std::cout << "Button clicked!" << std::endl;
-        // Add your button click handling logic here
-    });
-    uiContainer->addElement(std::move(button));
-    auto button2 = std::make_unique<Button>(
-        inputManager,
-        sf::Vector2f(100.f, 200.f),
-        font,
-        sf::Vector2f(200.f, 50.f),
-        sf::Color::Green,
-        "Start",
-        24
-    );
-    button2->setCallback([]() {
-        std::cout << "Button2 clicked!" << std::endl;
-        // Add your button click handling logic here
-    });
-    uiContainer->addElement(std::move(button2));
-    inputManager.setUIContainer(uiContainer.get());
-    uiManager.addUIContainer(GameState::MainMenu, uiContainer);
+    uiManager.initOptionsUI(inputManager, font,[this](GameState newState) { this->changeGameState(newState); });
+    inputManager.setUIContainer(uiManager.getUIContainer(GameState::MainMenu));
+    inputManager.setUIContainer(uiManager.getUIContainer(GameState::Paused));
 }
 
 
@@ -53,7 +31,7 @@ void GameManager::Play()
         if(inputManager.handleInput(gameWindow)!=nullptr){
             inputManager.handleInput(gameWindow)->executeCommand();
         }
-        uiManager.drawUI(gameWindow, GameState::MainMenu);
+        uiManager.drawUI(gameWindow, this->getGameState());
         gameWindow.display();
     }
 }

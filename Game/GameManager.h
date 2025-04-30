@@ -15,9 +15,12 @@ private:
     std::shared_ptr<UIContainer> uiContainer;
     UIManager uiManager;
     sf::Font font;
+    GameState currentGameState = GameState::MainMenu;
 public:
     GameManager();
     ~GameManager(){};
+    void changeGameState(GameState newState) { currentGameState = newState; }
+    GameState getGameState() const { return currentGameState; }
 
     void Play();
 };
