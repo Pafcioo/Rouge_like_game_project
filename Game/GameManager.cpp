@@ -39,7 +39,7 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
 void GameManager::Play()
 {
     // Create a window
-    gameWindow.create(sf::VideoMode::getFullscreenModes() [5], "SFML Game");
+    gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
 
     // Main loop
