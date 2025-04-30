@@ -10,6 +10,7 @@ enum class GameState
     MainMenu,
     Playing,
     Paused,
+    Options,
     GameOver
 };
 
@@ -25,7 +26,13 @@ public:
 
     void addUIContainer(GameState state, std::shared_ptr<UIContainer> container);
     void drawUI(sf::RenderTarget& target, GameState state);
-    void initMainMenuUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback);
-    void initOptionsUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback);
+    void initMainMenuUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback);
+    void initOptionsUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback);
+    void initPauseUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback);
+    void initAllUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback) {
+        initMainMenuUI(inputManager, font, changeStateCallback, getStateCallback);
+        initOptionsUI(inputManager, font, changeStateCallback, getStateCallback);
+        initPauseUI(inputManager, font, changeStateCallback, getStateCallback);
+    }
     UIContainer* getUIContainer(GameState state);
 };

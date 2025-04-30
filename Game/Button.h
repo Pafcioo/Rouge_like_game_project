@@ -7,10 +7,19 @@
 
 class Button : public UIElement {
 public:
-    Button(InputManager& inputManager, const sf::Vector2f& position, const sf::Font& font,const sf::Vector2f& size={0.f,0.f}, const sf::Color& color=sf::Color::White, const std::string& text="", unsigned int characterSize=1);
-    
-    using ClickAction = std::function<void()>;
 
+    using ClickAction = std::function<void()>;
+    using IsVisiblePredicate = std::function<bool()>;
+    Button(InputManager& inputManager, 
+        const sf::Vector2f& position, 
+        const sf::Font& font,
+        const sf::Vector2f& size={0.f,0.f},
+        const sf::Color& color=sf::Color::White,
+        const std::string& text="",
+        unsigned int characterSize=1,
+        IsVisiblePredicate isVisible = []() { return true; });
+    
+    
     // Setters
     void setPosition(const sf::Vector2f& position);
     void setSize(const sf::Vector2f& size);
@@ -42,7 +51,7 @@ protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-    
+    IsVisiblePredicate isVisible_;
     sf::RectangleShape buttonShape;
     sf::Text buttonText;
     bool focused_ = false;

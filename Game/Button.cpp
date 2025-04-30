@@ -1,8 +1,15 @@
 #include "Button.h"
 #include <iostream>
 
-Button::Button(InputManager& inputManager, const sf::Vector2f& position, const sf::Font& font, const sf::Vector2f& size, const sf::Color& color, const std::string& text, unsigned int characterSize)
-    : buttonText(font) // Initialize buttonText with text, font, and character size
+Button::Button(InputManager& inputManager,
+    const sf::Vector2f& position,
+    const sf::Font& font,
+    const sf::Vector2f& size,
+    const sf::Color& color,
+    const std::string& text,
+    unsigned int characterSize,
+    IsVisiblePredicate isVisible) // Constructor with default values
+    : buttonText(font), isVisible_(std::move(isVisible)) // Initialize buttonText with text, font, and character size
 {
     buttonShape.setPosition(position);
     buttonShape.setSize(size);
@@ -15,6 +22,7 @@ Button::Button(InputManager& inputManager, const sf::Vector2f& position, const s
 
     inputManager.registerMousePressCallback(
         [this](const sf::Event& event) {
+            if (!isVisible_()) return; // Check if the button is visible before processing events
             if (const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>()) {
                 if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
                     sf::Vector2f mousePos(

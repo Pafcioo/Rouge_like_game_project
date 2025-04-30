@@ -2,16 +2,21 @@
 #include <iostream>
 
 
+struct ChangeStateFunctor {
+    GameManager* manager;
+    void operator()(GameState newState) const {
+        manager->changeGameState(newState);
+        manager->updateInputManager();
+    }
+};
+
+
 GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
 {
-    uiManager.initMainMenuUI(
-        inputManager,
-        font,
-        [this](GameState newState) { this->changeGameState(newState); }
-    );
-    uiManager.initOptionsUI(inputManager, font,[this](GameState newState) { this->changeGameState(newState); });
-    inputManager.setUIContainer(uiManager.getUIContainer(GameState::MainMenu));
-    inputManager.setUIContainer(uiManager.getUIContainer(GameState::Paused));
+    uiManager.initAllUI(inputManager, font, ChangeStateFunctor{this},[this]() {
+        return this->getGameState();
+    });
+    inputManager.setUIContainer(uiManager.getUIContainer(this->getGameState()));
 }
 
 
