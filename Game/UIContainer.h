@@ -34,6 +34,14 @@ public:
         unsigned int characterSize = 24
     );
 
+    void createText(
+        const sf::Font& font,
+        const std::string& text,
+        const sf::Vector2f& position,
+        unsigned int characterSize = 30,
+        sf::Color color = sf::Color::White
+    );
+
 private:
     std::vector<std::shared_ptr<UIElement>> uiElements;
     int focusedIndex_ = -1;

@@ -31,6 +31,13 @@ std::shared_ptr<UIContainer> UIManager::createUI(
     auto container = std::make_shared<UIContainer>();
 
     if (state == GameState::MainMenu) {
+        container->createText(
+            font,
+            "Main Menu",
+            {100.f, 25.f},
+            48,
+            sf::Color::White
+        );
         container->createButton(
             inputManager,
             {100.f, 100.f},

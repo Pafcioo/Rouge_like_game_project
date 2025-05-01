@@ -1,6 +1,7 @@
 #include <iostream>
 #include "UIContainer.h"
 #include "Button.h"
+#include "Text.h"
 
 void UIContainer::focusNext() {
     if (uiElements.empty()) return;
@@ -108,4 +109,16 @@ void UIContainer::createButton(
     );
     button->setCallback(std::move(onClick));
     addElement(button);
+}
+
+void UIContainer::createText(
+    const sf::Font& font,
+    const std::string& text,
+    const sf::Vector2f& position,
+    unsigned int characterSize,
+    sf::Color color
+) {
+    auto txt = std::make_shared<Text>(font, text, characterSize, color);
+    txt->setPosition(position);
+    addElement(txt);
 }
