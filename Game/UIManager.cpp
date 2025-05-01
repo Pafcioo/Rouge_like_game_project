@@ -1,4 +1,5 @@
 #include <iostream>
+#include "math.h"
 #include "UIManager.h"
 #include "InputManager.h"
 
@@ -8,6 +9,12 @@ struct getStateCallbackFunctor {
     bool operator()() const {
         return getStateCallback() == state;
     }
+};
+
+struct ImageData {
+    int index;
+    std::string path;
+    sf::Vector2i clipSize; // rozmiar wycinanego fragmentu
 };
 
 void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> container) {
@@ -90,7 +97,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(
         container->createImage(
             "Assets/player.png",
             {1000.f, 300.f},
-            {0.1, 0.1}
+            {0.3f, 0.3f},
+            sf::degrees(0)
         );
     }
     else if (state == GameState::Options) {
@@ -130,6 +138,34 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             48,
             sf::Color::White
         );
+
+        std::vector<ImageData> imagesData = {
+            {0, "Assets/ability1.png", {500, 500}},
+            {1, "Assets/ability2.png", {2000, 2000}},
+            {2, "Assets/ability1.png", {500, 500}},
+            {3, "Assets/ability2.png", {2000, 2000}},
+            {4, "Assets/ability1.png", {500, 500}},
+            {5, "Assets/ability2.png", {2000, 2000}}
+            // ...
+        };
+        float sizeOfImageX = 50.f;
+        float scale = 0.7f;
+        float offset =sizeOfImageX * sqrt(2.f)* scale;
+        sf::Vector2f leftPos = {70.f, 200.f};
+        sf::Vector2f rightPos = {leftPos.x + offset, leftPos.y}; // np. 100px odstępu
+        sf::Vector2f sizeOfImages = {sizeOfImageX, sizeOfImageX};
+        sf::Angle angle = sf::degrees(45);
+
+        for (size_t i = 0; i < imagesData.size(); ++i) {
+            sf::Vector2f pos = (i % 2 == 0) ? leftPos : rightPos;
+            pos.y += i * offset; // odstęp w pionie
+            container->createImageWithSize(
+                imagesData[i].path,
+                pos,
+                sizeOfImages,
+                angle
+            );
+        }
     }
     // Dodaj kolejne else if dla innych GameState...
 

@@ -2,6 +2,7 @@
 #include "UIContainer.h"
 #include "Text.h"
 #include "Image.h"
+#include "GameElement.h"
 
 void UIContainer::focusNext() {
     if (uiElements.empty()) return;
@@ -126,8 +127,29 @@ void UIContainer::createText(
 void UIContainer::createImage(
     const std::string& texturePath,
     const sf::Vector2f& position,
-    const sf::Vector2f& scale
+    const sf::Vector2f& scale,
+    const sf::Angle& rotation
 ) {
-    auto img = std::make_shared<Image>(texturePath, position, scale);
+    auto img = std::make_shared<Image>(texturePath, position, scale, rotation);
     addElement(img);
+}
+
+void UIContainer::createImageWithSize(
+    const std::string& texturePath,
+    const sf::Vector2f& position,
+    const sf::Vector2f& targetSize,
+    const sf::Angle& rotation
+) {
+    auto img = Image::createWithSize(texturePath, position, targetSize, rotation);
+    addElement(img);
+}
+
+void UIContainer::createGameElement(
+    GameElement::ShapeType type,
+    const sf::Vector2f& position,
+    const sf::Vector2f& size,
+    sf::Color color
+) {
+    auto elem = std::make_shared<GameElement>(type, position, size, color);
+    addElement(elem);
 }
