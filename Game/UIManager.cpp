@@ -17,6 +17,14 @@ void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> con
 void UIManager::drawUI(sf::RenderTarget& target, GameState state) {
     auto it = uiContainers_.find(state);
     if (it != uiContainers_.end() && it->second) {
+        // Najpierw rysuj overlayStates (może być ich wiele)
+        for (GameState overlay : it->second->overlayStates) {
+            drawUI(target, overlay);
+        }
+        if(!it->second->overlayStates.empty()){
+            drawBackground(target, sf::RenderStates::Default);
+        }
+        // Potem rysuj główny container
         it->second->drawAll(target, sf::RenderStates::Default);
     }
 }
@@ -88,7 +96,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(
     else if (state == GameState::Options) {
         container->createButton(
             inputManager,
-            {720.f, 360.f},
+            {640.f, 360.f},
             font,
             "Go back",
             [changeStateCallback]() {
@@ -102,7 +110,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(
         );
         container->createButton(
             inputManager,
-            {720.f, 460.f},
+            {640.f, 460.f},
             font,
             "Smth",
             []() {
@@ -114,6 +122,15 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             24
         );
     }
+    else if (state == GameState::Playing) {
+        container->createText(
+            font,
+            "Playing",
+            {100.f, 25.f},
+            48,
+            sf::Color::White
+        );
+    }
     // Dodaj kolejne else if dla innych GameState...
 
     return container;
@@ -123,16 +140,16 @@ void UIManager::initAllUI(InputManager& inputManager, sf::Font& font,
     std::function<void(GameState)> changeStateCallback,
     std::function<GameState()> getStateCallback)
 {
-    for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused}) {
+    for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused, GameState::Playing}) {
         auto container = createUI(state, inputManager, font, changeStateCallback, getStateCallback);
         addUIContainer(state, container);
     }
 }
 
-UIContainer* UIManager::getUIContainer(GameState state) {
+std::shared_ptr<UIContainer> UIManager::getUIContainer(GameState state) {
     auto it = uiContainers_.find(state);
     if (it != uiContainers_.end()) {
-        return it->second.get();
+        return it->second;
     }
     return nullptr;
 }

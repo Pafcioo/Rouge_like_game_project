@@ -19,6 +19,25 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     inputManager.setUIContainer(uiManager.getUIContainer(this->getGameState()));
 }
 
+void GameManager::changeGameState(GameState newState) {
+    lastGameState = currentGameState; // Save the last game state before changing
+    currentGameState = newState;
+    
+    if (newState == GameState::Options) {
+        auto optionsContainer = uiManager.getUIContainer(GameState::Options);
+        optionsContainer->overlayStates.clear();
+        if (lastGameState == GameState::MainMenu) {
+            optionsContainer->overlayStates.push_back(GameState::MainMenu);
+        } else if (lastGameState == GameState::Playing) {
+            optionsContainer->overlayStates.push_back(GameState::Playing);
+        }
+        // Dodaj kolejne przypadki jeśli chcesz
+    }
+}
+
+void GameManager::updateInputManager() {
+    inputManager.setUIContainer(uiManager.getUIContainer(this->getGameState())); 
+}
 
 void GameManager::Play()
 {

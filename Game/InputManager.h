@@ -13,8 +13,8 @@ public:
     ~InputManager() = default;
     std::unique_ptr<Command> handleInput(sf::RenderWindow& window);
     void registerMousePressCallback(MousePressCallback cb);
-    void setUIContainer(UIContainer* container) { uiContainer_ = container; }
+    void setUIContainer(std::shared_ptr<UIContainer> container) { uiContainer_ = container; }
 private:
     std::vector<MousePressCallback> mousePressCbs_;
-    UIContainer* uiContainer_ = nullptr;
+    std::shared_ptr<UIContainer> uiContainer_ = nullptr;
 };

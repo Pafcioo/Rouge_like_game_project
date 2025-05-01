@@ -16,13 +16,12 @@ private:
     UIManager uiManager;
     sf::Font font;
     GameState currentGameState = GameState::MainMenu;
+    GameState lastGameState = GameState::MainMenu; // <-- dodaj to pole
 public:
     GameManager();
     ~GameManager(){};
-    void changeGameState(GameState newState) { currentGameState = newState; }
-    void updateInputManager() {
-         inputManager.setUIContainer(uiManager.getUIContainer(this->getGameState())); 
-        }
+    void changeGameState(GameState newState);
+    void updateInputManager();
     GameState getGameState() const { return currentGameState; }
 
     void Play();
