@@ -79,6 +79,11 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             sf::Color::Red,
             24
         );
+        container->createImage(
+            "Assets/player.png",
+            {1000.f, 300.f},
+            {0.1, 0.1}
+        );
     }
     else if (state == GameState::Options) {
         container->createButton(

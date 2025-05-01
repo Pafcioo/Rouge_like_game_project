@@ -42,6 +42,12 @@ public:
         sf::Color color = sf::Color::White
     );
 
+    void createImage(
+        const std::string& texturePath,
+        const sf::Vector2f& position = {0.f, 0.f},
+        const sf::Vector2f& scale = {1.f, 1.f}
+    );
+
 private:
     std::vector<std::shared_ptr<UIElement>> uiElements;
     int focusedIndex_ = -1;

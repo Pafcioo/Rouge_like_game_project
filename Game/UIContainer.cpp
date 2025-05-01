@@ -1,7 +1,7 @@
 #include <iostream>
 #include "UIContainer.h"
-#include "Button.h"
 #include "Text.h"
+#include "Image.h"
 
 void UIContainer::focusNext() {
     if (uiElements.empty()) return;
@@ -121,4 +121,13 @@ void UIContainer::createText(
     auto txt = std::make_shared<Text>(font, text, characterSize, color);
     txt->setPosition(position);
     addElement(txt);
+}
+
+void UIContainer::createImage(
+    const std::string& texturePath,
+    const sf::Vector2f& position,
+    const sf::Vector2f& scale
+) {
+    auto img = std::make_shared<Image>(texturePath, position, scale);
+    addElement(img);
 }
