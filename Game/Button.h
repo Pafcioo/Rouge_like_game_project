@@ -11,13 +11,13 @@ public:
     using ClickAction = std::function<void()>;
     using IsVisiblePredicate = std::function<bool()>;
     Button(InputManager& inputManager, 
-        const sf::Vector2f& position, 
+        sf::Vector2f position, 
         const sf::Font& font,
-        const sf::Vector2f& size={0.f,0.f},
-        const sf::Color& color=sf::Color::White,
-        const std::string& text="",
-        unsigned int characterSize=1,
-        IsVisiblePredicate isVisible = []() { return true; });
+        sf::Vector2f size = sf::Vector2f(0.f, 0.f),
+        sf::Color color = sf::Color::White,
+        std::string text = "",
+        unsigned int characterSize = 1,
+        IsVisiblePredicate isVisible = IsVisiblePredicate());
     
     
     // Setters

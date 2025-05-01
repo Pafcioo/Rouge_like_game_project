@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "UIContainer.h"
-#include "Button.h"
+
 #include <unordered_map>
 #include <memory>
 
@@ -14,7 +14,7 @@ enum class GameState
     GameOver
 };
 
-class InputManager;
+
 
 class UIManager
 {
@@ -26,13 +26,11 @@ public:
 
     void addUIContainer(GameState state, std::shared_ptr<UIContainer> container);
     void drawUI(sf::RenderTarget& target, GameState state);
-    void initMainMenuUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback);
-    void initOptionsUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback);
-    void initPauseUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback);
-    void initAllUI(InputManager& inputManager, sf::Font& font, std::function<void(GameState)> changeStateCallback, std::function<GameState()> getStateCallback) {
-        initMainMenuUI(inputManager, font, changeStateCallback, getStateCallback);
-        initOptionsUI(inputManager, font, changeStateCallback, getStateCallback);
-        initPauseUI(inputManager, font, changeStateCallback, getStateCallback);
-    }
+    void initAllUI(InputManager& inputManager, sf::Font& font,
+        std::function<void(GameState)> changeStateCallback,
+        std::function<GameState()> getStateCallback);
     UIContainer* getUIContainer(GameState state);
+    std::shared_ptr<UIContainer> createUI(GameState state, InputManager& inputManager, sf::Font& font,
+        std::function<void(GameState)> changeStateCallback,
+        std::function<GameState()> getStateCallback);
 };

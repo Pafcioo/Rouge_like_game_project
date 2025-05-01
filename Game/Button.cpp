@@ -1,15 +1,20 @@
 #include "Button.h"
 #include <iostream>
 
-Button::Button(InputManager& inputManager,
-    const sf::Vector2f& position,
+Button::Button(
+    InputManager& inputManager,
+    sf::Vector2f position,
     const sf::Font& font,
-    const sf::Vector2f& size,
-    const sf::Color& color,
-    const std::string& text,
+    sf::Vector2f size,
+    sf::Color color,
+    std::string text,
     unsigned int characterSize,
-    IsVisiblePredicate isVisible) // Constructor with default values
-    : buttonText(font), isVisible_(std::move(isVisible)) // Initialize buttonText with text, font, and character size
+    IsVisiblePredicate isVisible
+)
+    : isVisible_(isVisible ? std::move(isVisible) : [](){ return true; })
+    , buttonShape()
+    , buttonText(font)
+    , focused_(false)
 {
     buttonShape.setPosition(position);
     buttonShape.setSize(size);

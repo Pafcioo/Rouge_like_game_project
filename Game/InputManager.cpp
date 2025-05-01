@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InputManager.h"
+#include "UIContainer.h"
 
 std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
 {

@@ -84,3 +84,28 @@ void UIContainer::focusByMouse(const sf::Vector2f& mousePos) {
         focusedIndex_ = -1;
     }
 }
+
+void UIContainer::createButton(
+    InputManager& inputManager,
+    const sf::Vector2f& position,
+    const sf::Font& font,
+    const std::string& text,
+    Button::ClickAction onClick,
+    Button::IsVisiblePredicate isVisible,
+    const sf::Vector2f& size,
+    const sf::Color& color,
+    unsigned int characterSize
+) {
+    auto button = std::make_shared<Button>(
+        inputManager,
+        position,
+        font,
+        size,
+        color,
+        text,
+        characterSize,
+        std::move(isVisible)
+    );
+    button->setCallback(std::move(onClick));
+    addElement(button);
+}

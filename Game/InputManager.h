@@ -2,7 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Command.h"
 #include <functional>
-#include "UIContainer.h"
+
+class UIContainer;
 
 class InputManager
 {

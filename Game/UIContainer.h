@@ -1,6 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "UIElement.h"
+#include "Button.h"
+
+class InputManager;
 
 class UIContainer
 {
@@ -18,6 +21,19 @@ public:
     void focusByMouse(const sf::Vector2f& mousePos);
     int getFocusedIndex() const { return focusedIndex_; }
     int getButtonCount() const { return static_cast<int>(uiElements.size()); }
+
+    void createButton(
+        InputManager& inputManager,
+        const sf::Vector2f& position,
+        const sf::Font& font,
+        const std::string& text,
+        Button::ClickAction onClick,
+        Button::IsVisiblePredicate isVisible,
+        const sf::Vector2f& size = {200.f, 50.f},
+        const sf::Color& color = sf::Color::White,
+        unsigned int characterSize = 24
+    );
+
 private:
     std::vector<std::shared_ptr<UIElement>> uiElements;
     int focusedIndex_ = -1;
