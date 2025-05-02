@@ -1,6 +1,9 @@
 #include "GameManager.h"
 #include <iostream>
 
+#include "Entity.h"
+#include "Player.h"
+
 
 struct ChangeStateFunctor {
     GameManager* manager;
@@ -44,7 +47,7 @@ void GameManager::Play()
     // Create a window
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
-
+    Entity* player = new Player(100, 250, sf::Vector2f(0, 0), sf::Texture("Assets/player.png"));
     // Main loop
     while (gameWindow.isOpen())
     {
@@ -53,9 +56,10 @@ void GameManager::Play()
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
         if(inputManager.handleInput(gameWindow)!=nullptr){
-            inputManager.handleInput(gameWindow)->executeCommand();
+            inputManager.handleInput(gameWindow)->executeCommand(player, deltaTime);
         }
         uiManager.drawUI(gameWindow, this->getGameState());
+        gameWindow.draw(*player);
         gameWindow.display();
     }
 }
