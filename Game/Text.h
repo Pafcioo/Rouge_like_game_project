@@ -6,7 +6,7 @@
 class Text : public UIElement {
 
 public:
-    Text(const sf::Font& font, const std::string& text, unsigned int characterSize, sf::Color color);
+    Text(const sf::Font& font, const std::string& text, unsigned int characterSize, sf::Color color, const std::string& label = "");
     void setPosition(const sf::Vector2f& position);
     void setString(const std::string& text);
     void setCharacterSize(unsigned int size);

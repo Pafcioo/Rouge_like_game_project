@@ -2,8 +2,8 @@
 #include <iostream>
 
 // Konstruktor ze skalą
-Image::Image(const std::string& texturePath, const sf::Vector2f& position, const sf::Vector2f& scale, const sf::Angle& rotation)
-    : texturePath_(texturePath), texture_(texturePath), sprite_(texture_)
+Image::Image(const std::string& texturePath, const sf::Vector2f& position, const sf::Vector2f& scale, const sf::Angle& rotation, const std::string& label)
+    : texturePath_(texturePath), texture_(texturePath), sprite_(texture_), UIElement(label)
 {
     sprite_.setTexture(texture_);
     sprite_.setOrigin({texture_.getSize().x / 2.f, texture_.getSize().y / 2.f});
@@ -17,9 +17,10 @@ std::shared_ptr<Image> Image::createWithSize(
     const std::string& texturePath,
     const sf::Vector2f& position,
     const sf::Vector2f& targetSize,
-    const sf::Angle& rotation
+    const sf::Angle& rotation,
+    const std::string& label
 ) {
-    auto img = std::make_shared<Image>(texturePath, position, sf::Vector2f(1.f, 1.f), rotation);
+    auto img = std::make_shared<Image>(texturePath, position, sf::Vector2f(1.f, 1.f), rotation, label);
     img->sprite_.setScale(
         {targetSize.x / static_cast<float>(img->texture_.getSize().x),
         targetSize.y / static_cast<float>(img->texture_.getSize().y)}

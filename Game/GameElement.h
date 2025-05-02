@@ -7,7 +7,7 @@ class GameElement : public UIElement {
 public:
     enum class ShapeType { Rectangle, Circle, Convex };
 
-    GameElement(ShapeType type, const sf::Vector2f& position, const sf::Vector2f& size = {50.f, 50.f}, sf::Color color = sf::Color::White);
+    GameElement(ShapeType type, const sf::Vector2f& position, const sf::Vector2f& size = {50.f, 50.f}, sf::Color color = sf::Color::White, const std::string& label = "");
 
     void setPosition(const sf::Vector2f& position);
     void setSize(const sf::Vector2f& size);

@@ -1,7 +1,7 @@
 #include "GameElement.h"
 
-GameElement::GameElement(ShapeType type, const sf::Vector2f& position, const sf::Vector2f& size, sf::Color color)
-    : type_(type)
+GameElement::GameElement(ShapeType type, const sf::Vector2f& position, const sf::Vector2f& size , sf::Color color, const std::string& label)
+    : UIElement(label), type_(type)
 {
     if (type_ == ShapeType::Rectangle) {
         rect_.setPosition(position);

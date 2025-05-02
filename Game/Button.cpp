@@ -9,9 +9,11 @@ Button::Button(
     sf::Color color,
     std::string text,
     unsigned int characterSize,
-    IsVisiblePredicate isVisible
+    IsVisiblePredicate isVisible,
+    const std::string& label
 )
-    : isVisible_(isVisible ? std::move(isVisible) : [](){ return true; })
+    : UIElement(label) // <-- PRZEKAŻ DO BAZOWEGO
+    , isVisible_(isVisible ? std::move(isVisible) : [](){ return true; })
     , buttonShape()
     , buttonText(font)
     , focused_(false)

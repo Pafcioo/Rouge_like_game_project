@@ -51,7 +51,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             "Main Menu",
             {100.f, 25.f},
             48,
-            sf::Color::White
+            sf::Color::White,
+            "MainMenuTitle"
         );
         container->createButton(
             inputManager,
@@ -65,7 +66,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             getStateCallbackFunctor{state, getStateCallback},
             {200.f, 50.f},
             sf::Color::Green,
-            24
+            24,
+            "PlayButton"
         );
         container->createButton(
             inputManager,
@@ -79,7 +81,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             getStateCallbackFunctor{state, getStateCallback},
             {200.f, 50.f},
             sf::Color::Blue,
-            24
+            24,
+            "OptionsButton"
         );
         container->createButton(
             inputManager,
@@ -92,13 +95,15 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             getStateCallbackFunctor{state, getStateCallback},
             {200.f, 50.f},
             sf::Color::Red,
-            24
+            24,
+            "QuitButton"
         );
         container->createImage(
             "Assets/player.png",
             {1000.f, 300.f},
             {0.3f, 0.3f},
-            sf::degrees(0)
+            sf::degrees(0),
+            "PlayerImage"
         );
     }
     else if (state == GameState::Options) {
@@ -114,7 +119,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             getStateCallbackFunctor{state, getStateCallback},
             {200.f, 50.f},
             sf::Color::Yellow,
-            24
+            24,
+            "BackButton"
         );
         container->createButton(
             inputManager,
@@ -136,7 +142,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(
             "Playing",
             {100.f, 25.f},
             48,
-            sf::Color::White
+            sf::Color::White,
+            "PlayingTitle"
         );
 
         std::vector<ImageData> imagesData = {
@@ -166,6 +173,20 @@ std::shared_ptr<UIContainer> UIManager::createUI(
                 angle
             );
         }
+        container->createGameElement(
+            GameElement::ShapeType::Rectangle,
+            {50.f, 620.f},
+            {500.f, 20.f},
+            sf::Color::Blue,
+            "ManaBar"
+        );
+        container->createGameElement(
+            GameElement::ShapeType::Rectangle,
+            {50.f, 580.f},
+            {500.f, 20.f},
+            sf::Color::Red,
+            "HealthBar"
+        );
     }
     // Dodaj kolejne else if dla innych GameState...
 

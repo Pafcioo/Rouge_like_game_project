@@ -17,8 +17,8 @@ public:
         sf::Color color = sf::Color::White,
         std::string text = "",
         unsigned int characterSize = 1,
-        IsVisiblePredicate isVisible = IsVisiblePredicate());
-    
+        IsVisiblePredicate isVisible = IsVisiblePredicate(),
+        const std::string& label = ""); // <-- DODAJ TO
     
     // Setters
     void setPosition(const sf::Vector2f& position);

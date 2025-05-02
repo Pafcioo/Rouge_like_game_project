@@ -96,7 +96,8 @@ void UIContainer::createButton(
     Button::IsVisiblePredicate isVisible,
     const sf::Vector2f& size,
     const sf::Color& color,
-    unsigned int characterSize
+    unsigned int characterSize,
+    const std::string& label
 ) {
     auto button = std::make_shared<Button>(
         inputManager,
@@ -106,7 +107,8 @@ void UIContainer::createButton(
         color,
         text,
         characterSize,
-        std::move(isVisible)
+        std::move(isVisible),
+        label
     );
     button->setCallback(std::move(onClick));
     addElement(button);
@@ -117,9 +119,10 @@ void UIContainer::createText(
     const std::string& text,
     const sf::Vector2f& position,
     unsigned int characterSize,
-    sf::Color color
+    sf::Color color,
+    const std::string& label
 ) {
-    auto txt = std::make_shared<Text>(font, text, characterSize, color);
+    auto txt = std::make_shared<Text>(font, text, characterSize, color, label);
     txt->setPosition(position);
     addElement(txt);
 }
@@ -128,9 +131,10 @@ void UIContainer::createImage(
     const std::string& texturePath,
     const sf::Vector2f& position,
     const sf::Vector2f& scale,
-    const sf::Angle& rotation
+    const sf::Angle& rotation,
+    const std::string& label
 ) {
-    auto img = std::make_shared<Image>(texturePath, position, scale, rotation);
+    auto img = std::make_shared<Image>(texturePath, position, scale, rotation, label);
     addElement(img);
 }
 
@@ -138,9 +142,10 @@ void UIContainer::createImageWithSize(
     const std::string& texturePath,
     const sf::Vector2f& position,
     const sf::Vector2f& targetSize,
-    const sf::Angle& rotation
+    const sf::Angle& rotation,
+    const std::string& label
 ) {
-    auto img = Image::createWithSize(texturePath, position, targetSize, rotation);
+    auto img = Image::createWithSize(texturePath, position, targetSize, rotation, label);
     addElement(img);
 }
 
@@ -148,8 +153,9 @@ void UIContainer::createGameElement(
     GameElement::ShapeType type,
     const sf::Vector2f& position,
     const sf::Vector2f& size,
-    sf::Color color
+    sf::Color color,
+    const std::string& label
 ) {
-    auto elem = std::make_shared<GameElement>(type, position, size, color);
+    auto elem = std::make_shared<GameElement>(type, position, size, color, label);
     addElement(elem);
 }

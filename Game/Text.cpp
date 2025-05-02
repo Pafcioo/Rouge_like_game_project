@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Text.h"
 
-Text::Text(const sf::Font& font, const std::string& text, unsigned int characterSize, sf::Color color)
-    : font_(font),text_(font), characterSize_(characterSize), color_(color) {
+Text::Text(const sf::Font& font, const std::string& text, unsigned int characterSize, sf::Color color, const std::string& label)
+    : UIElement(label), font_(font), text_(font), characterSize_(characterSize), color_(color) {
     text_.setString(text);
     text_.setCharacterSize(characterSize_);
     text_.setFillColor(color_);

@@ -37,7 +37,8 @@ public:
         Button::IsVisiblePredicate isVisible,
         const sf::Vector2f& size = {200.f, 50.f},
         const sf::Color& color = sf::Color::White,
-        unsigned int characterSize = 24
+        unsigned int characterSize = 24,
+        const std::string& label = ""
     );
 
     void createText(
@@ -45,28 +46,32 @@ public:
         const std::string& text,
         const sf::Vector2f& position,
         unsigned int characterSize = 30,
-        sf::Color color = sf::Color::White
+        sf::Color color = sf::Color::White,
+        const std::string& label = ""
     );
 
     void createImage(
         const std::string& texturePath,
         const sf::Vector2f& position,
         const sf::Vector2f& scale = {1.f, 1.f},
-        const sf::Angle& rotation = sf::degrees(0)
+        const sf::Angle& rotation = sf::degrees(0),
+        const std::string& label = ""
     );
 
     void createImageWithSize(
         const std::string& texturePath,
         const sf::Vector2f& position,
         const sf::Vector2f& targetSize,
-        const sf::Angle& rotation = sf::degrees(0)
+        const sf::Angle& rotation = sf::degrees(0),
+        const std::string& label = ""
     );
 
     void createGameElement(
         GameElement::ShapeType type,
         const sf::Vector2f& position,
         const sf::Vector2f& size = {50.f, 50.f},
-        sf::Color color = sf::Color::White
+        sf::Color color = sf::Color::White,
+        const std::string& label = ""
     );
 
     std::vector<GameState> overlayStates;
