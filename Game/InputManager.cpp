@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InputManager.h"
+#include "UIContainer.h"
 
 std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
 {
@@ -14,10 +15,36 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
             window.close();
         else if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
         {
+            if (uiContainer_) {
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Down)
+                    uiContainer_->focusNext();
+                else if (keyPressed->scancode == sf::Keyboard::Scancode::Up)
+                    uiContainer_->focusPrevious();
+                else if (keyPressed->scancode == sf::Keyboard::Scancode::Enter)
+                    uiContainer_->activateFocused();
+            }
             if (keyPressed->scancode == sf::Keyboard::Scancode::Space)
                 return std::make_unique<DashCommand>(inputDirectionOfPlayer);
-            
         }
+        else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+        {
+            if (mouseButtonPressed->button== sf::Mouse::Button::Left)
+            {
+                //Placeholder for left mouse button handling
+            }
+        }
+        else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
+        {
+            if (uiContainer_) {
+                sf::Vector2f mousePos(
+                    static_cast<float>(mouseMoved->position.x),
+                    static_cast<float>(mouseMoved->position.y)
+                );
+                uiContainer_->focusByMouse(mousePos);
+            }
+            // Placeholder for mouse movement handling
+        }
+        else
         if (const auto* mouseWheelScrolled = event->getIf<sf::Event::MouseWheelScrolled>())
         {
             switch (mouseWheelScrolled->wheel)
@@ -25,6 +52,16 @@ std::unique_ptr<Command> InputManager::handleInput(sf::RenderWindow& window)
                 // Placeholder for mouse wheel scroll handling
             }
         }
+        for (const auto& callback : mousePressCbs_)
+        {
+            callback(*event);
+        }
     }
-    return std::make_unique<MoveCommand>(inputDirectionOfPlayer);    
+    if(inputDirectionOfPlayer.x != 0 || inputDirectionOfPlayer.y != 0)
+        return std::make_unique<MoveCommand>(inputDirectionOfPlayer);
+    return nullptr;
+}
+
+void InputManager::registerMousePressCallback(MousePressCallback cb) {
+    mousePressCbs_.push_back(std::move(cb));
 }
