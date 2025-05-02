@@ -23,4 +23,5 @@ public:
     void update(float deltaTime);
     bool isActive() const { return projectileIsActive; }
     void deactivate() { projectileIsActive = false; }
+    sf::Vector2f getPosition() const { return projectilePosition; }
 };

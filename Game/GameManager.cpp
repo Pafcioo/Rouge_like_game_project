@@ -48,7 +48,7 @@ void GameManager::Play()
     // Create a window
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
-    Entity* player = new Player(100, 250, sf::Vector2f(0, 0), sf::Texture("Assets/player.png"));
+    Entity* player = new Player(100, 250, sf::Vector2f(640, 360), sf::Texture("Assets/player.png"));
     //Projectile bullet(sf::Vector2f(640, 360), sf::Vector2f(1, 1), 100);
     // Main loop
     while (gameWindow.isOpen())
@@ -65,7 +65,9 @@ void GameManager::Play()
             }
         }
         uiManager.drawUI(gameWindow, this->getGameState());
-        player->updateGun(deltaTime, gameWindow);
+        player->updateGun(deltaTime);
+        player->drawProjectiles(gameWindow);
+        std::cout << "Player position: " << player->getPosition().x << " " << player->getPosition().y <<  std::endl;
         gameWindow.draw(*player);
         //bullet.update(deltaTime);
         //gameWindow.draw(bullet);

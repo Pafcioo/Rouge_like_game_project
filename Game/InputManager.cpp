@@ -59,11 +59,16 @@ std::vector<std::unique_ptr<Command>> InputManager::handleInput(sf::RenderWindow
             callback(*event);
         }
     }
-    if(inputDirectionOfPlayer.x != 0 || inputDirectionOfPlayer.y != 0)
+    if(inputDirectionOfPlayer.x != 0 || inputDirectionOfPlayer.y != 0) {
         commands.emplace_back(std::make_unique<MoveCommand>(inputDirectionOfPlayer));
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z))
+            commands.emplace_back(std::make_unique<AttackCommand>(inputDirectionOfPlayer));
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z)) {
+        commands.emplace_back(std::make_unique<AttackCommand>(sf::Vector2f(1, 0)));
+    }
     //return nullptr;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Z))
-        commands.emplace_back(std::make_unique<AttackCommand>(inputDirectionOfPlayer));
+
     return commands;
 }
 

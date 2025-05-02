@@ -7,8 +7,11 @@ void Weapon::update(float deltaTime) {
     timeSinceLastShot += deltaTime;
 
     // Update projectiles
-    for (Projectile* proj : weaponProjectiles) {
+    for (auto& proj : weaponProjectiles) {
         proj->update(deltaTime);
+        if (proj->getPosition().x < 0 || proj->getPosition().x > 1000 || proj->getPosition().y < 0 || proj->getPosition().y > 1000) {
+            proj->deactivate();
+        }
     }
 
     // Delete inactive projectiles
@@ -21,7 +24,7 @@ void Weapon::update(float deltaTime) {
 
 void Weapon::shoot(sf::Vector2f position, sf::Vector2f velocity, float speed) {
     if (timeSinceLastShot >= weaponFireCooldown) {
-        std::cout << "Shooting..." << std::endl;
+        std::cout << "Shooting from position: " << position.x << " " << position.y << std::endl;
         weaponProjectiles.emplace_back(new Projectile(position, velocity, speed));
         timeSinceLastShot = 0.f;
     }
