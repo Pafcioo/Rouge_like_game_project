@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Player.h"
+#include "Projectile.h"
 
 
 struct ChangeStateFunctor {
@@ -48,6 +49,7 @@ void GameManager::Play()
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
     Entity* player = new Player(100, 250, sf::Vector2f(0, 0), sf::Texture("Assets/player.png"));
+    //Projectile bullet(sf::Vector2f(640, 360), sf::Vector2f(1, 1), 100);
     // Main loop
     while (gameWindow.isOpen())
     {
@@ -55,11 +57,18 @@ void GameManager::Play()
         float deltaTime = elapsed.asSeconds();
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
-        if(inputManager.handleInput(gameWindow)!=nullptr){
-            inputManager.handleInput(gameWindow)->executeCommand(player, deltaTime);
+        if (!inputManager.handleInput(gameWindow).empty()) {
+            std::vector<std::unique_ptr<Command>> commands = inputManager.handleInput(gameWindow);
+            for (auto& command : commands) {
+                //std::cout << "Executing command..." << std::endl;
+                command->executeCommand(player, deltaTime);
+            }
         }
         uiManager.drawUI(gameWindow, this->getGameState());
+        player->updateGun(deltaTime, gameWindow);
         gameWindow.draw(*player);
+        //bullet.update(deltaTime);
+        //gameWindow.draw(bullet);
         gameWindow.display();
     }
 }

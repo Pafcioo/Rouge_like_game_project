@@ -31,9 +31,9 @@ public:
 class AttackCommand : public Command
 {
 private:
-    
+    sf::Vector2f entityDirection;
 public:
-    AttackCommand(){}
+    AttackCommand(sf::Vector2f direction) : entityDirection(direction){}
     void executeCommand(Entity* player, float deltaTime) override;
 };
 

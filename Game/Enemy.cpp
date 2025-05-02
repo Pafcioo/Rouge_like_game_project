@@ -6,7 +6,7 @@ void Enemy::move(sf::Vector2f direction)
     this->entitySprite.move(direction);
 }
 
-void Enemy::attack()
+void Enemy::attack(sf::Vector2f direction)
 {
     //Future implementation
 }

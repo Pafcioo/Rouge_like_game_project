@@ -9,5 +9,5 @@ class Enemy : public Entity
         Entity(health, speed, position, texture) {}
     ~Enemy() override = default;
     void move(sf::Vector2f direction) override;
-    void attack() override;
+    void attack(sf::Vector2f direction) override;
 };

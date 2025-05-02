@@ -15,7 +15,7 @@ void DashCommand::executeCommand(Entity* player, float deltaTime)
 
 void AttackCommand::executeCommand(Entity* player, float deltaTime)
 {
-    // Placeholder for attack command execution
+    player->attack(entityDirection);
     std::cout << "Executing attack command." << std::endl;
 }
 
