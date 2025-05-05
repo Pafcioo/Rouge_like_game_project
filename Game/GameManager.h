@@ -23,6 +23,7 @@ public:
     ~GameManager(){};
     void changeGameState(GameState newState);
     void updateInputManager();
+    void handleInput(float deltaTime);
     GameState getGameState() const { return currentGameState; }
 
     void Play();

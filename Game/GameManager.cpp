@@ -43,6 +43,16 @@ void GameManager::updateInputManager() {
     inputManager.setUIContainer(uiManager.getUIContainer(this->getGameState())); 
 }
 
+void GameManager::handleInput(float deltaTime) {
+    if (!inputManager.handleInput(gameWindow).empty()) {
+        std::vector<std::unique_ptr<Command>> commands = inputManager.handleInput(gameWindow);
+        for (auto& command : commands) {
+            //std::cout << "Executing command..." << std::endl;
+            command->executeCommand(entityManager.getPlayer(), deltaTime);
+        }
+    }
+}
+
 void GameManager::Play()
 {
     // Create a window
@@ -55,13 +65,7 @@ void GameManager::Play()
         float deltaTime = elapsed.asSeconds();
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
-        if (!inputManager.handleInput(gameWindow).empty()) {
-            std::vector<std::unique_ptr<Command>> commands = inputManager.handleInput(gameWindow);
-            for (auto& command : commands) {
-                //std::cout << "Executing command..." << std::endl;
-                command->executeCommand(entityManager.getPlayer(), deltaTime);
-            }
-        }
+        handleInput(deltaTime);
         uiManager.drawUI(gameWindow, this->getGameState());
         entityManager.updateEntities(deltaTime);
         entityManager.drawEntities(gameWindow);
