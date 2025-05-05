@@ -32,7 +32,6 @@ class Entity : public sf::Drawable
         virtual float getEntitySpeed() = 0;
         virtual void move(sf::Vector2f direction) = 0;
         virtual void attack(sf::Vector2f direction) = 0;
-        virtual void updateGun(float deltaTime) = 0;
-        virtual void drawProjectiles(sf::RenderWindow& window) = 0;
         sf::Vector2f getPosition() const { return entityPosition; }
+        Weapon* getWeapon() {return &gun;}
 };

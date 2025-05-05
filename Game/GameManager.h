@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "UIManager.h"
 #include "Button.h"
+#include "Player.h"
 
 class GameManager
 {

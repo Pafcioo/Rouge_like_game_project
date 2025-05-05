@@ -12,6 +12,4 @@ class Player : public Entity
     float getEntitySpeed() override;
     void move(sf::Vector2f direction) override;
     void attack(sf::Vector2f direction) override;
-    void updateGun(float deltaTime) override;
-    void drawProjectiles(sf::RenderWindow& window) override;
 };
