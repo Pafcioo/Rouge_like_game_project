@@ -11,5 +11,5 @@ class Player : public Entity
     ~Player() override = default;
     float getEntitySpeed() override;
     void move(sf::Vector2f direction) override;
-    void attack() override;
+    void attack(sf::Vector2f direction) override;
 };

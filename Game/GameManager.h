@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "UIManager.h"
 #include "Button.h"
+#include "Player.h"
 
 class GameManager
 {
@@ -22,6 +23,7 @@ public:
     ~GameManager(){};
     void changeGameState(GameState newState);
     void updateInputManager();
+    void handleInput(float deltaTime);
     GameState getGameState() const { return currentGameState; }
 
     void Play();
