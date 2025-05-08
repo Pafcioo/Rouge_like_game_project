@@ -4,22 +4,23 @@
 #include <functional>
 #include "InputManager.h"
 #include "UIElement.h"
-
+#include "Event.h"
+// Button inherits from UIElement so it can be in the same vector of UIElements
 class Button : public UIElement {
 public:
-
+    // Pointer to function, there the action for button is stored
     using ClickAction = std::function<void()>;
-    using IsVisiblePredicate = std::function<bool()>;
-    Button(InputManager& inputManager, 
-        sf::Vector2f position, 
-        const sf::Font& font,
-        sf::Vector2f size = sf::Vector2f(0.f, 0.f),
-        sf::Color color = sf::Color::White,
-        std::string text = "",
-        unsigned int characterSize = 1,
-        IsVisiblePredicate isVisible = IsVisiblePredicate(),
-        const std::string& label = ""); // <-- DODAJ TO
-    
+    Button(
+        const std::string& buttonLabel = "",
+        sf::Vector2f buttonSize = sf::Vector2f(0.f, 0.f),
+        sf::Vector2f buttonPosition,
+        sf::Color buttonColor = sf::Color::White,
+        std::string buttonTextString = "", 
+        const sf::Font& buttonFont,
+        unsigned int buttonCharacterSize = 1,
+        ClickAction buttonClickAction,
+        EventBus& eventBus  
+    );
     // Setters
     void setPosition(const sf::Vector2f& position);
     void setSize(const sf::Vector2f& size);
@@ -36,23 +37,16 @@ public:
     std::string getText() const;
     sf::Color getTextColor() const;
     unsigned int getCharacterSize() const;
-    sf::FloatRect getGlobalBounds() const { return buttonShape.getGlobalBounds(); }
-
-    void setCallback(ClickAction action) {
-        onClick = std::move(action);
-    }
-
+    // Methods for hover effect of a button
     void setFocused(bool focused);
     bool isFocused() const;
-
-    void update(float deltaTime) override;
-    ClickAction onClick;
+    
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-    IsVisiblePredicate isVisible_;
     sf::RectangleShape buttonShape;
     sf::Text buttonText;
     bool focused_ = false;
+    ClickAction onClick;
 };

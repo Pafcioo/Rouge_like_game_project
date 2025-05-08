@@ -14,8 +14,6 @@ enum class GameState
     GameOver
 };
 
-
-
 class UIManager
 {
 private:

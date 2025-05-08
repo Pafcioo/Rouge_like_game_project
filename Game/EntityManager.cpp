@@ -1,5 +1,6 @@
 #include <iostream>
 #include "EntityManager.h"
+#include "Event.h"
 #include <algorithm>
 #include <cmath>
 
@@ -16,7 +17,15 @@ void EntityManager::drawEntities(sf::RenderWindow& window)
     //std::cout << "Drawing entities..." << std::endl;
 }
 
-void EntityManager::updateEntities(float deltaTime) {
+void EntityManager::updateEntities(float deltaTime, EventBus& eventBus) {
+    // Subscribe to attack and movement events to control movement of player and his attack
+    eventBus.subscribe<MoveEvent>([this](const MoveEvent& moveEvent){
+        player->move(moveEvent.direction);
+    });
+    eventBus.subscribe<AttackEvent>([this](const AttackEvent& attackEvent){
+        player->attack(attackEvent.direction);
+    });
+
     player->getWeapon()->update(deltaTime);
     for (auto& proj : projectiles) {
         proj->update(deltaTime);

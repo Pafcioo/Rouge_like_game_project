@@ -15,7 +15,8 @@ struct ChangeStateFunctor {
 };
 
 
-GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
+GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf"),
+    gameMap("Assets/Map.png", {0,0}, {1280*8, 720*8})
 {
     uiManager.initAllUI(inputManager, font, ChangeStateFunctor{this},[this]() {
         return this->getGameState();
@@ -66,7 +67,11 @@ void GameManager::Play()
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
         handleInput(deltaTime);
+        gameMap.draw(gameWindow, sf::RenderStates::Default);
+        gameWindow.setView(gameWindow.getDefaultView()); // <-- ustaw widok na domyślny
         uiManager.drawUI(gameWindow, this->getGameState());
+        changeGameplayViewBasedOnPlayerPosition(); // <-- dodaj to wywołanie
+        gameWindow.setView(gameplayView); // <-- ustaw widok na gameplayView
         entityManager.updateEntities(deltaTime);
         entityManager.drawEntities(gameWindow);
         gameWindow.display();

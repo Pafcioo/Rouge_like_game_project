@@ -2,49 +2,41 @@
 #include <iostream>
 
 Button::Button(
-    InputManager& inputManager,
-    sf::Vector2f position,
-    const sf::Font& font,
-    sf::Vector2f size,
-    sf::Color color,
-    std::string text,
-    unsigned int characterSize,
-    IsVisiblePredicate isVisible,
-    const std::string& label
+    const std::string& buttonLabel = "",
+    sf::Vector2f buttonSize = sf::Vector2f(0.f, 0.f),
+    sf::Vector2f buttonPosition,
+    sf::Color buttonColor = sf::Color::White,
+    std::string buttonTextString = "", 
+    const sf::Font& buttonFont,
+    unsigned int buttonCharacterSize = 1,
+    ClickAction buttonClickAction,
+    EventBus& eventBus  
 )
-    : UIElement(label) // <-- PRZEKAŻ DO BAZOWEGO
-    , isVisible_(isVisible ? std::move(isVisible) : [](){ return true; })
-    , buttonShape()
-    , buttonText(font)
-    , focused_(false)
+    : UIElement(buttonLabel), onClick(buttonClickAction), buttonText(buttonFont, buttonTextString, buttonCharacterSize)
 {
-    buttonShape.setPosition(position);
-    buttonShape.setSize(size);
-    buttonShape.setFillColor(color);
-
-    buttonText.setString(text);
-    buttonText.setCharacterSize(characterSize);
+    // All the essential atributes of a button are set here 
+    buttonShape.setPosition(buttonPosition);
+    buttonShape.setSize(buttonSize);
+    buttonShape.setFillColor(buttonColor);
     buttonText.setFillColor(sf::Color::Black);
-    buttonText.setPosition(position);
-
-    inputManager.registerMousePressCallback(
-        [this](const sf::Event& event) {
-            if (!isVisible_()) return; // Check if the button is visible before processing events
-            if (const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>()) {
-                if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
-                    sf::Vector2f mousePos(
-                        static_cast<float>(mouseButtonPressed->position.x),
-                        static_cast<float>(mouseButtonPressed->position.y)
-                    );
-                    if (buttonShape.getGlobalBounds().contains(mousePos)) {
-                        if (onClick) onClick();
-                    }
-                }
-            }
-        }
-    );
+    buttonText.setPosition(buttonPosition);
+    // Every button subscribe to mouse click event, so when mouse button is clicked the action is trigerred
+    eventBus.subscribe<MouseClickedEvent>([this](const MouseClickedEvent& mouseEvent){
+        if(buttonShape.getGlobalBounds().contains(mouseEvent.positionOfClick)){
+            if(onClick)
+                onClick();
+        };
+    });
 }
 
+// This method is responsible for hover effect
+void Button::setFocused(bool focused) {
+    focused_ = focused;
+    buttonShape.setOutlineThickness(focused ? 3.f : 0.f);
+    buttonShape.setOutlineColor(sf::Color::Yellow);
+}
+
+// Down there there are basic setters and getters
 void Button::setPosition(const sf::Vector2f& position) {
     buttonShape.setPosition(position);
     buttonText.setPosition(position);
@@ -74,12 +66,6 @@ void Button::setCharacterSize(unsigned int size) {
     buttonText.setCharacterSize(size);
 }
 
-void Button::setFocused(bool focused) {
-    focused_ = focused;
-    buttonShape.setOutlineThickness(focused ? 3.f : 0.f);
-    buttonShape.setOutlineColor(sf::Color::Yellow);
-}
-
 bool Button::isFocused() const {
     return focused_;
 }
@@ -107,12 +93,8 @@ sf::Color Button::getTextColor() const {
 unsigned int Button::getCharacterSize() const {
     return buttonText.getCharacterSize();
 }
-
+// Draw method for button
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(buttonShape, states);
     target.draw(buttonText, states);
-}
-
-void Button::update(float /*deltaTime*/) {
-    // Tu możesz dodać logikę aktualizacji przycisku (np. animacje, hover, itp.)
 }

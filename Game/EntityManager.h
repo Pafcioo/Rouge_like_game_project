@@ -5,6 +5,8 @@
 #include "Projectile.h"
 #include <vector>
 
+class EventBus;
+
 class EntityManager
 {
     private:
@@ -15,7 +17,7 @@ class EntityManager
 
         static std::vector<Projectile*> projectiles;
         void drawEntities(sf::RenderWindow& window);
-        void updateEntities(float deltaTime);
+        void updateEntities(float deltaTime, EventBus& eventBus);
         Entity* getPlayer() { return player; }
 
 };
