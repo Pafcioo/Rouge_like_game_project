@@ -23,10 +23,6 @@ struct DashEvent {
     sf::Vector2f direction;
 };
 
-struct MouseClickedEvent {
-    sf::Vector2f positionOfClick;
-};
-
 // Bazowa klasa eventu (do przechowywania wskaźników)
 class EventBase {
 public:

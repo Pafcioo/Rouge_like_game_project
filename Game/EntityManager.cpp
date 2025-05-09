@@ -19,11 +19,11 @@ void EntityManager::drawEntities(sf::RenderWindow& window)
 
 void EntityManager::updateEntities(float deltaTime, EventBus& eventBus) {
     // Subscribe to attack and movement events to control movement of player and his attack
-    eventBus.subscribe<MoveEvent>([this](const MoveEvent& moveEvent){
-        player->move(moveEvent.direction);
+    eventBus.subscribe<MoveEvent>([this, deltaTime](const MoveEvent& moveEvent){
+        player->move(moveEvent.direction*deltaTime);
     });
-    eventBus.subscribe<AttackEvent>([this](const AttackEvent& attackEvent){
-        player->attack(attackEvent.direction);
+    eventBus.subscribe<AttackEvent>([this, deltaTime](const AttackEvent& attackEvent){
+        player->attack(attackEvent.direction*deltaTime);
     });
 
     player->getWeapon()->update(deltaTime);

@@ -1,47 +1,55 @@
 #include "Image.h"
 #include <iostream>
 
-// Konstruktor ze skalą
-Image::Image(const std::string& texturePath, const sf::Vector2f& position, const sf::Vector2f& scale, const sf::Angle& rotation, const std::string& label)
-    : texturePath_(texturePath), texture_(texturePath), sprite_(texture_), UIElement(label)
+// Constructor with scale
+Image::Image(const std::string& imageLabel,
+    const float imageScale,
+    const sf::Vector2f& imagePosition,
+    const sf::Angle& imageRotation,
+    const std::string& imageTexturePath)
+: UIElement(imageLabel),imageTexturePath_(imageTexturePath), imageTexture_(imageTexturePath), imageSprite_(imageTexture_)
 {
-    sprite_.setTexture(texture_);
-    sprite_.setOrigin({texture_.getSize().x / 2.f, texture_.getSize().y / 2.f});
-    sprite_.setScale(scale);
-    sprite_.setPosition(position);
-    sprite_.setRotation(rotation);
+    imageSprite_.setScale({imageScale,imageScale_});
+    imageSprite_.setPosition(imagePosition);
+    imageSprite_.setRotation(imageRotation);
+}
+// Constructor with target size of image
+Image::Image(const std::string& imageLabel,
+    const sf::Vector2f& imageTargetSize,
+    const sf::Vector2f& imagePosition,
+    const sf::Angle& imageRotation,
+    const std::string& imageTexturePath)
+: UIElement(imageLabel),imageTexturePath_(imageTexturePath), imageTexture_(imageTexturePath), imageSprite_(imageTexture_)
+{
+    // Compute the scale based on target size and size of texture
+    sf::Vector2u textureSize = imageTexture_.getSize();
+    if (textureSize.x > 0 && textureSize.y > 0) {
+        float scaleX = imageTargetSize.x / static_cast<float>(textureSize.x);
+        float scaleY = imageTargetSize.y / static_cast<float>(textureSize.y);
+        imageSprite_.setScale({scaleX, scaleY});
+    } 
+    else {
+        std::cerr << "Texture size is invalid for: " << imageTexturePath_ << std::endl;
+    }
+    imageSprite_.setPosition(imagePosition);
+    imageSprite_.setRotation(imageRotation);
 }
 
-// Statyczna metoda fabrykująca z docelowym rozmiarem
-std::shared_ptr<Image> Image::createWithSize(
-    const std::string& texturePath,
-    const sf::Vector2f& position,
-    const sf::Vector2f& targetSize,
-    const sf::Angle& rotation,
-    const std::string& label
-) {
-    auto img = std::make_shared<Image>(texturePath, position, sf::Vector2f(1.f, 1.f), rotation, label);
-    img->sprite_.setScale(
-        {targetSize.x / static_cast<float>(img->texture_.getSize().x),
-        targetSize.y / static_cast<float>(img->texture_.getSize().y)}
-    );
-    return img;
-}
 
 void Image::setPosition(const sf::Vector2f& position) {
-    sprite_.setPosition(position);
+    imageSprite_.setPosition(position);
 }
 
 void Image::setTexture(const std::string& texturePath) {
-    texturePath_ = texturePath;
-    if (!texture_.loadFromFile(texturePath_)) {
-        std::cerr << "Failed to load texture: " << texturePath_ << std::endl;
+    imageTexturePath_ = texturePath;
+    if (!imageTexture_.loadFromFile(imageTexturePath_)) {
+        std::cerr << "Failed to load texture: " << imageTexturePath_ << std::endl;
     }
-    sprite_.setTexture(texture_);
+    imageSprite_.setTexture(imageTexture_);
 }
 
 void Image::update(float) {}
 
 void Image::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    target.draw(sprite_, states);
+    target.draw(imageSprite_, states);
 }

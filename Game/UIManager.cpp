@@ -1,21 +1,15 @@
 #include <iostream>
 #include "math.h"
 #include "UIManager.h"
-#include "InputManager.h"
 
-struct getStateCallbackFunctor {
-    GameState state;
-    std::function<GameState()> getStateCallback;
-    bool operator()() const {
-        return getStateCallback() == state;
-    }
-};
+UIManager::UIManager(){
+    backgroundShape_.setFillColor(backgroundColor_);
+    backgroundShape_.setSize(sf::Vector2f(1280.f, 720.f));
+}
 
-struct ImageData {
-    int index;
-    std::string path;
-    sf::Vector2i clipSize; // rozmiar wycinanego fragmentu
-};
+void UIManager::drawBackground(sf::RenderTarget& target, sf::RenderStates states){
+    target.draw(backgroundShape_, states);
+}
 
 void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> container) {
     uiContainers_[state] = std::move(container);
@@ -24,181 +18,119 @@ void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> con
 void UIManager::drawUI(sf::RenderTarget& target, GameState state) {
     auto it = uiContainers_.find(state);
     if (it != uiContainers_.end() && it->second) {
-        // Najpierw rysuj overlayStates (może być ich wiele)
-        for (GameState overlay : it->second->overlayStates) {
-            drawUI(target, overlay);
+        // Draw background UIs if allowed
+        if (it->second->canHaveBackgroundUI()) {
+            for (auto& [prevState, container] : uiContainers_) {
+                if (prevState != state) {
+                    container->drawAll(target, sf::RenderStates::Default);
+                }
+            }
         }
-        if(!it->second->overlayStates.empty()){
-            drawBackground(target, sf::RenderStates::Default);
-        }
-        // Potem rysuj główny container
-        it->second->drawAll(target, sf::RenderStates::Default);
+    // Draw the current UI
+    drawBackground(target, sf::RenderStates::Default);
+    it->second->drawAll(target, sf::RenderStates::Default);
     }
 }
 
-std::shared_ptr<UIContainer> UIManager::createUI(
-    GameState state,
-    InputManager& inputManager,
-    sf::Font& font,
-    std::function<void(GameState)> changeStateCallback,
-    std::function<GameState()> getStateCallback)
-{
-    auto container = std::make_shared<UIContainer>();
-
+std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState state,sf::Font& font, bool canHaveBackgroundUI){
+    auto container = std::make_shared<UIContainer>(state, eventBus, canHaveBackgroundUI);
     if (state == GameState::MainMenu) {
-        container->createText(
+        container->createUIElement<Text>(
+            sf::Vector2f(50.f,100.f),
             font,
             "Main Menu",
-            {100.f, 25.f},
-            48,
+            24,
             sf::Color::White,
             "MainMenuTitle"
         );
-        container->createButton(
-            inputManager,
-            {100.f, 100.f},
-            font,
-            "Play",
-            [changeStateCallback]() {
-                changeStateCallback(GameState::Playing);
-                std::cout << "Playing state" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
+        container->createUIElement<Button>(
+            eventBus,
+            "PlayTheGameButton",
+            sf::Vector2f(100.f,50.f),
+            sf::Vector2f(100.f,100.f),
             sf::Color::Green,
-            24,
-            "PlayButton"
-        );
-        container->createButton(
-            inputManager,
-            {100.f, 200.f},
+            "Play",
             font,
-            "Options",
-            [changeStateCallback]() {
-                changeStateCallback(GameState::Options);
-                std::cout << "Options state" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
+            12,
+            [](){
+                std::cout<<"Button clicked 1";
+            }
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "OptionsButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 200.f),
             sf::Color::Blue,
-            24,
-            "OptionsButton"
-        );
-        container->createButton(
-            inputManager,
-            {100.f, 300.f},
+            "Options",
             font,
-            "Quit",
-            []() {
-                std::cout << "Quit game!" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::Red,
-            24,
-            "QuitButton"
+            12,
+            [](){
+                std::cout<<"Button clicked 2";
+            }
         );
-        container->createImage(
-            "Assets/player.png",
-            {1000.f, 300.f},
-            {0.3f, 0.3f},
+        container->createUIElement<Button>(
+            eventBus,
+            "QuitButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 300.f),
+            sf::Color::Blue,
+            "Quit",
+            font,
+            12,
+            [](){
+                std::cout<<"Button clicked 3";
+            }
+        );
+        container->createUIElement<Image>(
+            "PlayerImage",
+            0.3,
+            sf::Vector2f(500.f,400.f),
             sf::degrees(0),
-            "PlayerImage"
+            "Assets/player.png"
         );
     }
-    else if (state == GameState::Options) {
-        container->createButton(
-            inputManager,
-            {640.f, 360.f},
+    if (state == GameState::Options) {
+        container->createUIElement<Button>(
+            eventBus,
+            "PlayTheGameButton",
+            sf::Vector2f(100.f,50.f),
+            sf::Vector2f(100.f,100.f),
+            sf::Color::Green,
+            "Play",
             font,
-            "Go back",
-            [changeStateCallback]() {
-                changeStateCallback(GameState::MainMenu);
-                std::cout << "Button in options clicked!" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::Yellow,
-            24,
-            "BackButton"
+            12,
+            [](){}
         );
-        container->createButton(
-            inputManager,
-            {640.f, 460.f},
+        container->createUIElement<Button>(
+            eventBus,
+            "OptionsButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 200.f),
+            sf::Color::Blue,
+            "Options",
             font,
-            "Smth",
-            []() {
-                std::cout << "Second options button clicked!" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::White,
-            24
+            12,
+            [](){}
         );
     }
     else if (state == GameState::Playing) {
-        container->createText(
-            font,
-            "Playing",
-            {100.f, 25.f},
-            48,
-            sf::Color::White,
-            "PlayingTitle"
-        );
-
-        std::vector<ImageData> imagesData = {
-            {0, "Assets/ability1.png", {500, 500}},
-            {1, "Assets/ability2.png", {2000, 2000}},
-            {2, "Assets/ability1.png", {500, 500}},
-            {3, "Assets/ability2.png", {2000, 2000}},
-            {4, "Assets/ability1.png", {500, 500}},
-            {5, "Assets/ability2.png", {2000, 2000}}
-            // ...
-        };
-        float sizeOfImageX = 50.f;
-        float scale = 0.7f;
-        float offset =sizeOfImageX * sqrt(2.f)* scale;
-        sf::Vector2f leftPos = {70.f, 200.f};
-        sf::Vector2f rightPos = {leftPos.x + offset, leftPos.y}; // np. 100px odstępu
-        sf::Vector2f sizeOfImages = {sizeOfImageX, sizeOfImageX};
-        sf::Angle angle = sf::degrees(45);
-
-        for (size_t i = 0; i < imagesData.size(); ++i) {
-            sf::Vector2f pos = (i % 2 == 0) ? leftPos : rightPos;
-            pos.y += i * offset; // odstęp w pionie
-            container->createImageWithSize(
-                imagesData[i].path,
-                pos,
-                sizeOfImages,
-                angle
-            );
-        }
-        container->createGameElement(
-            GameElement::ShapeType::Rectangle,
-            {50.f, 620.f},
-            {500.f, 20.f},
-            sf::Color::Blue,
-            "ManaBar"
-        );
-        container->createGameElement(
-            GameElement::ShapeType::Rectangle,
-            {50.f, 580.f},
-            {500.f, 20.f},
-            sf::Color::Red,
-            "HealthBar"
+        container->createUIElement<GameElement>(
+            "HealthBar",
+            sf::Vector2f(100.f, 600.f), // Corrected
+            sf::Vector2f(200.f, 20.f), // Added size
+            sf::Color::Red, // Added color
+            ShapeType::Rectangle
         );
     }
-    // Dodaj kolejne else if dla innych GameState...
-
+    container->focusUIElement();
     return container;
 }
 
-void UIManager::initAllUI(InputManager& inputManager, sf::Font& font,
-    std::function<void(GameState)> changeStateCallback,
-    std::function<GameState()> getStateCallback)
+void UIManager::initAllUI(EventBus& eventBus, sf::Font& font)
 {
     for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused, GameState::Playing}) {
-        auto container = createUI(state, inputManager, font, changeStateCallback, getStateCallback);
+        auto container = createUI(eventBus, state, font, false);
         addUIContainer(state, container);
     }
 }

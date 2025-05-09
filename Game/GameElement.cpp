@@ -1,48 +1,52 @@
 #include "GameElement.h"
 
-GameElement::GameElement(ShapeType type, const sf::Vector2f& position, const sf::Vector2f& size , sf::Color color, const std::string& label)
-    : UIElement(label), type_(type)
+GameElement::GameElement(const std::string& label,
+    const sf::Vector2f& position,
+    const sf::Vector2f& size,
+    sf::Color color,   
+    ShapeType type  
+): UIElement(label), elementType_(type)
 {
-    if (type_ == ShapeType::Rectangle) {
-        rect_.setPosition(position);
-        rect_.setSize(size);
-        rect_.setFillColor(color);
-    } else if (type_ == ShapeType::Circle) {
-        circle_.setPosition(position);
-        circle_.setRadius(size.x / 2.f);
-        circle_.setFillColor(color);
+    if (elementType_ == ShapeType::Rectangle) {
+        elementRect_.setPosition(position);
+        elementRect_.setSize(size);
+        elementRect_.setFillColor(color);
+    } else if (elementType_ == ShapeType::Circle) {
+        elementCircle_.setPosition(position);
+        elementCircle_.setRadius(size.x / 2.f);
+        elementCircle_.setFillColor(color);
     }
     // Dodaj obsługę ConvexShape jeśli potrzebujesz
 }
 
 void GameElement::setPosition(const sf::Vector2f& position) {
-    if (type_ == ShapeType::Rectangle)
-        rect_.setPosition(position);
-    else if (type_ == ShapeType::Circle)
-        circle_.setPosition(position);
+    if (elementType_ == ShapeType::Rectangle)
+        elementRect_.setPosition(position);
+    else if (elementType_ == ShapeType::Circle)
+        elementCircle_.setPosition(position);
 }
 
 void GameElement::setSize(const sf::Vector2f& size) {
-    if (type_ == ShapeType::Rectangle)
-        rect_.setSize(size);
-    else if (type_ == ShapeType::Circle)
-        circle_.setRadius(size.x / 2.f);
+    if (elementType_ == ShapeType::Rectangle)
+        elementRect_.setSize(size);
+    else if (elementType_ == ShapeType::Circle)
+        elementCircle_.setRadius(size.x / 2.f);
 }
 
 void GameElement::setColor(const sf::Color& color) {
-    if (type_ == ShapeType::Rectangle)
-        rect_.setFillColor(color);
-    else if (type_ == ShapeType::Circle)
-        circle_.setFillColor(color);
+    if (elementType_ == ShapeType::Rectangle)
+        elementRect_.setFillColor(color);
+    else if (elementType_ == ShapeType::Circle)
+        elementCircle_.setFillColor(color);
 }
 
 void GameElement::setOutline(float thickness, sf::Color color) {
-    if (type_ == ShapeType::Rectangle) {
-        rect_.setOutlineThickness(thickness);
-        rect_.setOutlineColor(color);
-    } else if (type_ == ShapeType::Circle) {
-        circle_.setOutlineThickness(thickness);
-        circle_.setOutlineColor(color);
+    if (elementType_ == ShapeType::Rectangle) {
+        elementRect_.setOutlineThickness(thickness);
+        elementRect_.setOutlineColor(color);
+    } else if (elementType_ == ShapeType::Circle) {
+        elementCircle_.setOutlineThickness(thickness);
+        elementCircle_.setOutlineColor(color);
     }
 }
 
@@ -51,8 +55,8 @@ void GameElement::update(float) {
 }
 
 void GameElement::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    if (type_ == ShapeType::Rectangle)
-        target.draw(rect_, states);
-    else if (type_ == ShapeType::Circle)
-        target.draw(circle_, states);
+    if (elementType_ == ShapeType::Rectangle)
+        target.draw(elementRect_, states);
+    else if (elementType_ == ShapeType::Circle)
+        target.draw(elementCircle_, states);
 }

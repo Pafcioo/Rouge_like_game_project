@@ -14,30 +14,23 @@ enum class GameState
     GameOver
 };
 
-class UIManager
-{
+class UIManager {
+public:
+    UIManager();
+    ~UIManager() = default;
+    // Method for adding a UI to unordered map of UIs
+    void addUIContainer(GameState state, std::shared_ptr<UIContainer> container);
+    // Method for initializaing all of the created UIs
+    void initAllUI(EventBus& eventBus, sf::Font& font);
+    // Method for creating a UI
+    std::shared_ptr<UIContainer> createUI(EventBus& eventBus, GameState state, sf::Font& font, bool canHaveBackgroundUI);
+    // Getter for UI
+    std::shared_ptr<UIContainer> getUIContainer(GameState state);
+    // Draw methods for UIs
+    void drawUI(sf::RenderTarget& target, GameState state);
+    void drawBackground(sf::RenderTarget& target, sf::RenderStates states);
 private:
     std::unordered_map<GameState, std::shared_ptr<UIContainer>> uiContainers_;
     sf::RectangleShape backgroundShape_;
-    sf::Color backgroundColor_ = sf::Color(0, 0, 0, 150); // Semi-transparent black
-public:
-    UIManager(){
-        backgroundShape_.setFillColor(backgroundColor_);
-        backgroundShape_.setSize(sf::Vector2f(1280.f, 720.f)); // Set the size to match the window size
-    };
-    ~UIManager() = default;
-
-    void addUIContainer(GameState state, std::shared_ptr<UIContainer> container);
-    void drawUI(sf::RenderTarget& target, GameState state);
-    void drawBackground(sf::RenderTarget& target, sf::RenderStates states)
-    {
-        target.draw(backgroundShape_, states);
-    };
-    void initAllUI(InputManager& inputManager, sf::Font& font,
-        std::function<void(GameState)> changeStateCallback,
-        std::function<GameState()> getStateCallback);
-    std::shared_ptr<UIContainer> getUIContainer(GameState state);
-    std::shared_ptr<UIContainer> createUI(GameState state, InputManager& inputManager, sf::Font& font,
-        std::function<void(GameState)> changeStateCallback,
-        std::function<GameState()> getStateCallback);
+    sf::Color backgroundColor_ = sf::Color(0, 0, 0, 150);
 };

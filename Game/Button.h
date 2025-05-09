@@ -10,16 +10,15 @@ class Button : public UIElement {
 public:
     // Pointer to function, there the action for button is stored
     using ClickAction = std::function<void()>;
-    Button(
+    Button(EventBus& eventBus,
         const std::string& buttonLabel = "",
-        sf::Vector2f buttonSize = sf::Vector2f(0.f, 0.f),
-        sf::Vector2f buttonPosition,
+        const sf::Vector2f& buttonSize = {0.f, 0.f},
+        const sf::Vector2f& buttonPosition = {0.f, 0.f},
         sf::Color buttonColor = sf::Color::White,
-        std::string buttonTextString = "", 
-        const sf::Font& buttonFont,
-        unsigned int buttonCharacterSize = 1,
-        ClickAction buttonClickAction,
-        EventBus& eventBus  
+        const std::string& buttonTextString = "",
+        const sf::Font& buttonFont = sf::Font(),
+        unsigned int buttonCharacterSize = 12,
+        ClickAction buttonClickAction = nullptr
     );
     // Setters
     void setPosition(const sf::Vector2f& position);
@@ -37,16 +36,20 @@ public:
     std::string getText() const;
     sf::Color getTextColor() const;
     unsigned int getCharacterSize() const;
+    sf::FloatRect getGlobalBoundsOfButton() const;
+    ClickAction getClickAction(){
+        return onClick;
+    };
     // Methods for hover effect of a button
     void setFocused(bool focused);
     bool isFocused() const;
-    
-protected:
+    void update(float deltaTime);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
     sf::RectangleShape buttonShape;
     sf::Text buttonText;
     bool focused_ = false;
+    bool isActive = false;
     ClickAction onClick;
 };

@@ -20,14 +20,11 @@ private:
     Map gameMap;
     sf::Font font;
     GameState currentGameState = GameState::MainMenu;
-    GameState lastGameState = GameState::MainMenu; // <-- dodaj to pole
-    sf::View gameplayView= sf::View(sf::FloatRect({0,0},{1280, 720})); // <-- dodaj to pole
+    sf::View gameplayView= sf::View(sf::FloatRect({0,0},{1280, 720}));
 public:
     GameManager();
     ~GameManager(){};
     void changeGameState(GameState newState);
-    void updateInputManager();
-    void handleInput(float deltaTime);
     GameState getGameState() const { return currentGameState; }
     void changeGameplayViewBasedOnPlayerPosition()
     {

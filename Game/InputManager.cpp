@@ -22,8 +22,20 @@ void InputManager::handleInput(EventBus& eventBus, sf::RenderWindow& window)
         {
             window.close();
         }
+        else if( const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
+        {
+            eventBus.publish<sf::Event::MouseMoved>(*mouseMoved);
+        }
+        else if( const auto* mouseClicked = event->getIf<sf::Event::MouseButtonPressed>())
+        {
+            if(mouseClicked->button == sf::Mouse::Button::Left)
+                eventBus.publish<sf::Event::MouseButtonPressed>(*mouseClicked);
+        }
         else if( const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
         {
+            if (keyPressed->scancode == sf::Keyboard::Scancode::Up || keyPressed->scancode == sf::Keyboard::Scancode::Down) {
+                eventBus.publish<sf::Event::KeyPressed>(*keyPressed);
+            }
             if(keyPressed->scancode == sf::Keyboard::Scancode::Q)
                 eventBus.publish<AttackEvent>({inputDirection});
             if(keyPressed->scancode == sf::Keyboard::Scancode::Space)

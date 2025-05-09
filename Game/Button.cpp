@@ -2,15 +2,15 @@
 #include <iostream>
 
 Button::Button(
-    const std::string& buttonLabel = "",
-    sf::Vector2f buttonSize = sf::Vector2f(0.f, 0.f),
-    sf::Vector2f buttonPosition,
-    sf::Color buttonColor = sf::Color::White,
-    std::string buttonTextString = "", 
+    EventBus& eventBus, 
+    const std::string& buttonLabel,
+    const sf::Vector2f& buttonSize,
+    const sf::Vector2f& buttonPosition,
+    sf::Color buttonColor,
+    const std::string& buttonTextString, 
     const sf::Font& buttonFont,
-    unsigned int buttonCharacterSize = 1,
-    ClickAction buttonClickAction,
-    EventBus& eventBus  
+    unsigned int buttonCharacterSize,
+    ClickAction buttonClickAction
 )
     : UIElement(buttonLabel), onClick(buttonClickAction), buttonText(buttonFont, buttonTextString, buttonCharacterSize)
 {
@@ -21,9 +21,9 @@ Button::Button(
     buttonText.setFillColor(sf::Color::Black);
     buttonText.setPosition(buttonPosition);
     // Every button subscribe to mouse click event, so when mouse button is clicked the action is trigerred
-    eventBus.subscribe<MouseClickedEvent>([this](const MouseClickedEvent& mouseEvent){
-        if(buttonShape.getGlobalBounds().contains(mouseEvent.positionOfClick)){
-            if(onClick)
+    eventBus.subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& mouseEvent){
+        if(buttonShape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseEvent.position))){
+            if(onClick && isActive)
                 onClick();
         };
     });
@@ -93,6 +93,16 @@ sf::Color Button::getTextColor() const {
 unsigned int Button::getCharacterSize() const {
     return buttonText.getCharacterSize();
 }
+
+sf::FloatRect Button::getGlobalBoundsOfButton() const {
+    return buttonShape.getGlobalBounds();
+}
+
+void Button::update(float deltaTime) {
+    // Add logic for updating the button if needed
+    // For now, this can be left empty if no update logic is required.
+}
+
 // Draw method for button
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(buttonShape, states);
