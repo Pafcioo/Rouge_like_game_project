@@ -10,6 +10,7 @@ Image::Image(const std::string& imageLabel,
 : UIElement(imageLabel),imageTexturePath_(imageTexturePath), imageTexture_(imageTexturePath), imageSprite_(imageTexture_)
 {
     imageSprite_.setScale({imageScale,imageScale_});
+    imageSprite_.setOrigin(imageSprite_.getGlobalBounds().getCenter());
     imageSprite_.setPosition(imagePosition);
     imageSprite_.setRotation(imageRotation);
 }
@@ -31,6 +32,7 @@ Image::Image(const std::string& imageLabel,
     else {
         std::cerr << "Texture size is invalid for: " << imageTexturePath_ << std::endl;
     }
+    imageSprite_.setOrigin(imageSprite_.getGlobalBounds().getCenter());
     imageSprite_.setPosition(imagePosition);
     imageSprite_.setRotation(imageRotation);
 }

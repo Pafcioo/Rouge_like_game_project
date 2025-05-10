@@ -14,10 +14,11 @@ class GameElement : public UIElement {
 public:
     // Constructor
     GameElement(const std::string& label = "",
-        const sf::Vector2f& position = {0.f, 0.f},
         const sf::Vector2f& size = {50.f, 50.f},
+        const sf::Vector2f& position = {0.f, 0.f},
         sf::Color color = sf::Color::White,
-        ShapeType type = ShapeType::Rectangle  
+        ShapeType type = ShapeType::Rectangle,
+        bool centerOrigin = false // New parameter
     );
     // Setters
     void setPosition(const sf::Vector2f& position);
@@ -32,4 +33,5 @@ private:
     ShapeType elementType_;
     sf::RectangleShape elementRect_;
     sf::CircleShape elementCircle_;
+    void setOriginCentered(bool centerOrigin); // New private method
 };

@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "UIElement.h"
 #include "Event.h"
+
 // Button inherits from UIElement so it can be in the same vector of UIElements
 class Button : public UIElement {
 public:
@@ -18,7 +19,8 @@ public:
         const std::string& buttonTextString = "",
         const sf::Font& buttonFont = sf::Font(),
         unsigned int buttonCharacterSize = 12,
-        ClickAction buttonClickAction = nullptr
+        ClickAction buttonClickAction = nullptr,
+        bool centerOrigin = false // New parameter
     );
     // Setters
     void setPosition(const sf::Vector2f& position);
@@ -52,4 +54,5 @@ private:
     bool focused_ = false;
     bool isActive = false;
     ClickAction onClick;
+    void setOriginCentered(bool centerOrigin); // New private method
 };

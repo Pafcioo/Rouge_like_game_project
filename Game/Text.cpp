@@ -14,6 +14,7 @@ Text::Text(
     characterSize_(characterSize), 
     color_(color) 
 {
+    text_.setPosition(positionOfText);
     text_.setString(text);
     text_.setCharacterSize(characterSize_);
     text_.setFillColor(color_);

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "EntityManager.h"
 #include "Event.h"
+#include "GameManager.h"
 #include <algorithm>
 #include <cmath>
 
@@ -10,13 +11,13 @@ void EntityManager::subscribeToEvents(EventBus& eventBus)
 {
     std::cout << "Subscribing to MoveEvent..." << std::endl;
     eventBus.subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
-        if (player) {
+        if (player && isEntityManagerActive) {
             player->move(moveEvent.direction * moveEvent.deltaTime);
         }
     });
     std::cout << "Subscribing to AttackEvent..." << std::endl;
     eventBus.subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
-        if (player && attackEvent.direction!=sf::Vector2f(0,0)) {
+        if (player && attackEvent.direction!=sf::Vector2f(0,0) && isEntityManagerActive) {
             player->attack(attackEvent.direction);
         }
     });
@@ -26,9 +27,11 @@ void EntityManager::drawEntities(sf::RenderWindow& window)
 {
     // Placeholder for drawing entities
     // In a real implementation, you would loop through your entities and draw them here
-    window.draw(*player);
-    for (auto& proj : projectiles) {
-        window.draw(*proj);
+    if(isEntityManagerActive){
+        window.draw(*player);
+        for (auto& proj : projectiles) {
+            window.draw(*proj);
+        }
     }
     //std::cout << "Drawing entities..." << std::endl;
 }
@@ -50,4 +53,14 @@ void EntityManager::updateEntities(float deltaTime, EventBus& eventBus) {
                        [](const Projectile* p) { return !p->isActive(); }),
         projectiles.end()
     );
+}
+
+void EntityManager::updateEntityManager(GameState currentState){
+    if(currentState == GameState::Playing)
+    {
+        isEntityManagerActive = true;
+    }
+    else{
+        isEntityManagerActive = false;
+    }
 }

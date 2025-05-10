@@ -15,7 +15,7 @@ enum class GameState;
 class UIContainer
 {
 public:
-    UIContainer(GameState overlayStateOfGame, EventBus& eventBus, bool canHaveBackgroundUI, sf::Clock& globalCooldownClock);
+    UIContainer(GameState overlayStateOfGame, EventBus& eventBus, sf::Clock& globalCooldownClock);
     ~UIContainer() = default;
     // Method for adding UIElements to UI(container)
     void addElement(std::shared_ptr<UIElement> element);

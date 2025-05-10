@@ -4,9 +4,15 @@
 #include "Player.h"
 #include "Projectile.h"
 
+UIManager GameManager::getUIManager()
+{
+    return uiManager;
+}
+
 void GameManager::changeGameState(GameState newState) {
     currentGameState = newState;
-    uiManager.updateActiveUI(currentGameState); // Update active UI based on the new state
+    uiManager.updateActiveUI(currentGameState);
+    entityManager.updateEntityManager(newState);
 }
 
 GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf"),
@@ -14,6 +20,7 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
 {
     entityManager.subscribeToEvents(eventBus);
     uiManager.initAllUI(eventBus, font);
+    uiManager.updateActiveUI(currentGameState);
 }
 
 void GameManager::Play()
@@ -29,13 +36,13 @@ void GameManager::Play()
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
         inputManager.handleInput(deltaTime, eventBus, gameWindow);
-        gameMap.draw(gameWindow, sf::RenderStates::Default);
-        gameWindow.setView(gameWindow.getDefaultView());
-        uiManager.drawUI(gameWindow, currentGameState);
         changeGameplayViewBasedOnPlayerPosition();
         gameWindow.setView(gameplayView);
+        gameMap.draw(gameWindow, sf::RenderStates::Default);
         entityManager.updateEntities(deltaTime,eventBus);
         entityManager.drawEntities(gameWindow);
+        gameWindow.setView(defaultView);
+        uiManager.drawUI(gameWindow, currentGameState);
         gameWindow.display();
     }
 }

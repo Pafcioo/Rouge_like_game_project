@@ -1,10 +1,11 @@
 #include "GameElement.h"
 
 GameElement::GameElement(const std::string& label,
-    const sf::Vector2f& position,
     const sf::Vector2f& size,
+    const sf::Vector2f& position,
     sf::Color color,   
-    ShapeType type  
+    ShapeType type,
+    bool centerOrigin // New parameter
 ): UIElement(label), elementType_(type)
 {
     if (elementType_ == ShapeType::Rectangle) {
@@ -16,7 +17,23 @@ GameElement::GameElement(const std::string& label,
         elementCircle_.setRadius(size.x / 2.f);
         elementCircle_.setFillColor(color);
     }
-    // Dodaj obsługę ConvexShape jeśli potrzebujesz
+    setOriginCentered(centerOrigin); // Set origin based on the parameter
+}
+
+void GameElement::setOriginCentered(bool centerOrigin) {
+    if (centerOrigin) {
+        if (elementType_ == ShapeType::Rectangle) {
+            elementRect_.setOrigin({elementRect_.getSize().x / 2.f, elementRect_.getSize().y / 2.f});
+        } else if (elementType_ == ShapeType::Circle) {
+            elementCircle_.setOrigin({elementCircle_.getRadius(), elementCircle_.getRadius()});
+        }
+    } else {
+        if (elementType_ == ShapeType::Rectangle) {
+            elementRect_.setOrigin({0.f, 0.f});
+        } else if (elementType_ == ShapeType::Circle) {
+            elementCircle_.setOrigin({0.f, 0.f});
+        }
+    }
 }
 
 void GameElement::setPosition(const sf::Vector2f& position) {
@@ -27,10 +44,13 @@ void GameElement::setPosition(const sf::Vector2f& position) {
 }
 
 void GameElement::setSize(const sf::Vector2f& size) {
-    if (elementType_ == ShapeType::Rectangle)
+    if (elementType_ == ShapeType::Rectangle) {
         elementRect_.setSize(size);
-    else if (elementType_ == ShapeType::Circle)
+        setOriginCentered(elementRect_.getOrigin() != sf::Vector2f(0.f, 0.f)); // Update origin if centered
+    } else if (elementType_ == ShapeType::Circle) {
         elementCircle_.setRadius(size.x / 2.f);
+        setOriginCentered(elementCircle_.getOrigin() != sf::Vector2f(0.f, 0.f)); // Update origin if centered
+    }
 }
 
 void GameElement::setColor(const sf::Color& color) {
@@ -51,7 +71,7 @@ void GameElement::setOutline(float thickness, sf::Color color) {
 }
 
 void GameElement::update(float) {
-    // Dodaj logikę jeśli potrzebujesz
+    // Add logic if needed
 }
 
 void GameElement::draw(sf::RenderTarget& target, sf::RenderStates states) const {

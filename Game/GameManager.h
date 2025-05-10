@@ -20,11 +20,13 @@ private:
     Map gameMap;
     sf::Font font;
     GameState currentGameState = GameState::MainMenu;
-    sf::View gameplayView= sf::View(sf::FloatRect({0,0},{1280, 720}));
+    sf::View defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    sf::View gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
 public:
     GameManager();
     ~GameManager(){};
     void changeGameState(GameState newState);
+    UIManager getUIManager();
     GameState getGameState() const { return currentGameState; }
     void changeGameplayViewBasedOnPlayerPosition()
     {

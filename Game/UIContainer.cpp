@@ -4,8 +4,10 @@
 #include "Image.h"
 #include "GameElement.h"
 
-UIContainer::UIContainer(GameState overlayStateOfGame, EventBus& eventBus, bool canHaveBackgroundUI, sf::Clock& globalCooldownClock)
-    : eventBus_(eventBus), overlayStateOfGame_(overlayStateOfGame), canHaveBackgroundUI_(canHaveBackgroundUI), globalCooldownClock_(globalCooldownClock) {}
+UIContainer::UIContainer(GameState overlayStateOfGame, EventBus& eventBus, sf::Clock& globalCooldownClock)
+    : eventBus_(eventBus), overlayStateOfGame_(overlayStateOfGame), globalCooldownClock_(globalCooldownClock) {
+        canHaveBackgroundUI_ = false;
+    }
 
 int UIContainer::getFocusedIndex() const {
     return focusedIndex_;
@@ -19,6 +21,16 @@ bool UIContainer::canHaveBackgroundUI() const {
 }
 void UIContainer::setIsUIActive(bool value) {
     isUIActive_ = value;
+
+    if (!isUIActive_) {
+        // Reset focus when the UI becomes inactive
+        if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
+            if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get())) {
+                btn->setFocused(false);
+            }
+        }
+        focusedIndex_ = -1; // Reset the focused index
+    }
 }
 bool UIContainer::isUIActive() const {
     return isUIActive_;

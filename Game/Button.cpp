@@ -1,5 +1,6 @@
 #include "Button.h"
 #include <iostream>
+#include <cmath>
 
 Button::Button(
     EventBus& eventBus, 
@@ -10,23 +11,41 @@ Button::Button(
     const std::string& buttonTextString, 
     const sf::Font& buttonFont,
     unsigned int buttonCharacterSize,
-    ClickAction buttonClickAction
+    ClickAction buttonClickAction,
+    bool centerOrigin // New parameter
 )
     : UIElement(buttonLabel), onClick(buttonClickAction), buttonText(buttonFont, buttonTextString, buttonCharacterSize)
 {
-    // All the essential atributes of a button are set here 
-    buttonShape.setPosition(buttonPosition);
+    // Set button shape attributes
     buttonShape.setSize(buttonSize);
+    buttonShape.setPosition(buttonPosition);
     buttonShape.setFillColor(buttonColor);
-    buttonText.setFillColor(sf::Color::Black);
-    buttonText.setPosition(buttonPosition);
-    // Every button subscribe to mouse click event, so when mouse button is clicked the action is trigerred
+
+    // Set button text attributes
+    buttonText.setFillColor(sf::Color::White);
+
+    // Adjust origin based on the centerOrigin parameter
+    setOriginCentered(centerOrigin);
+
+    // Subscribe to mouse click event
     eventBus.subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& mouseEvent){
         if(buttonShape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseEvent.position))){
             if(onClick && isActive)
                 onClick();
         };
     });
+}
+
+void Button::setOriginCentered(bool centerOrigin) {
+    if (centerOrigin) {
+        // Center the origin of the button shape and text
+        buttonShape.setOrigin({buttonShape.getSize().x / 2.f, buttonShape.getSize().y / 2.f});
+    } else {
+        // Set origin to top-left
+        buttonShape.setOrigin({0.f, 0.f});
+    }
+    buttonText.setOrigin(buttonText.getGlobalBounds().getCenter());
+    buttonText.setPosition(buttonShape.getGlobalBounds().getCenter());
 }
 
 // This method is responsible for hover effect
@@ -100,10 +119,8 @@ sf::FloatRect Button::getGlobalBoundsOfButton() const {
 
 void Button::update(float deltaTime) {
     // Add logic for updating the button if needed
-    // For now, this can be left empty if no update logic is required.
 }
 
-// Draw method for button
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(buttonShape, states);
     target.draw(buttonText, states);
