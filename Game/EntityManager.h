@@ -14,10 +14,9 @@ class EntityManager
     public:
         EntityManager() = default;
         ~EntityManager() = default;
-
         static std::vector<Projectile*> projectiles;
         void drawEntities(sf::RenderWindow& window);
         void updateEntities(float deltaTime, EventBus& eventBus);
+        void subscribeToEvents(EventBus& eventBus);
         Entity* getPlayer() { return player; }
-
 };

@@ -6,7 +6,7 @@ float Player::getEntitySpeed() {return entitySpeed;}
 
 void Player::move(const sf::Vector2f direction)
 {
-    this->entitySprite.move(direction);
+    this->entitySprite.move(direction*entitySpeed);
     entityPosition = entitySprite.getPosition();
 }
 

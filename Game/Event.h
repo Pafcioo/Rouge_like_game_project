@@ -13,6 +13,7 @@ struct PlayerDamagedEvent {
 
 struct MoveEvent {
     sf::Vector2f direction;
+    float deltaTime;
 };
 
 struct AttackEvent {

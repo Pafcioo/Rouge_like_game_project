@@ -1,14 +1,25 @@
 #include <iostream>
 #include "math.h"
 #include "UIManager.h"
+#include "GameManager.h"
 
-UIManager::UIManager(){
+UIManager::UIManager(GameManager& gameManager):gameManager_(gameManager){
     backgroundShape_.setFillColor(backgroundColor_);
     backgroundShape_.setSize(sf::Vector2f(1280.f, 720.f));
 }
 
 void UIManager::drawBackground(sf::RenderTarget& target, sf::RenderStates states){
     target.draw(backgroundShape_, states);
+}
+
+void UIManager::updateActiveUI(GameState currentGameState) {
+    for (auto& [state, container] : uiContainers_) {
+        if (state == currentGameState) {
+            container->setIsUIActive(true); // Activate the container for the current state
+        } else {
+            container->setIsUIActive(false); // Deactivate all other containers
+        }
+    }
 }
 
 void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> container) {
@@ -21,19 +32,19 @@ void UIManager::drawUI(sf::RenderTarget& target, GameState state) {
         // Draw background UIs if allowed
         if (it->second->canHaveBackgroundUI()) {
             for (auto& [prevState, container] : uiContainers_) {
-                if (prevState != state) {
+                if (prevState != state && container) {
                     container->drawAll(target, sf::RenderStates::Default);
                 }
             }
+            drawBackground(target, sf::RenderStates::Default);
         }
     // Draw the current UI
-    drawBackground(target, sf::RenderStates::Default);
     it->second->drawAll(target, sf::RenderStates::Default);
     }
 }
 
 std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState state,sf::Font& font, bool canHaveBackgroundUI){
-    auto container = std::make_shared<UIContainer>(state, eventBus, canHaveBackgroundUI);
+    auto container = std::make_shared<UIContainer>(state, eventBus, canHaveBackgroundUI, globalEventCooldownClock_);
     if (state == GameState::MainMenu) {
         container->createUIElement<Text>(
             sf::Vector2f(50.f,100.f),
@@ -52,8 +63,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             "Play",
             font,
             12,
-            [](){
-                std::cout<<"Button clicked 1";
+            [&](){
+                gameManager_.changeGameState(GameState::Playing);
             }
         );
         container->createUIElement<Button>(
@@ -65,8 +76,9 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             "Options",
             font,
             12,
-            [](){
-                std::cout<<"Button clicked 2";
+            [&](){
+                std::cout<<"test";
+                gameManager_.changeGameState(GameState::Options);
             }
         );
         container->createUIElement<Button>(
@@ -100,7 +112,10 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             "Play",
             font,
             12,
-            [](){}
+            [&](){
+                std::cout<<"test";
+                gameManager_.changeGameState(GameState::Playing);
+            }
         );
         container->createUIElement<Button>(
             eventBus,
@@ -108,10 +123,12 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             sf::Vector2f(100.f, 50.f),
             sf::Vector2f(100.f, 200.f),
             sf::Color::Blue,
-            "Options",
+            "Go back to menu",
             font,
             12,
-            [](){}
+            [&](){
+                gameManager_.changeGameState(GameState::MainMenu);
+            }
         );
     }
     else if (state == GameState::Playing) {
@@ -122,8 +139,21 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             sf::Color::Red, // Added color
             ShapeType::Rectangle
         );
+        container->createUIElement<Button>(
+            eventBus,
+            "OptionsButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 200.f),
+            sf::Color::Blue,
+            "Go back to menu",
+            font,
+            12,
+            [&](){
+                gameManager_.changeGameState(GameState::MainMenu);
+            }
+        );
     }
-    container->focusUIElement();
+    container->subscribeToEvents();
     return container;
 }
 

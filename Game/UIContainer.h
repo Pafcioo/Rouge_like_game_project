@@ -15,7 +15,7 @@ enum class GameState;
 class UIContainer
 {
 public:
-    UIContainer(GameState overlayStateOfGame, EventBus& eventBus, bool canHaveBackgroundUI);
+    UIContainer(GameState overlayStateOfGame, EventBus& eventBus, bool canHaveBackgroundUI, sf::Clock& globalCooldownClock);
     ~UIContainer() = default;
     // Method for adding UIElements to UI(container)
     void addElement(std::shared_ptr<UIElement> element);
@@ -23,7 +23,7 @@ public:
     void focusNext();
     void focusPrevious();
     void activateFocused();
-    void focusUIElement();
+    void subscribeToEvents();
     int getFocusedIndex() const;
     int getButtonCount() const;
     // Setters and getters for background and active state
@@ -53,4 +53,5 @@ private:
     // Bool that decides whether the UI is active/can be clicked and drawn
     bool isUIActive_ = true;
     int focusedIndex_ = -1;
+    sf::Clock& globalCooldownClock_; // Reference to the global cooldown clock
 };
