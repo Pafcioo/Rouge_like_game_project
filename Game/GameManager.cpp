@@ -4,12 +4,10 @@
 #include "Player.h"
 #include "Projectile.h"
 
-GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf"),
-    gameMap("Assets/Map.png", {0,0}, {1280*8, 720*8})
+GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
 {
-    entityManager.subscribeToEvents(eventBus);
     uiManager.initAllUI(eventBus, font);
-    uiManager.updateActiveUI(currentGameState);
+    entityManager.subscribeToEvents(eventBus);
     currentGameState = GameState::MainMenu;
     defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
@@ -40,6 +38,10 @@ GameState GameManager::getGameState() const {
     return currentGameState; 
 }
 
+MapManager& GameManager::getMapManager() {
+    return mapManager;
+}
+
 void GameManager::Play()
 {
     // Create a window
@@ -58,12 +60,13 @@ void GameManager::Play()
         // relativly to player, so the player is always in the center of view
         changeGameplayViewBasedOnPlayer();
         gameWindow.setView(gameplayView);
-        gameMap.draw(gameWindow);
+        mapManager.drawMap(gameWindow, currentGameState);
         entityManager.updateEntities(deltaTime,eventBus);
         entityManager.drawEntities(gameWindow);
         gameWindow.setView(defaultView);
+        uiManager.updateActiveUI(currentGameState);
         uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game
-        //
+        
         gameWindow.display();
     }
 }

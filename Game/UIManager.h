@@ -13,7 +13,8 @@ enum class GameState
     Playing,
     Paused,
     Options,
-    GameOver
+    GameOver,
+    ChooseMap
 };
 
 class UIManager {

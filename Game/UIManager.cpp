@@ -107,7 +107,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             font,
             24, //Character size
             [&](){
-                gameManager_.changeGameState(GameState::Playing); //Action of the button
+                gameManager_.changeGameState(GameState::ChooseMap); //Action of the button
             }
         );
         container->createUIElement<Button>(
@@ -126,9 +126,22 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
         );
         container->createUIElement<Button>(
             eventBus,
-            "QuitButton",
+            "MapChooseButton",
             sf::Vector2f(100.f, 50.f),
             sf::Vector2f(100.f, 300.f),
+            sf::Color::White,
+            "Choose map",
+            font,
+            24,
+            [&](){
+                gameManager_.changeGameState(GameState::ChooseMap);
+            }
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "QuitButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 400.f),
             sf::Color::White,
             "Quit",
             font,
@@ -165,7 +178,6 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             font,
             12,
             [&](){
-                std::cout<<"test";
                 gameManager_.changeGameState(GameState::Playing);
             },
             true //Centered origin
@@ -174,7 +186,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             eventBus,
             "OptionsButton",
             sf::Vector2f(100.f, 100.f),
-            sf::Vector2f(600.f, 360.f),
+            sf::Vector2f(640.f, 360.f),
             sf::Color::Blue,
             "Go back",
             font,
@@ -188,7 +200,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             eventBus,
             "OptionsButton",
             sf::Vector2f(100.f, 100.f),
-            sf::Vector2f(700.f, 360.f),
+            sf::Vector2f(780.f, 360.f),
             sf::Color::Blue,
             "Go back to main menu",
             font,
@@ -228,6 +240,53 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             }
         );
     }
+    else if (state == GameState::ChooseMap) {
+        container->createUIElement<Button>(
+            eventBus,
+            "MapButton1",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(500.f, 360.f),
+            sf::Color::White,
+            "Desert Strike",
+            font,
+            24,
+            [&](){
+                gameManager_.getMapManager().setMap("Desert Strike");
+                gameManager_.changeGameState(GameState::Playing);
+            },
+            true
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "MapButton1",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(640.f, 360.f),
+            sf::Color::White,
+            "Forest Valley",
+            font,
+            24,
+            [&](){
+                gameManager_.getMapManager().setMap("Forest Valley");
+                gameManager_.changeGameState(GameState::Playing);
+            },
+            true
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "MapButton1",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(780.f, 360.f),
+            sf::Color::White,
+            "Castle",
+            font,
+            24,
+            [&](){
+                gameManager_.getMapManager().setMap("Castle");
+                gameManager_.changeGameState(GameState::Playing);
+            },
+            true
+        );
+    }
     // At the end UI subscribe to all events(hover effect, arrow keys, mouse click etc.)
     container->subscribeToEvents();
     return container;
@@ -235,7 +294,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
 
 void UIManager::initAllUI(EventBus& eventBus, sf::Font& font)
 {
-    for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused, GameState::Playing}) {
+    for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused, GameState::Playing, GameState::ChooseMap}) {
         auto container = createUI(eventBus, state, font);
         addUIContainer(state, container);
     }

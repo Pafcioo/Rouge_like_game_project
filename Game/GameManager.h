@@ -6,7 +6,8 @@
 #include "Button.h"
 #include "Player.h"
 #include "Event.h"
-#include "Map.h"
+#include "GameMap.h"
+#include "MapManager.h"
 // The most important class of the game, that handles everything
 class GameManager
 {
@@ -17,7 +18,7 @@ private:
     InputManager inputManager;
     EventBus eventBus;
     UIManager uiManager;
-    Map gameMap;
+    MapManager mapManager;
     sf::Font font;
     GameState currentGameState;
     sf::View defaultView;
@@ -28,6 +29,7 @@ public:
     void changeGameState(GameState newState);
     UIManager getUIManager();
     GameState getGameState() const;
+    MapManager& getMapManager();
     void changeGameplayViewBasedOnPlayer();
     void Play();
 };
