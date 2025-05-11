@@ -3,6 +3,8 @@
 #include "UIManager.h"
 #include "GameManager.h"
 
+// In deafault constructor 
+// gameManager is needed for changing the game state
 UIManager::UIManager(GameManager& gameManager):gameManager_(gameManager){
     backgroundShape_.setFillColor(backgroundColor_);
     backgroundShape_.setSize(sf::Vector2f(1280.f, 720.f));
@@ -12,6 +14,7 @@ void UIManager::drawBackground(sf::RenderTarget& target, sf::RenderStates states
     target.draw(backgroundShape_, states);
 }
 
+// Based on new state of the game, all previous UIs are deactivated but they could still be drawn in the background
 void UIManager::updateActiveUI(GameState newGameState) {
     // Push the current state to the stack if it's not already the top
     if (uiHistory_.empty() || uiHistory_.top() != newGameState) {
@@ -27,7 +30,7 @@ void UIManager::updateActiveUI(GameState newGameState) {
         }
     }
 }
-
+// Method for going back to previous UI, so the button don't need the info to where go back, just go to previous one
 void UIManager::goBackToPreviousUI() {
     if (!uiHistory_.empty()) {
         uiHistory_.pop(); // Remove the current state
@@ -40,6 +43,7 @@ void UIManager::goBackToPreviousUI() {
     }
 }
 
+// Method for adding UIs, because UIManager has a map for that, it is used later in createUI method
 void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> container) {
     uiContainers_[state] = std::move(container);
 }
@@ -66,7 +70,7 @@ void UIManager::drawUI(sf::RenderTarget& target, GameState currentState) {
                     uisToDraw.push_back(prevState);
                 }
             }
-
+            // Draw only the last one in the background
             auto it = uisToDraw.rend();
             it--;
             auto prevIt = uiContainers_.find(*it);
@@ -81,28 +85,29 @@ void UIManager::drawUI(sf::RenderTarget& target, GameState currentState) {
     }
 }
 
+// It is very important method for creating UIs. For the appropriate game state the elements of UI are created using generic method createUIElement 
 std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState state,sf::Font& font){
     auto container = std::make_shared<UIContainer>(state, eventBus, globalEventCooldownClock_);
     if (state == GameState::MainMenu) {
         container->createUIElement<Text>(
-            sf::Vector2f(100.f,30.f),
+            sf::Vector2f(100.f,30.f), //Position
             font,
-            "Main Menu",
-            48,
-            sf::Color::White,
-            "MainMenuTitle"
+            "Main Menu", //Text
+            48, //Character size
+            sf::Color::White, // Color of font
+            "MainMenuTitle" // Label, used later for finding the element
         );
         container->createUIElement<Button>(
-            eventBus,
-            "PlayTheGameButton",
-            sf::Vector2f(100.f,50.f),
-            sf::Vector2f(100.f,100.f),
-            sf::Color::Black,
-            "Play",
+            eventBus, // event bus for subscribing and publishing events
+            "PlayTheGameButton", //Label
+            sf::Vector2f(100.f,50.f), // Position
+            sf::Vector2f(100.f,100.f), // Size
+            sf::Color::White, // Background color
+            "Play", //Text
             font,
-            24,
+            24, //Character size
             [&](){
-                gameManager_.changeGameState(GameState::Playing);
+                gameManager_.changeGameState(GameState::Playing); //Action of the button
             }
         );
         container->createUIElement<Button>(
@@ -110,7 +115,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             "OptionsButton",
             sf::Vector2f(100.f, 50.f),
             sf::Vector2f(100.f, 200.f),
-            sf::Color::Black,
+            sf::Color::White,
             "Options",
             font,
             24,
@@ -124,7 +129,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             "QuitButton",
             sf::Vector2f(100.f, 50.f),
             sf::Vector2f(100.f, 300.f),
-            sf::Color::Black,
+            sf::Color::White,
             "Quit",
             font,
             24,
@@ -133,22 +138,22 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             }
         );
         container->createUIElement<Image>(
-            "PlayerImage",
-            0.3,
-            sf::Vector2f(500.f,400.f),
-            sf::degrees(0),
-            "Assets/player.png"
+            "PlayerImage", //Label
+            0.3, //Scale or target size(sf::Vector2f)
+            sf::Vector2f(500.f,400.f), // Position
+            sf::degrees(0), // Rotation
+            "Assets/player.png" //Path to texture
         );
     }
     if (state == GameState::Options) {
         container->setCanHaveBackgroundUI(true);
         container->createUIElement<GameElement>(
-            "BackgroundOption",
-            sf::Vector2f(600,300),
-            sf::Vector2f(640,360),
-            sf::Color::Black,
-            ShapeType::Rectangle,
-            true
+            "BackgroundOption", // Label
+            sf::Vector2f(600,300), // Position
+            sf::Vector2f(640,360), // Size
+            sf::Color::Black, // Background color
+            ShapeType::Rectangle, //Type of shape
+            true // Centered origin
         );
         container->createUIElement<Button>(
             eventBus,
@@ -163,7 +168,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
                 std::cout<<"test";
                 gameManager_.changeGameState(GameState::Playing);
             },
-            true
+            true //Centered origin
         );
         container->createUIElement<Button>(
             eventBus,
@@ -197,16 +202,16 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
     else if (state == GameState::Playing) {
         container->createUIElement<GameElement>(
             "EnergyBar",
-            sf::Vector2f(300.f, 30.f), // Corrected
-            sf::Vector2f(50.f, 600.f), // Added size
-            sf::Color::Red, // Added color
+            sf::Vector2f(300.f, 30.f),
+            sf::Vector2f(50.f, 600.f),
+            sf::Color::Red,
             ShapeType::Rectangle
         );
         container->createUIElement<GameElement>(
             "HealthBar",
-            sf::Vector2f(300.f, 30.f), // Corrected
-            sf::Vector2f(50.f, 650.f), // Added size
-            sf::Color::Red, // Added color
+            sf::Vector2f(300.f, 30.f),
+            sf::Vector2f(50.f, 650.f),
+            sf::Color::Red,
             ShapeType::Rectangle
         );
         container->createUIElement<Button>(
@@ -214,7 +219,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             "OptionsButton",
             sf::Vector2f(100.f, 50.f),
             sf::Vector2f(1000.f, 50.f),
-            sf::Color::Black,
+            sf::Color::White,
             "Options",
             font,
             12,
@@ -223,6 +228,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             }
         );
     }
+    // At the end UI subscribe to all events(hover effect, arrow keys, mouse click etc.)
     container->subscribeToEvents();
     return container;
 }

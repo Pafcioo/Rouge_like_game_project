@@ -6,6 +6,7 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 
+// Structures for custom events
 struct PlayerDamagedEvent {
     int playerId;
     int damage;
@@ -24,13 +25,13 @@ struct DashEvent {
     sf::Vector2f direction;
 };
 
-// Bazowa klasa eventu (do przechowywania wskaźników)
+// Base class for events, needed for storing pointers to this base class
 class EventBase {
 public:
     virtual ~EventBase() = default;
 };
 
-// Szablonowy event z danymi dowolnego typu
+// Template event that stores any kind of event listed above in structures
 template<typename T>
 class Event : public EventBase {
 public:
@@ -38,13 +39,13 @@ public:
     explicit Event(const T& data) : data(data) {}
 };
 
-// EventBus - generyczny system eventów
+// Generic system for events
 class EventBus {
 public:
     template<typename EventType>
-    using Handler = std::function<void(const EventType&)>;
+    using Handler = std::function<void(const EventType&)>; // action that will be triggered after receving a publish
 
-    // Subskrybuj event danego typu
+    // Subscription of event, the handler(action) is added to map of handlers
     template<typename EventType>
     void subscribe(Handler<EventType> handler) {
         auto& handlers = handlers_[std::type_index(typeid(EventType))];
@@ -53,7 +54,7 @@ public:
         });
     }
 
-    // Publikuj event danego typu
+    // Publication of event, after publishing every subscriber activate his action (handler)
     template<typename EventType>
     void publish(const EventType& event) {
         auto it = handlers_.find(std::type_index(typeid(EventType)));

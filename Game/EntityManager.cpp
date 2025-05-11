@@ -6,16 +6,14 @@
 #include <cmath>
 
 std::vector<Projectile*> EntityManager::projectiles;
-
+// Method for subscribing events where player subscribe to events like movement and attack
 void EntityManager::subscribeToEvents(EventBus& eventBus)
 {
-    std::cout << "Subscribing to MoveEvent..." << std::endl;
     eventBus.subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
         if (player && isEntityManagerActive) {
             player->move(moveEvent.direction * moveEvent.deltaTime);
         }
     });
-    std::cout << "Subscribing to AttackEvent..." << std::endl;
     eventBus.subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
         if (player && attackEvent.direction!=sf::Vector2f(0,0) && isEntityManagerActive) {
             player->attack(attackEvent.direction);
@@ -54,7 +52,7 @@ void EntityManager::updateEntities(float deltaTime, EventBus& eventBus) {
         projectiles.end()
     );
 }
-
+// Method for changing the activity of entity manager, which is only active when the game is in playing state
 void EntityManager::updateEntityManager(GameState currentState){
     if(currentState == GameState::Playing)
     {

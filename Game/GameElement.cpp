@@ -1,11 +1,12 @@
 #include "GameElement.h"
 
+// Default constructor
 GameElement::GameElement(const std::string& label,
     const sf::Vector2f& size,
     const sf::Vector2f& position,
     sf::Color color,   
     ShapeType type,
-    bool centerOrigin // New parameter
+    bool centerOrigin
 ): UIElement(label), elementType_(type)
 {
     if (elementType_ == ShapeType::Rectangle) {
@@ -17,9 +18,10 @@ GameElement::GameElement(const std::string& label,
         elementCircle_.setRadius(size.x / 2.f);
         elementCircle_.setFillColor(color);
     }
-    setOriginCentered(centerOrigin); // Set origin based on the parameter
+    setOriginCentered(centerOrigin);
 }
 
+// All the setters for GameElement object
 void GameElement::setOriginCentered(bool centerOrigin) {
     if (centerOrigin) {
         if (elementType_ == ShapeType::Rectangle) {

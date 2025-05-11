@@ -12,7 +12,7 @@ Button::Button(
     const sf::Font& buttonFont,
     unsigned int buttonCharacterSize,
     ClickAction buttonClickAction,
-    bool centerOrigin // New parameter
+    bool centerOrigin
 )
     : UIElement(buttonLabel), onClick(buttonClickAction), buttonText(buttonFont, buttonTextString, buttonCharacterSize)
 {
@@ -22,7 +22,7 @@ Button::Button(
     buttonShape.setFillColor(buttonColor);
 
     // Set button text attributes
-    buttonText.setFillColor(sf::Color::White);
+    buttonText.setFillColor(sf::Color::Black);
 
     // Adjust origin based on the centerOrigin parameter
     setOriginCentered(centerOrigin);

@@ -31,7 +31,7 @@ public:
     // Draw methods for UIs
     void drawUI(sf::RenderTarget& target, GameState state);
     void drawBackground(sf::RenderTarget& target, sf::RenderStates states);
-
+    // Update methods for UI
     void updateActiveUI(GameState newGameState);
     void goBackToPreviousUI();
 private:
@@ -41,5 +41,5 @@ private:
     sf::Color backgroundColor_ = sf::Color(0, 0, 0, 150);
     std::stack<GameState> uiHistory_; // Stack to track the history of opened UIs
     sf::Clock globalEventCooldownClock_; // Global clock to track event cooldown
-    sf::Time globalEventCooldown_ = sf::milliseconds(200); // Global cooldown duration
+    sf::Time globalEventCooldown_ = sf::milliseconds(200);
 };

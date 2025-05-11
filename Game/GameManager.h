@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "Event.h"
 #include "Map.h"
-
+// The most important class of the game, that handles everything
 class GameManager
 {
 private:
@@ -19,24 +19,15 @@ private:
     UIManager uiManager;
     Map gameMap;
     sf::Font font;
-    GameState currentGameState = GameState::MainMenu;
-    sf::View defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
-    sf::View gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    GameState currentGameState;
+    sf::View defaultView;
+    sf::View gameplayView;
 public:
     GameManager();
     ~GameManager(){};
     void changeGameState(GameState newState);
     UIManager getUIManager();
-    GameState getGameState() const { return currentGameState; }
-    void changeGameplayViewBasedOnPlayerPosition()
-    {
-        Entity* player = entityManager.getPlayer(); // Assuming you have a method to get the player entity
-        if (player)
-        {
-            sf::Vector2f playerPosition = player->getPosition();
-            gameplayView.setCenter(playerPosition);
-        }
-    };
-
+    GameState getGameState() const;
+    void changeGameplayViewBasedOnPlayer();
     void Play();
 };

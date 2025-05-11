@@ -53,6 +53,7 @@ private:
     sf::Text buttonText;
     bool focused_ = false;
     bool isActive = false;
+    // Action triggered when clicking button
     ClickAction onClick;
-    void setOriginCentered(bool centerOrigin); // New private method
+    void setOriginCentered(bool centerOrigin);
 };

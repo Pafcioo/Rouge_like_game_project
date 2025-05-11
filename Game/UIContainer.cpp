@@ -4,14 +4,12 @@
 #include "Image.h"
 #include "GameElement.h"
 
+// Constructor for UI container
 UIContainer::UIContainer(GameState overlayStateOfGame, EventBus& eventBus, sf::Clock& globalCooldownClock)
     : eventBus_(eventBus), overlayStateOfGame_(overlayStateOfGame), globalCooldownClock_(globalCooldownClock) {
         canHaveBackgroundUI_ = false;
-    }
-
-int UIContainer::getFocusedIndex() const {
-    return focusedIndex_;
 }
+
 // Setters and getters for background and active state
 void UIContainer::setCanHaveBackgroundUI(bool value) {
     canHaveBackgroundUI_ = value;
@@ -21,7 +19,6 @@ bool UIContainer::canHaveBackgroundUI() const {
 }
 void UIContainer::setIsUIActive(bool value) {
     isUIActive_ = value;
-
     if (!isUIActive_) {
         // Reset focus when the UI becomes inactive
         if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
@@ -38,7 +35,10 @@ bool UIContainer::isUIActive() const {
 int UIContainer::getButtonCount() const {
     return static_cast<int>(uiElements_.size());
 }
-
+int UIContainer::getFocusedIndex() const {
+    return focusedIndex_;
+}
+// Focusing methods with wrapping functionality
 void UIContainer::focusNext() {
     if (uiElements_.empty()) return;
     if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
@@ -81,7 +81,7 @@ void UIContainer::activateFocused() {
     if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
         if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get())) {
             if (btn->getClickAction()) {
-                btn->getClickAction()(); // Wywołaj akcję kliknięcia
+                btn->getClickAction()(); // Activate on click action of a button
             }
         }
     }

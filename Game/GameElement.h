@@ -33,5 +33,5 @@ private:
     ShapeType elementType_;
     sf::RectangleShape elementRect_;
     sf::CircleShape elementCircle_;
-    void setOriginCentered(bool centerOrigin); // New private method
+    void setOriginCentered(bool centerOrigin);
 };

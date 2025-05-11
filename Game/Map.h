@@ -15,7 +15,7 @@ public:
         sprite.setPosition(position);
         sprite.setScale({size.x / texture.getSize().x, size.y / texture.getSize().y});
     }
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+    void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override
     {
         target.draw(sprite, states);
     }
