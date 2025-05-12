@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <regex>
 #include "json.hpp" // Include the nlohmann/json library
 #include "MapManager.h"
 #include "UIManager.h"
@@ -12,7 +13,7 @@ using json = nlohmann::json;
 MapManager::MapManager()
 {
     try {
-        loadMaps("Assets/mapData.json");
+        loadMaps("Assets/mapData.csv");
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
@@ -51,22 +52,66 @@ void MapManager::loadMaps(const std::string& pathToMaps) {
         throw std::runtime_error("Failed to open map file: " + pathToMaps);
     }
 
-    json jsonData;
-    file >> jsonData;
+    std::string line;
+    bool isHeader = true;
 
-    for (const auto& mapData : jsonData["maps"]) {
+    // Regular expression to match sizes in the format [xXy] (e.g., [200x150])
+    std::regex sizeRegex(R"(\[([0-9]+(?:\.[0-9]*)?)x([0-9]+(?:\.[0-9]*)?)\])");
+
+    while (std::getline(file, line)) {
+        // Skip the header line
+        if (isHeader) {
+            isHeader = false;
+            continue;
+        }
+
+        std::istringstream lineStream(line);
+        std::string labelOfMap, pathToMap, sizeOfPreviewMapStr, sizeOfGameplayMapStr;
+
+        // Parse the CSV line
+        std::getline(lineStream, labelOfMap, ',');
+        std::getline(lineStream, pathToMap, ',');
+        std::getline(lineStream, sizeOfPreviewMapStr, ',');
+        std::getline(lineStream, sizeOfGameplayMapStr, ',');
+
+        // Debugging output
+        std::cout << "Parsing line: " << line << std::endl;
+
+        // Parse sizeOfPreviewMap using regex
+        sf::Vector2f sizeOfPreviewMap;
+        std::smatch match;
+        if (std::regex_match(sizeOfPreviewMapStr, match, sizeRegex)) {
+            sizeOfPreviewMap.x = std::stof(match[1].str());
+            sizeOfPreviewMap.y = std::stof(match[2].str());
+        } else {
+            std::cerr << "Invalid sizeOfPreviewMap format: " << sizeOfPreviewMapStr << std::endl;
+            continue;
+        }
+
+        // Parse sizeOfGameplayMap using regex
+        sf::Vector2f sizeOfGameplayMap;
+        if (std::regex_match(sizeOfGameplayMapStr, match, sizeRegex)) {
+            sizeOfGameplayMap.x = std::stof(match[1].str());
+            sizeOfGameplayMap.y = std::stof(match[2].str());
+        } else {
+            std::cerr << "Invalid sizeOfGameplayMap format: " << sizeOfGameplayMapStr << std::endl;
+            continue;
+        }
+
+        // Debugging output
+        std::cout << "Parsed sizes: Preview(" << sizeOfPreviewMap.x << ", " << sizeOfPreviewMap.y
+                  << "), Gameplay(" << sizeOfGameplayMap.x << ", " << sizeOfGameplayMap.y << ")" << std::endl;
+
+        // Create MapData
         MapData map;
-        map.labelOfMap = mapData["labelOfMap"];
-        map.pathToMap = mapData["pathToMap"];
-        map.sizeOfPreviewMap = sf::Vector2f(
-            mapData["sizeOfPreviewMap"][0],
-            mapData["sizeOfPreviewMap"][1]
-        );
-        map.sizeOfGameplayMap = sf::Vector2f(
-            mapData["sizeOfGameplayMap"][0],
-            mapData["sizeOfGameplayMap"][1]
-        );
+        map.labelOfMap = labelOfMap;
+        map.pathToMap = pathToMap;
+        map.sizeOfPreviewMap = sizeOfPreviewMap;
+        map.sizeOfGameplayMap = sizeOfGameplayMap;
+
         std::cout << "Loading map: " << map.labelOfMap << std::endl;
+
+        // Add the map
         addMap(map);
     }
 }
