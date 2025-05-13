@@ -27,7 +27,7 @@ protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
     float imageScale_;
-    sf::Texture imageTexture_;
-    sf::Sprite imageSprite_;
+    std::shared_ptr<sf::Texture> imageTexture_;
+    std::unique_ptr<sf::Sprite> imageSprite_;
     std::string imageTexturePath_;
 };

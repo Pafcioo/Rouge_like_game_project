@@ -152,8 +152,8 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
         );
         container->createUIElement<Image>(
             "PlayerImage", //Label
-            0.3, //Scale or target size(sf::Vector2f)
-            sf::Vector2f(500.f,400.f), // Position
+            0.4, //Scale or target size(sf::Vector2f)
+            sf::Vector2f(840.f,360.f), // Position
             sf::degrees(0), // Rotation
             "Assets/player.png" //Path to texture
         );
@@ -230,7 +230,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
             eventBus,
             "OptionsButton",
             sf::Vector2f(100.f, 50.f),
-            sf::Vector2f(1000.f, 50.f),
+            sf::Vector2f(1100.f, 50.f),
             sf::Color::White,
             "Options",
             font,
