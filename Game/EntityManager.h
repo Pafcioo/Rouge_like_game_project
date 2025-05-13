@@ -12,7 +12,7 @@ enum class GameState;
 class EntityManager
 {
     private:
-        Entity* player = new Player(100, 250, {640, 360}, sf::Texture("Assets/player.png"));
+        Entity* player = new Player(100, 250, {0, 0}, sf::Texture("Assets/player.png"));
         bool isEntityManagerActive = false; // Bolean responsible for managing input for UI
     public:
         EntityManager() = default;

@@ -51,34 +51,34 @@ void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> con
 void UIManager::drawUI(sf::RenderTarget& target, GameState currentState) {
     auto it = uiContainers_.find(currentState);
     if (it != uiContainers_.end() && it->second) {
-        // Draw background UIs if the current UI allows it
-        if (it->second->canHaveBackgroundUI()) {
-            // Iterate through the stack and draw previous UIs
-            std::stack<GameState> tempStack = uiHistory_; // Copy the stack
-            std::vector<GameState> uisToDraw; // Store UIs to draw in order
+        // // Draw background UIs if the current UI allows it
+        // if (it->second->canHaveBackgroundUI()) {
+        //     // Iterate through the stack and draw previous UIs
+        //     std::stack<GameState> tempStack = uiHistory_; // Copy the stack
+        //     std::vector<GameState> uisToDraw; // Store UIs to draw in order
 
-            // Collect UIs to draw
-            while (!tempStack.empty()) {
-                GameState prevState = tempStack.top();
-                tempStack.pop();
+        //     // Collect UIs to draw
+        //     while (!tempStack.empty()) {
+        //         GameState prevState = tempStack.top();
+        //         tempStack.pop();
 
-                // Skip the current state
-                if (prevState == currentState) continue;
+        //         // Skip the current state
+        //         if (prevState == currentState) continue;
 
-                auto prevIt = uiContainers_.find(prevState);
-                if (prevIt != uiContainers_.end() && prevIt->second) {
-                    uisToDraw.push_back(prevState);
-                }
-            }
-            // Draw only the last one in the background
-            auto it = uisToDraw.rend();
-            it--;
-            auto prevIt = uiContainers_.find(*it);
-            prevIt ->second->drawAll(target, sf::RenderStates::Default);
+        //         auto prevIt = uiContainers_.find(prevState);
+        //         if (prevIt != uiContainers_.end() && prevIt->second) {
+        //             uisToDraw.push_back(prevState);
+        //         }
+        //     }
+        //     // Draw only the last one in the background
+        //     auto it = uisToDraw.rend();
+        //     it--;
+        //     auto prevIt = uiContainers_.find(*it);
+        //     prevIt ->second->drawAll(target, sf::RenderStates::Default);
 
-            // Draw the background for the current UI
-            drawBackground(target, sf::RenderStates::Default);
-        }
+        //     // Draw the background for the current UI
+        //     drawBackground(target, sf::RenderStates::Default);
+        // }
 
         // Draw the current UI
         it->second->drawAll(target, sf::RenderStates::Default);

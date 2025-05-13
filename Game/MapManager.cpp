@@ -4,11 +4,8 @@
 #include <vector>
 #include <string>
 #include <regex>
-#include "json.hpp" // Include the nlohmann/json library
 #include "MapManager.h"
 #include "UIManager.h"
-
-using json = nlohmann::json;
 
 MapManager::MapManager()
 {
@@ -24,7 +21,7 @@ void MapManager::addMap(const MapData& mapData) {
 
     // Create a shared pointer for the GameMap and store it in the map
     gameMaps[mapData.labelOfMap] = std::make_shared<GameMap>(
-        mapData.pathToMap, sf::Vector2f(640, 360), mapData.sizeOfGameplayMap
+        mapData.pathToMap, sf::Vector2f(0, 0), mapData.sizeOfGameplayMap
     );
 }
 
@@ -45,6 +42,9 @@ const GameMap& MapManager::getCurrentMap() const {
     return *gameMaps.at(currentMapLabel); // Dereference the shared pointer
 }
 
+const std::string& MapManager::getCurrentMapLabel() const {
+    return currentMapLabel;
+}
 
 void MapManager::loadMaps(const std::string& pathToMaps) {
     std::ifstream file(pathToMaps);
@@ -124,7 +124,7 @@ void MapManager::setMap(const std::string& labelOfMap) {
     std::cout << "Current map set to: " << currentMapLabel << std::endl;
 }
 
-void MapManager::drawMap(sf::RenderWindow& window, GameState currentGameState) const {
+void MapManager::drawMap(sf::RenderTarget& window, GameState currentGameState) const {
     if (currentGameState == GameState::Playing && !currentMapLabel.empty()) {
         window.draw(getCurrentMap());
     }

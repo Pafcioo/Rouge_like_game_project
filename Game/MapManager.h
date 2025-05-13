@@ -28,7 +28,8 @@ public:
     void addMap(const MapData& mapData);
     void removeMap(const std::string& labelOfMap);
     const GameMap& getCurrentMap() const;
+    const std::string& getCurrentMapLabel() const;
     void loadMaps(const std::string& pathToMaps);
     void setMap(const std::string& labelOfMap);
-    void drawMap(sf::RenderWindow& window, GameState currentGameState) const;
+    void drawMap(sf::RenderTarget& window, GameState currentGameState) const;
 };

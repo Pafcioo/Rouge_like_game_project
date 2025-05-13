@@ -13,15 +13,37 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
 }
 
-void GameManager::changeGameplayViewBasedOnPlayer()
-    {
-        Entity* player = entityManager.getPlayer();
-        if (player)
-        {
-            sf::Vector2f playerPosition = player->getPosition();
-            gameplayView.setCenter(playerPosition);
-        }
-    };
+void GameManager::changeGameplayViewBasedOnPlayer() {
+    Entity* player = entityManager.getPlayer();
+    if (!player) return;
+
+    sf::Vector2f playerPosition = player->getPosition();
+
+    if (!mapManager.getCurrentMapLabel().empty()) {
+        sf::Vector2f halfMapSize = mapManager.getCurrentMap().getSize() / 2.f;
+        sf::Vector2f viewSize = gameplayView.getSize();
+        sf::Vector2f halfViewSize = viewSize / 2.f;
+
+        float clampedX = playerPosition.x;
+        float clampedY = playerPosition.y;
+
+        // Lewa do prawa: od -halfMapSize.x + halfViewSize.x do +halfMapSize.x - halfViewSize.x
+        clampedX = std::max(-halfMapSize.x + halfViewSize.x,
+                            std::min(clampedX, halfMapSize.x - halfViewSize.x));
+
+        // Góra do dołu: od -halfMapSize.y + halfViewSize.y do +halfMapSize.y - halfViewSize.y
+        clampedY = std::max(-halfMapSize.y + halfViewSize.y,
+                            std::min(clampedY, halfMapSize.y - halfViewSize.y));
+
+        gameplayView.setCenter({clampedX, clampedY});
+
+
+        gameplayView.setCenter({clampedX, clampedY});
+    } else {
+        gameplayView.setCenter(playerPosition);
+    }
+}
+
 
 void GameManager::changeGameState(GameState newState) {
     currentGameState = newState;
