@@ -17,7 +17,7 @@ void GameManager::changeGameplayViewBasedOnPlayer() {
     Entity* player = entityManager.getPlayer();
     if (!player) return;
 
-    sf::Vector2f playerPosition = player->getPosition();
+    sf::Vector2f playerPosition = player->getEntityPosition();
 
     if (!mapManager.getCurrentMapLabel().empty()) {
         sf::Vector2f halfMapSize = mapManager.getCurrentMap().getSize() / 2.f;

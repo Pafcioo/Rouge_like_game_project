@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Projectile.h"
 #include <vector>
+#include "CollisionManager.h"
 
 // Forward declaration of classes
 class EventBus;
@@ -14,6 +15,7 @@ class EntityManager
     private:
         Entity* player = new Player(100, 250, {0, 0}, sf::Texture("Assets/player.png"));
         bool isEntityManagerActive = false; // Bolean responsible for managing input for UI
+        CollisionManager collisionManager;
     public:
         EntityManager() = default;
         ~EntityManager() = default;

@@ -6,18 +6,20 @@
 #include <cmath>
 
 std::vector<Projectile*> EntityManager::projectiles;
-// Method for subscribing events where player subscribe to events like movement and attack
+// Method for subscribing events where player subscribes to events like movement and attack
 void EntityManager::subscribeToEvents(EventBus& eventBus)
 {
     eventBus.subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
         if (player && isEntityManagerActive) {
             player->move(moveEvent.direction * moveEvent.deltaTime);
+            player->setEntityDirection(moveEvent.direction);
         }
     });
     eventBus.subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
         if (player && attackEvent.direction!=sf::Vector2f(0,0) && isEntityManagerActive) {
-            player->attack(attackEvent.direction);
+            player->setEntityDirection(attackEvent.direction);
         }
+        player->attack(player->getEntityDirection());
     });
 }
 
@@ -43,6 +45,7 @@ void EntityManager::updateEntities(float deltaTime, EventBus& eventBus) {
         if (distance > 500) {
             proj->deactivate();
         }
+        collisionManager.manageCollision(player, proj);
     }
 
     // Delete inactive projectiles

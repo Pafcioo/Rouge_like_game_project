@@ -8,6 +8,7 @@ class Entity : public sf::Drawable
         int entityHealth;
         float entitySpeed;
         sf::Vector2f entityPosition;
+        sf::Vector2f entityDirection = {1.f, 0.f};
         sf::Texture entityTexture;
         sf::Sprite entitySprite;
         bool entityCanMeleeAttack = true;
@@ -32,6 +33,9 @@ class Entity : public sf::Drawable
         virtual float getEntitySpeed() = 0;
         virtual void move(sf::Vector2f direction) = 0;
         virtual void attack(sf::Vector2f direction) = 0;
-        sf::Vector2f getPosition() const { return entityPosition; }
+        sf::Vector2f getEntityPosition() const { return entityPosition; }
+        sf::Vector2f getEntityDirection() const { return entityDirection; }
+        void setEntityDirection(sf::Vector2f direction) { entityDirection = direction; }
+        sf::FloatRect getEntityGlobalBounds() const { return entitySprite.getGlobalBounds(); }
         Weapon* getWeapon() {return &gun;}
 };

@@ -39,8 +39,8 @@ void InputManager::handleInput(float deltaTime, EventBus& eventBus, sf::RenderWi
             if (keyPressed->scancode == sf::Keyboard::Scancode::Up || keyPressed->scancode == sf::Keyboard::Scancode::Down || keyPressed->scancode == sf::Keyboard::Scancode::Enter) {
                 eventBus.publish<sf::Event::KeyPressed>(*keyPressed); // Navigating UI with arrows
             }
-            // Publishing events other tat KeyPressed
-            if(keyPressed->scancode == sf::Keyboard::Scancode::Q)
+            // Publishing events other than KeyPressed
+            if(keyPressed->scancode == sf::Keyboard::Scancode::K)
                 eventBus.publish<AttackEvent>({inputDirection}); // Attacking
             if(keyPressed->scancode == sf::Keyboard::Scancode::Space)
                 eventBus.publish<DashEvent>({inputDirection}); // Dashing

@@ -25,4 +25,5 @@ public:
     void deactivate() { projectileIsActive = false; }
     sf::Vector2f getInitialPosition() const { return projectileInitialPosition; }
     sf::CircleShape getShape() const { return projectileShape; }
+    sf::FloatRect getGlobalBounds() const { return projectileShape.getGlobalBounds(); }
 };
