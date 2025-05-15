@@ -1,22 +1,41 @@
 #include <iostream>
 #include "EntityManager.h"
+#include "Event.h"
+#include "GameManager.h"
 #include <algorithm>
 #include <cmath>
 
 std::vector<Projectile*> EntityManager::projectiles;
+// Method for subscribing events where player subscribe to events like movement and attack
+void EntityManager::subscribeToEvents(EventBus& eventBus)
+{
+    eventBus.subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
+        if (player && isEntityManagerActive) {
+            player->move(moveEvent.direction * moveEvent.deltaTime);
+        }
+    });
+    eventBus.subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
+        if (player && attackEvent.direction!=sf::Vector2f(0,0) && isEntityManagerActive) {
+            player->attack(attackEvent.direction);
+        }
+    });
+}
 
 void EntityManager::drawEntities(sf::RenderWindow& window)
 {
     // Placeholder for drawing entities
     // In a real implementation, you would loop through your entities and draw them here
-    window.draw(*player);
-    for (auto& proj : projectiles) {
-        window.draw(*proj);
+    if(isEntityManagerActive){
+        window.draw(*player);
+        for (auto& proj : projectiles) {
+            window.draw(*proj);
+        }
     }
     //std::cout << "Drawing entities..." << std::endl;
 }
 
-void EntityManager::updateEntities(float deltaTime) {
+void EntityManager::updateEntities(float deltaTime, EventBus& eventBus) {
+    
     player->getWeapon()->update(deltaTime);
     for (auto& proj : projectiles) {
         proj->update(deltaTime);
@@ -32,4 +51,14 @@ void EntityManager::updateEntities(float deltaTime) {
                        [](const Projectile* p) { return !p->isActive(); }),
         projectiles.end()
     );
+}
+// Method for changing the activity of entity manager, which is only active when the game is in playing state
+void EntityManager::updateEntityManager(GameState currentState){
+    if(currentState == GameState::Playing)
+    {
+        isEntityManagerActive = true;
+    }
+    else{
+        isEntityManagerActive = false;
+    }
 }

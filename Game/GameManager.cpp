@@ -1,56 +1,67 @@
 #include "GameManager.h"
 #include <iostream>
-
 #include "Entity.h"
 #include "Player.h"
 #include "Projectile.h"
 
-
-struct ChangeStateFunctor {
-    GameManager* manager;
-    void operator()(GameState newState) const {
-        manager->changeGameState(newState);
-        manager->updateInputManager();
-    }
-};
-
-
-GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
+GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
 {
-    uiManager.initAllUI(inputManager, font, ChangeStateFunctor{this},[this]() {
-        return this->getGameState();
-    });
-    inputManager.setUIContainer(uiManager.getUIContainer(this->getGameState()));
+    uiManager.initAllUI(eventBus, font);
+    entityManager.subscribeToEvents(eventBus);
+    currentGameState = GameState::MainMenu;
+    defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
 }
+
+void GameManager::changeGameplayViewBasedOnPlayer() {
+    Entity* player = entityManager.getPlayer();
+    if (!player) return;
+
+    sf::Vector2f playerPosition = player->getPosition();
+
+    if (!mapManager.getCurrentMapLabel().empty()) {
+        sf::Vector2f halfMapSize = mapManager.getCurrentMap().getSize() / 2.f;
+        sf::Vector2f viewSize = gameplayView.getSize();
+        sf::Vector2f halfViewSize = viewSize / 2.f;
+
+        float clampedX = playerPosition.x;
+        float clampedY = playerPosition.y;
+
+        // Lewa do prawa: od -halfMapSize.x + halfViewSize.x do +halfMapSize.x - halfViewSize.x
+        clampedX = std::max(-halfMapSize.x + halfViewSize.x,
+                            std::min(clampedX, halfMapSize.x - halfViewSize.x));
+
+        // Góra do dołu: od -halfMapSize.y + halfViewSize.y do +halfMapSize.y - halfViewSize.y
+        clampedY = std::max(-halfMapSize.y + halfViewSize.y,
+                            std::min(clampedY, halfMapSize.y - halfViewSize.y));
+
+        gameplayView.setCenter({clampedX, clampedY});
+
+
+        gameplayView.setCenter({clampedX, clampedY});
+    } else {
+        gameplayView.setCenter(playerPosition);
+    }
+}
+
 
 void GameManager::changeGameState(GameState newState) {
-    lastGameState = currentGameState; // Save the last game state before changing
     currentGameState = newState;
-    
-    if (newState == GameState::Options) {
-        auto optionsContainer = uiManager.getUIContainer(GameState::Options);
-        optionsContainer->overlayStates.clear();
-        if (lastGameState == GameState::MainMenu) {
-            optionsContainer->overlayStates.push_back(GameState::MainMenu);
-        } else if (lastGameState == GameState::Playing) {
-            optionsContainer->overlayStates.push_back(GameState::Playing);
-        }
-        // Dodaj kolejne przypadki jeśli chcesz
-    }
+    uiManager.updateActiveUI(currentGameState);
+    entityManager.updateEntityManager(newState);
 }
 
-void GameManager::updateInputManager() {
-    inputManager.setUIContainer(uiManager.getUIContainer(this->getGameState())); 
+UIManager GameManager::getUIManager()
+{
+    return uiManager;
 }
 
-void GameManager::handleInput(float deltaTime) {
-    if (!inputManager.handleInput(gameWindow).empty()) {
-        std::vector<std::unique_ptr<Command>> commands = inputManager.handleInput(gameWindow);
-        for (auto& command : commands) {
-            //std::cout << "Executing command..." << std::endl;
-            command->executeCommand(entityManager.getPlayer(), deltaTime);
-        }
-    }
+GameState GameManager::getGameState() const {
+    return currentGameState; 
+}
+
+MapManager& GameManager::getMapManager() {
+    return mapManager;
 }
 
 void GameManager::Play()
@@ -65,10 +76,19 @@ void GameManager::Play()
         float deltaTime = elapsed.asSeconds();
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
-        handleInput(deltaTime);
-        uiManager.drawUI(gameWindow, this->getGameState());
-        entityManager.updateEntities(deltaTime);
+        inputManager.handleInput(deltaTime, eventBus, gameWindow);
+        // In this section the gameplayerView changes in specific order so 
+        // background is first, then the player and at the end is UI that is static
+        // relativly to player, so the player is always in the center of view
+        changeGameplayViewBasedOnPlayer();
+        gameWindow.setView(gameplayView);
+        mapManager.drawMap(gameWindow, currentGameState);
+        entityManager.updateEntities(deltaTime,eventBus);
         entityManager.drawEntities(gameWindow);
+        gameWindow.setView(defaultView);
+        uiManager.updateActiveUI(currentGameState);
+        uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game
+        
         gameWindow.display();
     }
 }

@@ -1,204 +1,301 @@
 #include <iostream>
 #include "math.h"
 #include "UIManager.h"
-#include "InputManager.h"
+#include "GameManager.h"
 
-struct getStateCallbackFunctor {
-    GameState state;
-    std::function<GameState()> getStateCallback;
-    bool operator()() const {
-        return getStateCallback() == state;
+// In deafault constructor 
+// gameManager is needed for changing the game state
+UIManager::UIManager(GameManager& gameManager):gameManager_(gameManager){
+    backgroundShape_.setFillColor(backgroundColor_);
+    backgroundShape_.setSize(sf::Vector2f(1280.f, 720.f));
+}
+
+void UIManager::drawBackground(sf::RenderTarget& target, sf::RenderStates states){
+    target.draw(backgroundShape_, states);
+}
+
+// Based on new state of the game, all previous UIs are deactivated but they could still be drawn in the background
+void UIManager::updateActiveUI(GameState newGameState) {
+    // Push the current state to the stack if it's not already the top
+    if (uiHistory_.empty() || uiHistory_.top() != newGameState) {
+        uiHistory_.push(newGameState);
     }
-};
 
-struct ImageData {
-    int index;
-    std::string path;
-    sf::Vector2i clipSize; // rozmiar wycinanego fragmentu
-};
+    // Update the active state of all UIs
+    for (auto& [state, container] : uiContainers_) {
+        if (state == newGameState) {
+            container->setIsUIActive(true); // Activate the container for the new state
+        } else {
+            container->setIsUIActive(false); // Deactivate all other containers
+        }
+    }
+}
+// Method for going back to previous UI, so the button don't need the info to where go back, just go to previous one
+void UIManager::goBackToPreviousUI() {
+    if (!uiHistory_.empty()) {
+        uiHistory_.pop(); // Remove the current state
+    }
 
+    if (!uiHistory_.empty()) {
+        GameState previousState = uiHistory_.top(); // Get the previous state
+        updateActiveUI(previousState); // Activate the previous UI
+        gameManager_.changeGameState(previousState);
+    }
+}
+
+// Method for adding UIs, because UIManager has a map for that, it is used later in createUI method
 void UIManager::addUIContainer(GameState state, std::shared_ptr<UIContainer> container) {
     uiContainers_[state] = std::move(container);
 }
 
-void UIManager::drawUI(sf::RenderTarget& target, GameState state) {
-    auto it = uiContainers_.find(state);
+void UIManager::drawUI(sf::RenderTarget& target, GameState currentState) {
+    auto it = uiContainers_.find(currentState);
     if (it != uiContainers_.end() && it->second) {
-        // Najpierw rysuj overlayStates (może być ich wiele)
-        for (GameState overlay : it->second->overlayStates) {
-            drawUI(target, overlay);
-        }
-        if(!it->second->overlayStates.empty()){
-            drawBackground(target, sf::RenderStates::Default);
-        }
-        // Potem rysuj główny container
+        // // Draw background UIs if the current UI allows it
+        // if (it->second->canHaveBackgroundUI()) {
+        //     // Iterate through the stack and draw previous UIs
+        //     std::stack<GameState> tempStack = uiHistory_; // Copy the stack
+        //     std::vector<GameState> uisToDraw; // Store UIs to draw in order
+
+        //     // Collect UIs to draw
+        //     while (!tempStack.empty()) {
+        //         GameState prevState = tempStack.top();
+        //         tempStack.pop();
+
+        //         // Skip the current state
+        //         if (prevState == currentState) continue;
+
+        //         auto prevIt = uiContainers_.find(prevState);
+        //         if (prevIt != uiContainers_.end() && prevIt->second) {
+        //             uisToDraw.push_back(prevState);
+        //         }
+        //     }
+        //     // Draw only the last one in the background
+        //     auto it = uisToDraw.rend();
+        //     it--;
+        //     auto prevIt = uiContainers_.find(*it);
+        //     prevIt ->second->drawAll(target, sf::RenderStates::Default);
+
+        //     // Draw the background for the current UI
+        //     drawBackground(target, sf::RenderStates::Default);
+        // }
+
+        // Draw the current UI
         it->second->drawAll(target, sf::RenderStates::Default);
     }
 }
 
-std::shared_ptr<UIContainer> UIManager::createUI(
-    GameState state,
-    InputManager& inputManager,
-    sf::Font& font,
-    std::function<void(GameState)> changeStateCallback,
-    std::function<GameState()> getStateCallback)
-{
-    auto container = std::make_shared<UIContainer>();
-
+// It is very important method for creating UIs. For the appropriate game state the elements of UI are created using generic method createUIElement 
+std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState state,sf::Font& font){
+    auto container = std::make_shared<UIContainer>(state, eventBus, globalEventCooldownClock_);
     if (state == GameState::MainMenu) {
-        container->createText(
+        container->createUIElement<Text>(
+            sf::Vector2f(100.f,30.f), //Position
             font,
-            "Main Menu",
-            {100.f, 25.f},
-            48,
+            "Main Menu", //Text
+            48, //Character size
+            sf::Color::White, // Color of font
+            "MainMenuTitle" // Label, used later for finding the element
+        );
+        container->createUIElement<Button>(
+            eventBus, // event bus for subscribing and publishing events
+            "PlayTheGameButton", //Label
+            sf::Vector2f(100.f,50.f), // Position
+            sf::Vector2f(100.f,100.f), // Size
+            sf::Color::White, // Background color
+            "Play", //Text
+            font,
+            24, //Character size
+            [&](){
+                gameManager_.changeGameState(GameState::ChooseMap); //Action of the button
+            }
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "OptionsButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 200.f),
             sf::Color::White,
-            "MainMenuTitle"
-        );
-        container->createButton(
-            inputManager,
-            {100.f, 100.f},
-            font,
-            "Play",
-            [changeStateCallback]() {
-                changeStateCallback(GameState::Playing);
-                std::cout << "Playing state" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::Green,
-            24,
-            "PlayButton"
-        );
-        container->createButton(
-            inputManager,
-            {100.f, 200.f},
-            font,
             "Options",
-            [changeStateCallback]() {
-                changeStateCallback(GameState::Options);
-                std::cout << "Options state" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::Blue,
-            24,
-            "OptionsButton"
-        );
-        container->createButton(
-            inputManager,
-            {100.f, 300.f},
             font,
-            "Quit",
-            []() {
-                std::cout << "Quit game!" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::Red,
             24,
-            "QuitButton"
+            [&](){
+                std::cout<<"test";
+                gameManager_.changeGameState(GameState::Options);
+            }
         );
-        container->createImage(
-            "Assets/player.png",
-            {1000.f, 300.f},
-            {0.3f, 0.3f},
-            sf::degrees(0),
-            "PlayerImage"
+        container->createUIElement<Button>(
+            eventBus,
+            "MapChooseButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 300.f),
+            sf::Color::White,
+            "Choose map",
+            font,
+            24,
+            [&](){
+                gameManager_.changeGameState(GameState::ChooseMap);
+            }
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "QuitButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(100.f, 400.f),
+            sf::Color::White,
+            "Quit",
+            font,
+            24,
+            [](){
+                std::cout<<"Button clicked 3";
+            }
+        );
+        container->createUIElement<Image>(
+            "PlayerImage", //Label
+            0.4, //Scale or target size(sf::Vector2f)
+            sf::Vector2f(840.f,360.f), // Position
+            sf::degrees(0), // Rotation
+            "Assets/player.png" //Path to texture
         );
     }
-    else if (state == GameState::Options) {
-        container->createButton(
-            inputManager,
-            {640.f, 360.f},
-            font,
-            "Go back",
-            [changeStateCallback]() {
-                changeStateCallback(GameState::MainMenu);
-                std::cout << "Button in options clicked!" << std::endl;
-            },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::Yellow,
-            24,
-            "BackButton"
+    if (state == GameState::Options) {
+        container->setCanHaveBackgroundUI(true);
+        container->createUIElement<GameElement>(
+            "BackgroundOption", // Label
+            sf::Vector2f(600,300), // Position
+            sf::Vector2f(640,360), // Size
+            sf::Color::Black, // Background color
+            ShapeType::Rectangle, //Type of shape
+            true // Centered origin
         );
-        container->createButton(
-            inputManager,
-            {640.f, 460.f},
+        container->createUIElement<Button>(
+            eventBus,
+            "PlayTheGameButton",
+            sf::Vector2f(100.f,100.f),
+            sf::Vector2f(500.f,360.f),
+            sf::Color::Green,
+            "Play",
             font,
-            "Smth",
-            []() {
-                std::cout << "Second options button clicked!" << std::endl;
+            12,
+            [&](){
+                gameManager_.changeGameState(GameState::Playing);
             },
-            getStateCallbackFunctor{state, getStateCallback},
-            {200.f, 50.f},
-            sf::Color::White,
-            24
+            true //Centered origin
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "OptionsButton",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(640.f, 360.f),
+            sf::Color::Blue,
+            "Go back",
+            font,
+            12,
+            [&](){
+                gameManager_.getUIManager().goBackToPreviousUI();
+            },
+            true
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "OptionsButton",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(780.f, 360.f),
+            sf::Color::Blue,
+            "Go back to main menu",
+            font,
+            12,
+            [&](){
+                gameManager_.changeGameState(GameState::MainMenu);
+            },
+            true
         );
     }
     else if (state == GameState::Playing) {
-        container->createText(
-            font,
-            "Playing",
-            {100.f, 25.f},
-            48,
-            sf::Color::White,
-            "PlayingTitle"
-        );
-
-        std::vector<ImageData> imagesData = {
-            {0, "Assets/ability1.png", {500, 500}},
-            {1, "Assets/ability2.png", {2000, 2000}},
-            {2, "Assets/ability1.png", {500, 500}},
-            {3, "Assets/ability2.png", {2000, 2000}},
-            {4, "Assets/ability1.png", {500, 500}},
-            {5, "Assets/ability2.png", {2000, 2000}}
-            // ...
-        };
-        float sizeOfImageX = 50.f;
-        float scale = 0.7f;
-        float offset =sizeOfImageX * sqrt(2.f)* scale;
-        sf::Vector2f leftPos = {70.f, 200.f};
-        sf::Vector2f rightPos = {leftPos.x + offset, leftPos.y}; // np. 100px odstępu
-        sf::Vector2f sizeOfImages = {sizeOfImageX, sizeOfImageX};
-        sf::Angle angle = sf::degrees(45);
-
-        for (size_t i = 0; i < imagesData.size(); ++i) {
-            sf::Vector2f pos = (i % 2 == 0) ? leftPos : rightPos;
-            pos.y += i * offset; // odstęp w pionie
-            container->createImageWithSize(
-                imagesData[i].path,
-                pos,
-                sizeOfImages,
-                angle
-            );
-        }
-        container->createGameElement(
-            GameElement::ShapeType::Rectangle,
-            {50.f, 620.f},
-            {500.f, 20.f},
-            sf::Color::Blue,
-            "ManaBar"
-        );
-        container->createGameElement(
-            GameElement::ShapeType::Rectangle,
-            {50.f, 580.f},
-            {500.f, 20.f},
+        container->createUIElement<GameElement>(
+            "EnergyBar",
+            sf::Vector2f(300.f, 30.f),
+            sf::Vector2f(50.f, 600.f),
             sf::Color::Red,
-            "HealthBar"
+            ShapeType::Rectangle
+        );
+        container->createUIElement<GameElement>(
+            "HealthBar",
+            sf::Vector2f(300.f, 30.f),
+            sf::Vector2f(50.f, 650.f),
+            sf::Color::Red,
+            ShapeType::Rectangle
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "OptionsButton",
+            sf::Vector2f(100.f, 50.f),
+            sf::Vector2f(1100.f, 50.f),
+            sf::Color::White,
+            "Options",
+            font,
+            12,
+            [&](){
+                gameManager_.changeGameState(GameState::Options);
+            }
         );
     }
-    // Dodaj kolejne else if dla innych GameState...
-
+    else if (state == GameState::ChooseMap) {
+        container->createUIElement<Button>(
+            eventBus,
+            "MapButton1",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(500.f, 360.f),
+            sf::Color::White,
+            "Desert Strike",
+            font,
+            24,
+            [&](){
+                gameManager_.getMapManager().setMap("Desert Strike");
+                gameManager_.changeGameState(GameState::Playing);
+            },
+            true
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "MapButton1",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(640.f, 360.f),
+            sf::Color::White,
+            "Forest Valley",
+            font,
+            24,
+            [&](){
+                gameManager_.getMapManager().setMap("Forest Valley");
+                gameManager_.changeGameState(GameState::Playing);
+            },
+            true
+        );
+        container->createUIElement<Button>(
+            eventBus,
+            "MapButton1",
+            sf::Vector2f(100.f, 100.f),
+            sf::Vector2f(780.f, 360.f),
+            sf::Color::White,
+            "Castle",
+            font,
+            24,
+            [&](){
+                gameManager_.getMapManager().setMap("Castle");
+                gameManager_.changeGameState(GameState::Playing);
+            },
+            true
+        );
+    }
+    // At the end UI subscribe to all events(hover effect, arrow keys, mouse click etc.)
+    container->subscribeToEvents();
     return container;
 }
 
-void UIManager::initAllUI(InputManager& inputManager, sf::Font& font,
-    std::function<void(GameState)> changeStateCallback,
-    std::function<GameState()> getStateCallback)
+void UIManager::initAllUI(EventBus& eventBus, sf::Font& font)
 {
-    for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused, GameState::Playing}) {
-        auto container = createUI(state, inputManager, font, changeStateCallback, getStateCallback);
+    for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused, GameState::Playing, GameState::ChooseMap}) {
+        auto container = createUI(eventBus, state, font);
         addUIContainer(state, container);
     }
 }

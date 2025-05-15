@@ -7,77 +7,51 @@
 #include "Button.h"
 #include "GameElement.h"
 #include "Image.h"
+#include "Text.h"
+#include "Event.h"
 
-class InputManager;
 enum class GameState;
 
 class UIContainer
 {
 public:
-    UIContainer() = default;
+    UIContainer(GameState overlayStateOfGame, EventBus& eventBus, sf::Clock& globalCooldownClock);
     ~UIContainer() = default;
-
+    // Method for adding UIElements to UI(container)
     void addElement(std::shared_ptr<UIElement> element);
-
-    void drawAll(sf::RenderTarget& target, sf::RenderStates states) const;
-
+    // Methods for focusing functionality
     void focusNext();
     void focusPrevious();
     void activateFocused();
-    void focusByMouse(const sf::Vector2f& mousePos);
-    int getFocusedIndex() const { return focusedIndex_; }
-    int getButtonCount() const { return static_cast<int>(uiElements.size()); }
-
-    void createButton(
-        InputManager& inputManager,
-        const sf::Vector2f& position,
-        const sf::Font& font,
-        const std::string& text,
-        Button::ClickAction onClick,
-        Button::IsVisiblePredicate isVisible,
-        const sf::Vector2f& size = {200.f, 50.f},
-        const sf::Color& color = sf::Color::White,
-        unsigned int characterSize = 24,
-        const std::string& label = ""
-    );
-
-    void createText(
-        const sf::Font& font,
-        const std::string& text,
-        const sf::Vector2f& position,
-        unsigned int characterSize = 30,
-        sf::Color color = sf::Color::White,
-        const std::string& label = ""
-    );
-
-    void createImage(
-        const std::string& texturePath,
-        const sf::Vector2f& position,
-        const sf::Vector2f& scale = {1.f, 1.f},
-        const sf::Angle& rotation = sf::degrees(0),
-        const std::string& label = ""
-    );
-
-    void createImageWithSize(
-        const std::string& texturePath,
-        const sf::Vector2f& position,
-        const sf::Vector2f& targetSize,
-        const sf::Angle& rotation = sf::degrees(0),
-        const std::string& label = ""
-    );
-
-    void createGameElement(
-        GameElement::ShapeType type,
-        const sf::Vector2f& position,
-        const sf::Vector2f& size = {50.f, 50.f},
-        sf::Color color = sf::Color::White,
-        const std::string& label = ""
-    );
-
-    std::vector<GameState> overlayStates;
-
+    void subscribeToEvents();
+    int getFocusedIndex() const;
+    int getButtonCount() const;
+    // Setters and getters for background and active state
+    void setCanHaveBackgroundUI(bool value);
+    bool canHaveBackgroundUI() const;
+    void setIsUIActive(bool value);
+    bool isUIActive() const;
+    // Generic method for creating UIElement
+    template<typename TypeOfUIElement, typename... ArgsForUIElement>
+    void createUIElement(ArgsForUIElement&&... args)
+    {
+        addElement(std::static_pointer_cast<UIElement>(
+        std::make_shared<TypeOfUIElement>(std::forward<ArgsForUIElement>(args)...)
+    ));
+    }
+    // Drawing method
+    void drawAll(sf::RenderTarget& target, sf::RenderStates states) const;
 private:
-    std::vector<std::shared_ptr<UIElement>> uiElements;
+    // Vector that stores pointers for UIElements
+    std::vector<std::shared_ptr<UIElement>> uiElements_;
+    // Reference to eventBus to control hover effect
+    EventBus& eventBus_;
+    // State of the game where the UI will be active and visible
+    GameState overlayStateOfGame_;
+    // Bool that decides whether the UI can have background UIs behind or not
+    bool canHaveBackgroundUI_;
+    // Bool that decides whether the UI is active/can be clicked and drawn
+    bool isUIActive_ = true;
     int focusedIndex_ = -1;
-
+    sf::Clock& globalCooldownClock_; // Reference to the global cooldown clock
 };

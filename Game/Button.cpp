@@ -1,50 +1,61 @@
 #include "Button.h"
 #include <iostream>
+#include <cmath>
 
 Button::Button(
-    InputManager& inputManager,
-    sf::Vector2f position,
-    const sf::Font& font,
-    sf::Vector2f size,
-    sf::Color color,
-    std::string text,
-    unsigned int characterSize,
-    IsVisiblePredicate isVisible,
-    const std::string& label
+    EventBus& eventBus, 
+    const std::string& buttonLabel,
+    const sf::Vector2f& buttonSize,
+    const sf::Vector2f& buttonPosition,
+    sf::Color buttonColor,
+    const std::string& buttonTextString, 
+    const sf::Font& buttonFont,
+    unsigned int buttonCharacterSize,
+    ClickAction buttonClickAction,
+    bool centerOrigin
 )
-    : UIElement(label) // <-- PRZEKAŻ DO BAZOWEGO
-    , isVisible_(isVisible ? std::move(isVisible) : [](){ return true; })
-    , buttonShape()
-    , buttonText(font)
-    , focused_(false)
+    : UIElement(buttonLabel), onClick(buttonClickAction), buttonText(buttonFont, buttonTextString, buttonCharacterSize)
 {
-    buttonShape.setPosition(position);
-    buttonShape.setSize(size);
-    buttonShape.setFillColor(color);
+    // Set button shape attributes
+    buttonShape.setSize(buttonSize);
+    buttonShape.setPosition(buttonPosition);
+    buttonShape.setFillColor(buttonColor);
 
-    buttonText.setString(text);
-    buttonText.setCharacterSize(characterSize);
+    // Set button text attributes
     buttonText.setFillColor(sf::Color::Black);
-    buttonText.setPosition(position);
 
-    inputManager.registerMousePressCallback(
-        [this](const sf::Event& event) {
-            if (!isVisible_()) return; // Check if the button is visible before processing events
-            if (const auto* mouseButtonPressed = event.getIf<sf::Event::MouseButtonPressed>()) {
-                if (mouseButtonPressed->button == sf::Mouse::Button::Left) {
-                    sf::Vector2f mousePos(
-                        static_cast<float>(mouseButtonPressed->position.x),
-                        static_cast<float>(mouseButtonPressed->position.y)
-                    );
-                    if (buttonShape.getGlobalBounds().contains(mousePos)) {
-                        if (onClick) onClick();
-                    }
-                }
-            }
-        }
-    );
+    // Adjust origin based on the centerOrigin parameter
+    setOriginCentered(centerOrigin);
+
+    // Subscribe to mouse click event
+    eventBus.subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& mouseEvent){
+        if(buttonShape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseEvent.position))){
+            if(onClick && isActive)
+                onClick();
+        };
+    });
 }
 
+void Button::setOriginCentered(bool centerOrigin) {
+    if (centerOrigin) {
+        // Center the origin of the button shape and text
+        buttonShape.setOrigin({buttonShape.getSize().x / 2.f, buttonShape.getSize().y / 2.f});
+    } else {
+        // Set origin to top-left
+        buttonShape.setOrigin({0.f, 0.f});
+    }
+    buttonText.setOrigin(buttonText.getGlobalBounds().getCenter());
+    buttonText.setPosition(buttonShape.getGlobalBounds().getCenter());
+}
+
+// This method is responsible for hover effect
+void Button::setFocused(bool focused) {
+    focused_ = focused;
+    buttonShape.setOutlineThickness(focused ? 3.f : 0.f);
+    buttonShape.setOutlineColor(sf::Color::Yellow);
+}
+
+// Down there there are basic setters and getters
 void Button::setPosition(const sf::Vector2f& position) {
     buttonShape.setPosition(position);
     buttonText.setPosition(position);
@@ -72,12 +83,6 @@ void Button::setFont(const sf::Font& font) {
 
 void Button::setCharacterSize(unsigned int size) {
     buttonText.setCharacterSize(size);
-}
-
-void Button::setFocused(bool focused) {
-    focused_ = focused;
-    buttonShape.setOutlineThickness(focused ? 3.f : 0.f);
-    buttonShape.setOutlineColor(sf::Color::Yellow);
 }
 
 bool Button::isFocused() const {
@@ -108,11 +113,15 @@ unsigned int Button::getCharacterSize() const {
     return buttonText.getCharacterSize();
 }
 
+sf::FloatRect Button::getGlobalBoundsOfButton() const {
+    return buttonShape.getGlobalBounds();
+}
+
+void Button::update(float deltaTime) {
+    // Add logic for updating the button if needed
+}
+
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(buttonShape, states);
     target.draw(buttonText, states);
-}
-
-void Button::update(float /*deltaTime*/) {
-    // Tu możesz dodać logikę aktualizacji przycisku (np. animacje, hover, itp.)
 }

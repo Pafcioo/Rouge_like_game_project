@@ -5,7 +5,10 @@
 #include "UIManager.h"
 #include "Button.h"
 #include "Player.h"
-
+#include "Event.h"
+#include "GameMap.h"
+#include "MapManager.h"
+// The most important class of the game, that handles everything
 class GameManager
 {
 private:
@@ -13,18 +16,20 @@ private:
     sf::Clock gameClock;
     EntityManager entityManager;
     InputManager inputManager;
-    //std::shared_ptr<UIContainer> uiContainer;
+    EventBus eventBus;
     UIManager uiManager;
+    MapManager mapManager;
     sf::Font font;
-    GameState currentGameState = GameState::MainMenu;
-    GameState lastGameState = GameState::MainMenu; // <-- dodaj to pole
+    GameState currentGameState;
+    sf::View defaultView;
+    sf::View gameplayView;
 public:
     GameManager();
     ~GameManager(){};
     void changeGameState(GameState newState);
-    void updateInputManager();
-    void handleInput(float deltaTime);
-    GameState getGameState() const { return currentGameState; }
-
+    UIManager getUIManager();
+    GameState getGameState() const;
+    MapManager& getMapManager();
+    void changeGameplayViewBasedOnPlayer();
     void Play();
 };
