@@ -6,4 +6,11 @@ file(GLOB SPAWNER_SOURCES
 )
 
 add_library(Spawner STATIC ${SPAWNER_SOURCES})
-target_include_directories(Spawner PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Game)
+target_include_directories(Spawner PUBLIC ${CMAKE_SOURCE_DIR})
+
+target_link_libraries(Spawner
+    PUBLIC
+        SFML::Graphics
+        SFML::Window
+        SFML::System
+)

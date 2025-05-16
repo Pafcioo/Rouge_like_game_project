@@ -6,4 +6,11 @@ file(GLOB FACTORY_SOURCES
 )
 
 add_library(Factory STATIC ${FACTORY_SOURCES})
-target_include_directories(Factory PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Game)
+target_include_directories(Factory PUBLIC ${CMAKE_SOURCE_DIR})
+
+target_link_libraries(Factory
+    PUBLIC
+        SFML::Graphics
+        SFML::Window
+        SFML::System
+)

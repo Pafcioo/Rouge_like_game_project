@@ -11,7 +11,7 @@ class Button : public UIElement {
 public:
     // Pointer to function, there the action for button is stored
     using ClickAction = std::function<void()>;
-    Button(EventBus& eventBus,
+    Button(std::shared_ptr<EventBus> eventBus,
         const std::string& buttonLabel = "",
         const sf::Vector2f& buttonSize = {0.f, 0.f},
         const sf::Vector2f& buttonPosition = {0.f, 0.f},

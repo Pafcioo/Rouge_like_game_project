@@ -7,14 +7,14 @@
 
 std::vector<Projectile*> EntityManager::projectiles;
 // Method for subscribing events where player subscribe to events like movement and attack
-void EntityManager::subscribeToEvents(EventBus& eventBus)
+void EntityManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
 {
-    eventBus.subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
+    eventBus->subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
         if (player && isEntityManagerActive) {
             player->move(moveEvent.direction * moveEvent.deltaTime);
         }
     });
-    eventBus.subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
+    eventBus->subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
         if (player && attackEvent.direction!=sf::Vector2f(0,0) && isEntityManagerActive) {
             player->attack(attackEvent.direction);
         }
@@ -34,7 +34,7 @@ void EntityManager::drawEntities(sf::RenderWindow& window)
     //std::cout << "Drawing entities..." << std::endl;
 }
 
-void EntityManager::updateEntities(float deltaTime, EventBus& eventBus) {
+void EntityManager::updateEntities(float deltaTime) {
     
     player->getWeapon()->update(deltaTime);
     for (auto& proj : projectiles) {

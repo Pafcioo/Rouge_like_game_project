@@ -20,7 +20,7 @@ class EntityManager
         static std::vector<Projectile*> projectiles;
         void drawEntities(sf::RenderWindow& window);
         void updateEntityManager(GameState currentState);
-        void updateEntities(float deltaTime, EventBus& eventBus);
-        void subscribeToEvents(EventBus& eventBus);
+        void updateEntities(float deltaTime);
+        void subscribeToEvents(std::shared_ptr<EventBus> eventBus);
         Entity* getPlayer() { return player; }
 };

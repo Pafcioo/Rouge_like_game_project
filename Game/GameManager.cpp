@@ -83,7 +83,7 @@ void GameManager::Play()
         changeGameplayViewBasedOnPlayer();
         gameWindow.setView(gameplayView);
         mapManager.drawMap(gameWindow, currentGameState);
-        entityManager.updateEntities(deltaTime,eventBus);
+        entityManager.updateEntities(deltaTime);
         entityManager.drawEntities(gameWindow);
         gameWindow.setView(defaultView);
         uiManager.updateActiveUI(currentGameState);

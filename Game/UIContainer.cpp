@@ -5,7 +5,7 @@
 #include "GameElement.h"
 
 // Constructor for UI container
-UIContainer::UIContainer(GameState overlayStateOfGame, EventBus& eventBus, sf::Clock& globalCooldownClock)
+UIContainer::UIContainer(GameState overlayStateOfGame, std::shared_ptr<EventBus> eventBus, sf::Clock& globalCooldownClock)
     : eventBus_(eventBus), overlayStateOfGame_(overlayStateOfGame), globalCooldownClock_(globalCooldownClock) {
         canHaveBackgroundUI_ = false;
 }
@@ -89,7 +89,7 @@ void UIContainer::activateFocused() {
 
 void UIContainer::subscribeToEvents() {
     // Subscribe to mouse button press events
-    eventBus_.subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& event) {
+    eventBus_->subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& event) {
         if (!isUIActive_) return; // Only process events if active
         if (globalCooldownClock_.getElapsedTime() < sf::milliseconds(200)) return;
         sf::Vector2f mousePosition(static_cast<float>(event.position.x), static_cast<float>(event.position.y));
@@ -105,7 +105,7 @@ void UIContainer::subscribeToEvents() {
     });
 
     // Subscribe to mouse move events (hover effect)
-    eventBus_.subscribe<sf::Event::MouseMoved>([this](const sf::Event::MouseMoved& event) {
+    eventBus_->subscribe<sf::Event::MouseMoved>([this](const sf::Event::MouseMoved& event) {
         if (!isUIActive_) return; // Only process events if active
         sf::Vector2f mousePosition(static_cast<float>(event.position.x), static_cast<float>(event.position.y));
         for (int i = 0; i < (int)uiElements_.size(); ++i) {
@@ -134,7 +134,7 @@ void UIContainer::subscribeToEvents() {
     });
 
     // Subscribe to key press events
-    eventBus_.subscribe<sf::Event::KeyPressed>([this](const sf::Event::KeyPressed& event) {
+    eventBus_->subscribe<sf::Event::KeyPressed>([this](const sf::Event::KeyPressed& event) {
         if (!isUIActive_) return; // Only process events if active
         if (globalCooldownClock_.getElapsedTime() < sf::milliseconds(200)) return;
         if (event.scancode == sf::Keyboard::Scancode::Up) {

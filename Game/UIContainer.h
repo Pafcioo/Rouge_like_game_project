@@ -15,7 +15,7 @@ enum class GameState;
 class UIContainer
 {
 public:
-    UIContainer(GameState overlayStateOfGame, EventBus& eventBus, sf::Clock& globalCooldownClock);
+    UIContainer(GameState overlayStateOfGame, std::shared_ptr<EventBus> eventBus, sf::Clock& globalCooldownClock);
     ~UIContainer() = default;
     // Method for adding UIElements to UI(container)
     void addElement(std::shared_ptr<UIElement> element);
@@ -45,7 +45,7 @@ private:
     // Vector that stores pointers for UIElements
     std::vector<std::shared_ptr<UIElement>> uiElements_;
     // Reference to eventBus to control hover effect
-    EventBus& eventBus_;
+    std::shared_ptr<EventBus> eventBus_;
     // State of the game where the UI will be active and visible
     GameState overlayStateOfGame_;
     // Bool that decides whether the UI can have background UIs behind or not

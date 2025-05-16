@@ -10,5 +10,5 @@ class InputManager
 public:
     InputManager() = default;
     ~InputManager() = default;
-    void handleInput(float deltaTime, EventBus& eventBus, sf::RenderWindow& window);
+    void handleInput(float deltaTime, std::shared_ptr<EventBus> eventBus, sf::RenderWindow& window);
 };

@@ -16,7 +16,7 @@ private:
     sf::Clock gameClock;
     EntityManager entityManager;
     InputManager inputManager;
-    EventBus eventBus;
+    std::shared_ptr<EventBus> eventBus;
     UIManager uiManager;
     MapManager mapManager;
     sf::Font font;

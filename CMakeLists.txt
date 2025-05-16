@@ -33,6 +33,10 @@ add_subdirectory(Game/Factory)
 # 5) Tworzymy target o nazwie projektu
 add_executable(${PROJECT_NAME} ${GAME_SOURCES})
 
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_SOURCE_DIR}
+)
+
 # 6) Wymagamy C++17
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 

@@ -3,7 +3,7 @@
 #include <cmath>
 
 Button::Button(
-    EventBus& eventBus, 
+    std::shared_ptr<EventBus> eventBus, 
     const std::string& buttonLabel,
     const sf::Vector2f& buttonSize,
     const sf::Vector2f& buttonPosition,
@@ -28,7 +28,7 @@ Button::Button(
     setOriginCentered(centerOrigin);
 
     // Subscribe to mouse click event
-    eventBus.subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& mouseEvent){
+    eventBus->subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& mouseEvent){
         if(buttonShape.getGlobalBounds().contains(static_cast<sf::Vector2f>(mouseEvent.position))){
             if(onClick && isActive)
                 onClick();

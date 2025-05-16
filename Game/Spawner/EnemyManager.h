@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Enemy.h"
+#include "Game/Enemy.h"
 
 class EnemyManager
 {

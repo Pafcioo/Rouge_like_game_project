@@ -86,7 +86,7 @@ void UIManager::drawUI(sf::RenderTarget& target, GameState currentState) {
 }
 
 // It is very important method for creating UIs. For the appropriate game state the elements of UI are created using generic method createUIElement 
-std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState state,sf::Font& font){
+std::shared_ptr<UIContainer> UIManager::createUI(std::shared_ptr<EventBus> eventBus, GameState state,sf::Font& font){
     auto container = std::make_shared<UIContainer>(state, eventBus, globalEventCooldownClock_);
     if (state == GameState::MainMenu) {
         container->createUIElement<Text>(
@@ -292,7 +292,7 @@ std::shared_ptr<UIContainer> UIManager::createUI(EventBus& eventBus, GameState s
     return container;
 }
 
-void UIManager::initAllUI(EventBus& eventBus, sf::Font& font)
+void UIManager::initAllUI(std::shared_ptr<EventBus> eventBus, sf::Font& font)
 {
     for (auto state : {GameState::MainMenu, GameState::Options, GameState::Paused, GameState::Playing, GameState::ChooseMap}) {
         auto container = createUI(eventBus, state, font);
