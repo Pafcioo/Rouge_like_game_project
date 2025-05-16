@@ -14,7 +14,7 @@ class AbstractSpawner
         std::shared_ptr<GameplayInfoSource> gameplayInfoSource;
         std::shared_ptr<EnemyManager> enemyManager;
         std::shared_ptr<EventBus> eventBus;
-        std::shared_ptr<EnemyFactory> enemyFactory;
+        std::unordered_map<std::string, std::shared_ptr<EnemyFactory>> factories;
 };
 
 class Spawner : public AbstractSpawner
@@ -26,6 +26,4 @@ class Spawner : public AbstractSpawner
         ~Spawner() override = default;
         void spawn(const std::string& enemyType) override;
         void registerFactory(const std::string& enemyType, std::shared_ptr<EnemyFactory> factory);
-    private:
-        std::unordered_map<std::string, std::shared_ptr<EnemyFactory>> factories;
 };
