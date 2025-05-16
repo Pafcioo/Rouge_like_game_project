@@ -28,6 +28,7 @@ file(GLOB GAME_SOURCES
 
 add_subdirectory(Game/AIController)
 add_subdirectory(Game/Spawner)
+add_subdirectory(Game/Factory)
 
 # 5) Tworzymy target o nazwie projektu
 add_executable(${PROJECT_NAME} ${GAME_SOURCES})
@@ -40,6 +41,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         Spawner
         AIController
+        Factory
         SFML::Graphics
         SFML::Window
         SFML::System
