@@ -21,10 +21,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(SFML)
 
 # 4) Zbieramy wszystkie pliki .cpp/.hpp z src/
-file(GLOB_RECURSE GAME_SOURCES
+file(GLOB GAME_SOURCES
     "${CMAKE_SOURCE_DIR}/Game/*.cpp"
-    "${CMAKE_SOURCE_DIR}/Game/*.hpp"
+    "${CMAKE_SOURCE_DIR}/Game/*.h"
 )
+
+add_subdirectory(Game/AIController)
+add_subdirectory(Game/Spawner)
 
 # 5) Tworzymy target o nazwie projektu
 add_executable(${PROJECT_NAME} ${GAME_SOURCES})
@@ -35,6 +38,8 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 # 7) Linkujemy potrzebne moduły SFML
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
+        Spawner
+        AIController
         SFML::Graphics
         SFML::Window
         SFML::System
