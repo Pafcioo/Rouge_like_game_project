@@ -2,10 +2,10 @@
 #include "EntityBuilder.h"
 #include "Game/GameplayInfoSource.h"
 
-void EnemyBuilder::reset(EnemyConfig config)
+void EnemyBuilder::reset(EntityConfig config)
 {
     // Create an enemy entity
-    enemy = enemyFactory->createEnemy(
+    enemy = enemyFactory->createEntity(
         config.health,
         config.speed,
         config.position,

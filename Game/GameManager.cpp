@@ -19,21 +19,9 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
 }
 
 void GameManager::setUpSpawner() {
-    // Create spawn rules
-    std::shared_ptr<SpawnRule> timeRule = std::make_shared<TimeBasedRule>(
-        std::vector<TimeBasedRule::TimeRule>{
-            {2.f, 5.f, 20.f, "enemy1"}
-        }
-    );
-    sf::Texture* texture = new sf::Texture("Assets/ability1.png");
-    EnemyConfig enemyConfig = {100, 50.f, {0.f, 0.f}, texture}; // Example enemy config
-    gameplayInfoSource->setInfo<EnemyConfig>("enemy1", enemyConfig);
-    // Add the spawn rule to the spawn manager
-    spawnManager->addSpawnRule(timeRule);
-    std::shared_ptr<AbstractSpawner> spawner = std::make_shared<Spawner>(eventBus, gameplayInfoSource, enemyManager);
-    std::shared_ptr<EnemyFactory> factory = std::make_shared<BasicEnemyFactory>();
-    spawner->registerFactory("enemy1", factory);
-    spawnManager->setSpawner(spawner);
+    
+    std::shared_ptr<AbstractSpawner> enemySpawner = std::make_shared<ZombieSpawner>(eventBus, gameplayInfoSource, enemyManager);
+    spawnManager->addSpawner(enemySpawner);
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
@@ -114,7 +102,6 @@ void GameManager::Play()
         gameWindow.setView(defaultView);
         uiManager.updateActiveUI(currentGameState);
         uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game
-        
         gameWindow.display();
     }
 }

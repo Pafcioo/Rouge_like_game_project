@@ -2,7 +2,7 @@
 #include "Game/Entity.h"
 #include "EnemyFactory.h"
 
-struct EnemyConfig;
+struct EntityConfig;
 
 class EntityBuilder
 {
@@ -16,16 +16,16 @@ class EntityBuilder
 class EnemyBuilder : public EntityBuilder
 {
     private:
-        std::shared_ptr<Enemy> enemy;
-        std::shared_ptr<EnemyFactory> enemyFactory;
+        std::shared_ptr<Entity> enemy;
+        std::shared_ptr<EntityFactory> enemyFactory;
     public:
-        EnemyBuilder(std::shared_ptr<EnemyFactory> factory) : enemyFactory(factory) {};
+        EnemyBuilder(std::shared_ptr<EntityFactory> factory) : enemyFactory(factory) {};
         ~EnemyBuilder() override = default;
         void setWeapon() const override;
         void setItem() const override;
         void setAbility() const override;
-        void reset(EnemyConfig config);
-        std::shared_ptr<Enemy> getEnemy() const { return enemy; }
+        void reset(EntityConfig config);
+        std::shared_ptr<Entity> getEnemy() const { return enemy; }
 };
 
 // class PlayerBuilder : public EntityBuilder

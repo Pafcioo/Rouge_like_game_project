@@ -1,7 +1,7 @@
 #include <iostream>
 #include "EnemyManager.h"
 
-void EnemyManager::addEnemy(std::shared_ptr<Enemy> enemy)
+void EnemyManager::addEnemy(std::shared_ptr<Entity> enemy)
 {
     vectorOfEnemies.push_back(enemy);
 }

@@ -5,10 +5,10 @@
 class EnemyManager
 {
     private:
-        std::vector<std::shared_ptr<Enemy>> vectorOfEnemies;
+        std::vector<std::shared_ptr<Entity>> vectorOfEnemies;
     public:
         EnemyManager() = default;
         ~EnemyManager() = default;
-        void addEnemy(std::shared_ptr<Enemy> enemy);
+        void addEnemy(std::shared_ptr<Entity> enemy);
         void drawEnemies(sf::RenderWindow& window);
 };

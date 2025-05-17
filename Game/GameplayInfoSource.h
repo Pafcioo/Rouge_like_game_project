@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <any>
 
-struct EnemyConfig {
+struct EntityConfig {
     int health;
     float speed;
     sf::Vector2f position;
