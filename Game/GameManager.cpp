@@ -22,10 +22,11 @@ void GameManager::setUpSpawner() {
     // Create spawn rules
     std::shared_ptr<SpawnRule> timeRule = std::make_shared<TimeBasedRule>(
         std::vector<TimeBasedRule::TimeRule>{
-            {2.f, "enemy1"}, // Spawn enemy1 after 2 seconds
+            {2.f, 5.f, 20.f, "enemy1"}
         }
     );
-    EnemyConfig enemyConfig = {100, 50.f, {0.f, 0.f}, nullptr}; // Example enemy config
+    sf::Texture* texture = new sf::Texture("Assets/ability1.png");
+    EnemyConfig enemyConfig = {100, 50.f, {0.f, 0.f}, texture}; // Example enemy config
     gameplayInfoSource->setInfo<EnemyConfig>("enemy1", enemyConfig);
     // Add the spawn rule to the spawn manager
     spawnManager->addSpawnRule(timeRule);
@@ -108,6 +109,7 @@ void GameManager::Play()
         gameWindow.setView(gameplayView);
         mapManager.drawMap(gameWindow, currentGameState);
         entityManager.updateEntities(deltaTime);
+        enemyManager->drawEnemies(gameWindow);
         entityManager.drawEntities(gameWindow);
         gameWindow.setView(defaultView);
         uiManager.updateActiveUI(currentGameState);

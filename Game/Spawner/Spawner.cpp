@@ -33,7 +33,10 @@ void Spawner::spawn(const std::string& enemyType)
         std::cerr << "No factory registered for enemy type: " << enemyType << std::endl;
     }
     // Pobierz aktualną listę (lub utwórz nową jeśli nie istnieje)
-    auto spawns = gameplayInfoSource->getInfo<std::vector<SpawnInfo>>("spawns");
+    std::vector<SpawnInfo> spawns;
+    if (gameplayInfoSource->hasInfo("spawns")) {
+        spawns = gameplayInfoSource->getInfo<std::vector<SpawnInfo>>("spawns");
+    }
     spawns.push_back(SpawnInfo{enemyType, config.position});
     gameplayInfoSource->setInfo("spawns", spawns);
 }
