@@ -6,7 +6,8 @@
 
 // Constructor for UI container
 UIContainer::UIContainer(GameState overlayStateOfGame, std::shared_ptr<EventBus> eventBus, sf::Clock& globalCooldownClock)
-    : eventBus_(eventBus), overlayStateOfGame_(overlayStateOfGame), globalCooldownClock_(globalCooldownClock) {
+    : overlayStateOfGame_(overlayStateOfGame), globalCooldownClock_(globalCooldownClock) {
+        eventBus_ = eventBus;
         canHaveBackgroundUI_ = false;
 }
 

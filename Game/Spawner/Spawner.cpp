@@ -23,14 +23,17 @@ void Spawner::spawn(const std::string& enemyType)
 {
     auto config = gameplayInfoSource->getInfo<EnemyConfig>(enemyType);
     auto factoryIt = factories.find(enemyType);
+    auto builder = std::make_shared<EnemyBuilder>(factoryIt->second);
     if (factoryIt != factories.end()) {
-        enemyManager->addEnemy(factoryIt->second->createEnemy(
-            config.health,
-            config.speed,
-            config.position,
-            *config.texture
-        ));
+        builder->reset(config);
+        auto enemy = builder->getEnemy();
+        enemyManager->addEnemy(enemy);
+        std::cout << "Spawned enemy of type: " << enemyType << " at position: " << config.position.x << ", " << config.position.y << std::endl;
     } else {
         std::cerr << "No factory registered for enemy type: " << enemyType << std::endl;
     }
+    // Pobierz aktualną listę (lub utwórz nową jeśli nie istnieje)
+    auto spawns = gameplayInfoSource->getInfo<std::vector<SpawnInfo>>("spawns");
+    spawns.push_back(SpawnInfo{enemyType, config.position});
+    gameplayInfoSource->setInfo("spawns", spawns);
 }

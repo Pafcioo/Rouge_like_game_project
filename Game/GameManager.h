@@ -8,6 +8,9 @@
 #include "Event.h"
 #include "GameMap.h"
 #include "MapManager.h"
+#include "Game/Spawner/SpawnManager.h"
+#include "Game/GameplayInfoSource.h"
+#include "Game/Spawner/EnemyManager.h"
 // The most important class of the game, that handles everything
 class GameManager
 {
@@ -23,6 +26,9 @@ private:
     GameState currentGameState;
     sf::View defaultView;
     sf::View gameplayView;
+    std::unique_ptr<SpawnManager> spawnManager;
+    std::shared_ptr<GameplayInfoSource> gameplayInfoSource;
+    std::shared_ptr<EnemyManager> enemyManager;
 public:
     GameManager();
     ~GameManager(){};
@@ -31,5 +37,6 @@ public:
     GameState getGameState() const;
     MapManager& getMapManager();
     void changeGameplayViewBasedOnPlayer();
+    void setUpSpawner();
     void Play();
 };

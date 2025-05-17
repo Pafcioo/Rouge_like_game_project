@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <any>
 
@@ -25,6 +26,9 @@ class GameplayInfoSource
         template<typename T>
         T getInfo(const std::string& key) const
         {
+            if (!hasInfo(key)) {
+                throw std::runtime_error("Key '" + key + "' not found in gameplayInfo.");
+            }
             return std::any_cast<T>(gameplayInfo.at(key));
         }
 

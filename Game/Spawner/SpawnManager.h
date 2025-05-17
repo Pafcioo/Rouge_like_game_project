@@ -40,7 +40,7 @@ class TimeBasedRule : public SpawnRule
 class SpawnManager
 {
     private:
-        std::vector<SpawnRule> spawnRules;
+        std::vector<std::shared_ptr<SpawnRule>> spawnRules;
         std::shared_ptr<AbstractSpawner> spawner;
         std::shared_ptr<EventBus> eventBus;
     public:
@@ -48,13 +48,17 @@ class SpawnManager
         ~SpawnManager() = default;
         void addSpawnRule(std::shared_ptr<SpawnRule> spawnRule)
         {
-            spawnRules.push_back(*spawnRule);
+            spawnRules.push_back(std::move(spawnRule));
+        }
+        void setSpawner(std::shared_ptr<AbstractSpawner> spawner)
+        {
+            this->spawner = spawner;
         }
         void update(float deltaTime)
         {
             for (auto& rule : spawnRules)
             {
-                rule.update(deltaTime, eventBus);
+                rule->update(deltaTime, eventBus);
             }
         }
 

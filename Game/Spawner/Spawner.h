@@ -2,8 +2,16 @@
 #include "Game/GameplayInfoSource.h"
 #include "EnemyManager.h"
 #include "Game/Factory/EnemyFactory.h"
+#include "Game/Factory/EntityBuilder.h"
 #include "Game/Event.h"
 #include <unordered_map>
+
+struct SpawnInfo
+{
+    std::string enemyType;
+    sf::Vector2f position;
+};
+
 
 class AbstractSpawner
 {

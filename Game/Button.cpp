@@ -7,7 +7,7 @@ Button::Button(
     const std::string& buttonLabel,
     const sf::Vector2f& buttonSize,
     const sf::Vector2f& buttonPosition,
-    sf::Color buttonColor,
+    const sf::Color& buttonColor,
     const std::string& buttonTextString, 
     const sf::Font& buttonFont,
     unsigned int buttonCharacterSize,

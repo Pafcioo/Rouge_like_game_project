@@ -6,11 +6,33 @@
 
 GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
 {
+    eventBus = std::make_shared<EventBus>();
+    spawnManager = std::make_unique<SpawnManager>(eventBus);
     uiManager.initAllUI(eventBus, font);
     entityManager.subscribeToEvents(eventBus);
     currentGameState = GameState::MainMenu;
     defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    gameplayInfoSource = std::make_shared<GameplayInfoSource>();
+    enemyManager = std::make_shared<EnemyManager>();
+    setUpSpawner();
+}
+
+void GameManager::setUpSpawner() {
+    // Create spawn rules
+    std::shared_ptr<SpawnRule> timeRule = std::make_shared<TimeBasedRule>(
+        std::vector<TimeBasedRule::TimeRule>{
+            {2.f, "enemy1"}, // Spawn enemy1 after 2 seconds
+        }
+    );
+    EnemyConfig enemyConfig = {100, 50.f, {0.f, 0.f}, nullptr}; // Example enemy config
+    gameplayInfoSource->setInfo<EnemyConfig>("enemy1", enemyConfig);
+    // Add the spawn rule to the spawn manager
+    spawnManager->addSpawnRule(timeRule);
+    std::shared_ptr<AbstractSpawner> spawner = std::make_shared<Spawner>(eventBus, gameplayInfoSource, enemyManager);
+    std::shared_ptr<EnemyFactory> factory = std::make_shared<BasicEnemyFactory>();
+    spawner->registerFactory("enemy1", factory);
+    spawnManager->setSpawner(spawner);
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
@@ -69,6 +91,7 @@ void GameManager::Play()
     // Create a window
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
+    
     // Main loop
     while (gameWindow.isOpen())
     {
@@ -77,6 +100,7 @@ void GameManager::Play()
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
         inputManager.handleInput(deltaTime, eventBus, gameWindow);
+        spawnManager->update(deltaTime);
         // In this section the gameplayerView changes in specific order so 
         // background is first, then the player and at the end is UI that is static
         // relativly to player, so the player is always in the center of view

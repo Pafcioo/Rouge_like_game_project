@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include "Game/Enemy.h"
 
@@ -11,5 +12,7 @@ class EnemyFactory
 class BasicEnemyFactory : public EnemyFactory
 {
     public:
+        BasicEnemyFactory() = default;
+        ~BasicEnemyFactory() override = default;
         std::shared_ptr<Enemy> createEnemy(const int health, const float speed, const sf::Vector2f position, const sf::Texture &texture) override;
 };

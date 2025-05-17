@@ -15,7 +15,7 @@ public:
         const std::string& buttonLabel = "",
         const sf::Vector2f& buttonSize = {0.f, 0.f},
         const sf::Vector2f& buttonPosition = {0.f, 0.f},
-        sf::Color buttonColor = sf::Color::White,
+        const sf::Color& buttonColor = sf::Color::White,
         const std::string& buttonTextString = "",
         const sf::Font& buttonFont = sf::Font(),
         unsigned int buttonCharacterSize = 12,
