@@ -8,6 +8,8 @@ class EntityBuilder;
 
 class EnemyBuilder;
 
+class SpawnComponent;
+
 class SpawnConfig
 {
 protected:
@@ -23,6 +25,7 @@ protected:
     int health;
     float speed;
     sf::Texture* texture; // Use pointer to avoid copying
+    std::vector<std::shared_ptr<SpawnComponent>> components;
 public:
     EntitySpawnConfig(int health, float speed, sf::Vector2f position, sf::Texture* texture)
         : health(health), speed(speed), texture(texture)
@@ -34,6 +37,8 @@ public:
     float getSpeed() const;
     sf::Texture* getTexture() const;
     virtual void configureBuilder(std::shared_ptr<EntityBuilder> builder){};
+    void add(std::shared_ptr<SpawnComponent> component);
+    void remove(std::shared_ptr<SpawnComponent> component);
 };
 
 class EnemySpawnConfig : public EntitySpawnConfig
