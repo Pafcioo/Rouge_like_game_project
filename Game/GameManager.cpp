@@ -19,11 +19,16 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
 }
 
 void GameManager::setUpSpawner() {
-    
+    auto zombieSpawner = std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager);
     spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
-        std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager),
-        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{5.f, 1.f, 20.f}),
-        std::make_shared<EntitySpawnConfig>(100, 100.f, sf::Vector2f(0.f, 0.f), new sf::Texture("Assets/ability1.png"))
+        zombieSpawner,
+        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{5.f, 1.f, 60.f}),
+        std::make_shared<EnemySpawnConfig>(100, 100.f, sf::Vector2f(0.f, 0.f), new sf::Texture("Assets/ability1.png"))
+    ));
+    spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
+        zombieSpawner,
+        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{55.f, 2.f, 180.f}),
+        std::make_shared<EnemySpawnConfig>(100, 100.f, sf::Vector2f(200.f, 0.f), new sf::Texture("Assets/ability2.png"))
     ));
 }
 

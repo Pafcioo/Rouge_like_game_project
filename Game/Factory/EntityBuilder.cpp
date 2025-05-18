@@ -4,12 +4,17 @@
 
 void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config)
 {
-    // Create an enemy entity
+    auto entityConfig = std::dynamic_pointer_cast<EntitySpawnConfig>(config);
+    if (!entityConfig)
+    {
+        std::cerr << "Invalid config type for EnemyBuilder" << std::endl;
+        return;
+    }
     enemy = enemyFactory->createEntity(
-        config->getHealth(),
-        config->getSpeed(),
-        config->getPosition(),
-        *config->getTexture()
+        entityConfig->getHealth(),
+        entityConfig->getSpeed(),
+        entityConfig->getPosition(),
+        *entityConfig->getTexture()
     );
 }
 

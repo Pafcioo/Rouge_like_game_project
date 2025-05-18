@@ -1,31 +1,48 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 class AbstractSpawner;
+
+class EntityBuilder;
+
+class EnemyBuilder;
 
 class SpawnConfig
 {
 protected:
-    int health;
-    float speed;
     sf::Vector2f position;
-    sf::Texture* texture; // Use pointer to avoid copying
 public:
-    SpawnConfig(int health, float speed, sf::Vector2f position, sf::Texture* texture)
-        : health(health), speed(speed), position(position), texture(texture) {}
     virtual ~SpawnConfig() = default;
-    int getHealth() const;
-    float getSpeed() const;
     const sf::Vector2f& getPosition() const;
-    sf::Texture* getTexture() const;
 };
 
 class EntitySpawnConfig : public SpawnConfig
 {
+protected:
+    int health;
+    float speed;
+    sf::Texture* texture; // Use pointer to avoid copying
 public:
     EntitySpawnConfig(int health, float speed, sf::Vector2f position, sf::Texture* texture)
-        : SpawnConfig(health, speed, position, texture) {}
-    ~EntitySpawnConfig() override = default;
+        : health(health), speed(speed), texture(texture)
+    {
+        this->position = position;
+    }
+    ~EntitySpawnConfig() = default;
+    int getHealth() const;
+    float getSpeed() const;
+    sf::Texture* getTexture() const;
+    virtual void configureBuilder(std::shared_ptr<EntityBuilder> builder){};
+};
+
+class EnemySpawnConfig : public EntitySpawnConfig
+{
+public:
+    EnemySpawnConfig(int health, float speed, sf::Vector2f position, sf::Texture* texture)
+        : EntitySpawnConfig(health, speed, position, texture) {}
+    ~EnemySpawnConfig() = default;
+    void configureBuilder(std::shared_ptr<EntityBuilder> builder) override;
 };
 
 class SpawnRule

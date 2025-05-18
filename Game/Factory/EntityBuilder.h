@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include "Game/Entity.h"
 #include "EnemyFactory.h"

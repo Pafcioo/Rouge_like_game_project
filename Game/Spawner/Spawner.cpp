@@ -11,10 +11,15 @@ EnemySpawner::EnemySpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSourc
 
 void EnemySpawner::spawn(std::shared_ptr<SpawnConfig> config)
 {
+    auto enemyConfig = std::dynamic_pointer_cast<EnemySpawnConfig>(config);
+    if (!enemyConfig)
+    {
+        std::cerr << "Invalid config type for EnemyBuilder" << std::endl;
+        return;
+    }
     auto builder = std::make_shared<EnemyBuilder>(factory);
-    builder->reset(config);
-    auto enemy = builder->getEnemy();
-    enemyManager->addEnemy(enemy);
+    enemyConfig->configureBuilder(builder);
+    enemyManager->addEnemy(builder->getEnemy());
 }
 
 // ZombieSpawner constructor: calls base and sets up specifics
