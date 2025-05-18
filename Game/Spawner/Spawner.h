@@ -10,22 +10,14 @@
 #include "Game/Spawner/SpawnRule.h"
 #include <unordered_map>
 
-struct SpawnInfo {
-    std::string entityType;
-    sf::Vector2f position;
-};
-
 // Abstract base class
 class AbstractSpawner {
 protected:
     std::shared_ptr<GameplayInfoSource> gameplayInfoSource;
-    std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<EntityFactory> factory;
-    std::shared_ptr<SpawnRule> spawnRule;
 public:
     virtual ~AbstractSpawner() = default;
-    virtual void spawn(const std::string& entityType) = 0;
-    virtual void update(float deltaTime) = 0;
+    virtual void spawn(std::shared_ptr<SpawnConfig> config) = 0;
 };
 
 // Abstract enemy spawner
@@ -33,19 +25,17 @@ class EnemySpawner : public AbstractSpawner {
 protected:
     std::shared_ptr<EnemyManager> enemyManager;
 public:
-    EnemySpawner(std::shared_ptr<EventBus> eventBus,
-                 std::shared_ptr<GameplayInfoSource> gameplayInfoSource,
+    EnemySpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSource,
                  std::shared_ptr<EnemyManager> enemyManager);
     ~EnemySpawner() override = default;
-    virtual void spawn(const std::string& entityType) override;
-    virtual void update(float deltaTime) override;
+    virtual void spawn(std::shared_ptr<SpawnConfig> config) override;
 };
 
 // Concrete zombie spawner
 class ZombieSpawner : public EnemySpawner {
 public:
-    ZombieSpawner(std::shared_ptr<EventBus> eventBus,
-                  std::shared_ptr<GameplayInfoSource> gameplayInfoSource,
+    ZombieSpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSource,
                   std::shared_ptr<EnemyManager> enemyManager);
     ~ZombieSpawner() override = default;
+    virtual void spawn(std::shared_ptr<SpawnConfig> config) override;
 };

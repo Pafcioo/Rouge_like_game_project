@@ -1,8 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Game/Entity.h"
 #include "EnemyFactory.h"
-
-struct EntityConfig;
+#include "Game/Spawner/SpawnRule.h"
 
 class EntityBuilder
 {
@@ -24,7 +23,7 @@ class EnemyBuilder : public EntityBuilder
         void setWeapon() const override;
         void setItem() const override;
         void setAbility() const override;
-        void reset(EntityConfig config);
+        void reset(std::shared_ptr<SpawnConfig> config);
         std::shared_ptr<Entity> getEnemy() const { return enemy; }
 };
 

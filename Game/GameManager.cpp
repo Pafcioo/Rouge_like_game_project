@@ -7,7 +7,7 @@
 GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
 {
     eventBus = std::make_shared<EventBus>();
-    spawnManager = std::make_unique<SpawnManager>(eventBus);
+    spawnManager = std::make_unique<SpawnManager>();
     uiManager.initAllUI(eventBus, font);
     entityManager.subscribeToEvents(eventBus);
     currentGameState = GameState::MainMenu;
@@ -20,8 +20,11 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
 
 void GameManager::setUpSpawner() {
     
-    std::shared_ptr<AbstractSpawner> enemySpawner = std::make_shared<ZombieSpawner>(eventBus, gameplayInfoSource, enemyManager);
-    spawnManager->addSpawner(enemySpawner);
+    spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
+        std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager),
+        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{5.f, 1.f, 20.f}),
+        std::make_shared<EntitySpawnConfig>(100, 100.f, sf::Vector2f(0.f, 0.f), new sf::Texture("Assets/ability1.png"))
+    ));
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {

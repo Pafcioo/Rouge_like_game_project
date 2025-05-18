@@ -2,13 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <any>
 
-struct EntityConfig {
-    int health;
-    float speed;
-    sf::Vector2f position;
-    sf::Texture* texture; // Use pointer to avoid copying
-};
-
 class GameplayInfoSource
 {
     private:

@@ -1,15 +1,15 @@
 #include <iostream>
 #include "EntityBuilder.h"
-#include "Game/GameplayInfoSource.h"
+#include "Game/Spawner/SpawnRule.h"
 
-void EnemyBuilder::reset(EntityConfig config)
+void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config)
 {
     // Create an enemy entity
     enemy = enemyFactory->createEntity(
-        config.health,
-        config.speed,
-        config.position,
-        *config.texture
+        config->getHealth(),
+        config->getSpeed(),
+        config->getPosition(),
+        *config->getTexture()
     );
 }
 

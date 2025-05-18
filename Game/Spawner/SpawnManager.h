@@ -1,26 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include "Spawner.h"
+#include "SpawnStrategy.h"
 #include "Game/Event.h"
 
 class SpawnManager
 {
     private:
-        std::vector<std::shared_ptr<AbstractSpawner>> spawners;
-        std::shared_ptr<EventBus> eventBus;
+        std::vector<std::shared_ptr<SpawnStrategy>> strategies;
     public:
-        SpawnManager(std::shared_ptr<EventBus> eventBus) : eventBus(eventBus) {};
+        SpawnManager();
         ~SpawnManager() = default;
-        void addSpawner(std::shared_ptr<AbstractSpawner> spawner)
-        {
-            spawners.push_back(spawner);
-        }
-        void update(float deltaTime)
-        {
-            for (auto& spawner : spawners)
-            {
-                spawner->update(deltaTime);
-            }
-        }
-
+        void addStrategy(std::shared_ptr<SpawnStrategy> strategy);
+        void update(float deltaTime);
 };
