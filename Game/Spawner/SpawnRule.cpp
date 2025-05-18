@@ -43,6 +43,6 @@ void EnemySpawnConfig::configureBuilder(std::shared_ptr<EntityBuilder> builder)
 {
     if(auto enemyBuilder = std::dynamic_pointer_cast<EnemyBuilder>(builder))
     {
-        enemyBuilder->reset(std::make_shared<EntitySpawnConfig>(health, speed, position, texture));
+        enemyBuilder->reset(std::make_shared<EnemySpawnConfig>(health, speed, position, texture));
     }
 };
