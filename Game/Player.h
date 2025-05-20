@@ -12,4 +12,5 @@ class Player : public Entity
     float getEntitySpeed() override;
     void move(sf::Vector2f direction) override;
     void attack(sf::Vector2f direction) override;
+    void useItem(std::shared_ptr<Item> item) override;
 };

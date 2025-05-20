@@ -21,4 +21,9 @@ void Player::attack(sf::Vector2f direction)
     gun.shoot(entityPosition, direction, 500);
 }
 
+void Player::useItem(std::shared_ptr<Item> item) {
+    item->activate(this);
+}
+
+
 

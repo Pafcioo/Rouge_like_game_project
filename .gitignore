@@ -1,5 +1,6 @@
 ﻿/.vscode
 /build
+/.idea
 /Game/.idea
-/Game/cmake-build-debug
-/Game/CMakeLists.txt
+/cmake-build-debug
+CMakeLists.txt

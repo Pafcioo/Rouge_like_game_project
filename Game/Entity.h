@@ -1,11 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Weapon.h"
+#include "Item.h"
 
 class Entity : public sf::Drawable
 {
     protected:
-        int entityHealth;
+        float entityHealth;
         float entitySpeed;
         sf::Vector2f entityPosition;
         sf::Texture entityTexture;
@@ -34,4 +35,7 @@ class Entity : public sf::Drawable
         virtual void attack(sf::Vector2f direction) = 0;
         sf::Vector2f getPosition() const { return entityPosition; }
         Weapon* getWeapon() {return &gun;}
+        virtual void useItem(std::shared_ptr<Item> item) = 0;
+        float getHealth() const { return entityHealth; }
+        void setHealth(float health) { entityHealth = health; }
 };
