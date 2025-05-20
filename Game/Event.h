@@ -25,6 +25,10 @@ struct DashEvent {
     sf::Vector2f direction;
 };
 
+struct SpawnEvent {
+    std::string labelOfSpawner;
+};
+
 // Base class for events, needed for storing pointers to this base class
 class EventBase {
 public:

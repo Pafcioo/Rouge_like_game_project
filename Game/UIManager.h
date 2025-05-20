@@ -24,9 +24,9 @@ public:
     // Method for adding a UI to unordered map of UIs
     void addUIContainer(GameState state, std::shared_ptr<UIContainer> container);
     // Method for initializaing all of the created UIs
-    void initAllUI(EventBus& eventBus, sf::Font& font);
+    void initAllUI(std::shared_ptr<EventBus> eventBus, sf::Font& font);
     // Method for creating a UI
-    std::shared_ptr<UIContainer> createUI(EventBus& eventBus, GameState state, sf::Font& font);
+    std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, GameState state, sf::Font& font);
     // Getter for UI
     std::shared_ptr<UIContainer> getUIContainer(GameState state);
     // Draw methods for UIs

@@ -4,7 +4,7 @@
 #include <vector>
 
 // Handle input method for publishing events to event bus
-void InputManager::handleInput(float deltaTime, EventBus& eventBus, sf::RenderWindow& window)
+void InputManager::handleInput(float deltaTime, std::shared_ptr<EventBus> eventBus, sf::RenderWindow& window)
 {   
     // Section responsible for movement
     sf::Vector2f inputDirection(0,0);
@@ -17,7 +17,7 @@ void InputManager::handleInput(float deltaTime, EventBus& eventBus, sf::RenderWi
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
             inputDirection.x++;
     if(inputDirection != sf::Vector2f(0,0)){
-        eventBus.publish<MoveEvent>({inputDirection, deltaTime});
+        eventBus->publish<MoveEvent>({inputDirection, deltaTime});
     }
     while(const std::optional event = window.pollEvent())
     {
@@ -27,23 +27,23 @@ void InputManager::handleInput(float deltaTime, EventBus& eventBus, sf::RenderWi
         }
         else if( const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())
         {
-            eventBus.publish<sf::Event::MouseMoved>(*mouseMoved); // Hover effect for buttons...
+            eventBus->publish<sf::Event::MouseMoved>(*mouseMoved); // Hover effect for buttons...
         }
         else if( const auto* mouseClicked = event->getIf<sf::Event::MouseButtonPressed>())
         {
             if(mouseClicked->button == sf::Mouse::Button::Left)
-                eventBus.publish<sf::Event::MouseButtonPressed>(*mouseClicked); // Mouse clicking
+                eventBus->publish<sf::Event::MouseButtonPressed>(*mouseClicked); // Mouse clicking
         }
         else if( const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
         {
             if (keyPressed->scancode == sf::Keyboard::Scancode::Up || keyPressed->scancode == sf::Keyboard::Scancode::Down || keyPressed->scancode == sf::Keyboard::Scancode::Enter) {
-                eventBus.publish<sf::Event::KeyPressed>(*keyPressed); // Navigating UI with arrows
+                eventBus->publish<sf::Event::KeyPressed>(*keyPressed); // Navigating UI with arrows
             }
             // Publishing events other tat KeyPressed
             if(keyPressed->scancode == sf::Keyboard::Scancode::Q)
-                eventBus.publish<AttackEvent>({inputDirection}); // Attacking
+                eventBus->publish<AttackEvent>({inputDirection}); // Attacking
             if(keyPressed->scancode == sf::Keyboard::Scancode::Space)
-                eventBus.publish<DashEvent>({inputDirection}); // Dashing
+                eventBus->publish<DashEvent>({inputDirection}); // Dashing
         }
     }
 }

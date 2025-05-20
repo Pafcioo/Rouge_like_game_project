@@ -6,11 +6,30 @@
 
 GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
 {
+    eventBus = std::make_shared<EventBus>();
+    spawnManager = std::make_unique<SpawnManager>();
     uiManager.initAllUI(eventBus, font);
     entityManager.subscribeToEvents(eventBus);
     currentGameState = GameState::MainMenu;
     defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    gameplayInfoSource = std::make_shared<GameplayInfoSource>();
+    enemyManager = std::make_shared<EnemyManager>();
+    setUpSpawner();
+}
+
+void GameManager::setUpSpawner() {
+    auto zombieSpawner = std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager);
+    spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
+        zombieSpawner,
+        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{5.f, 1.f, 60.f}),
+        std::make_shared<EnemySpawnConfig>(100, 100.f, sf::Vector2f(0.f, 0.f), new sf::Texture("Assets/ability1.png"))
+    ));
+    spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
+        zombieSpawner,
+        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{55.f, 2.f, 180.f}),
+        std::make_shared<EnemySpawnConfig>(100, 100.f, sf::Vector2f(200.f, 0.f), new sf::Texture("Assets/ability2.png"))
+    ));
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
@@ -69,6 +88,7 @@ void GameManager::Play()
     // Create a window
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
+    
     // Main loop
     while (gameWindow.isOpen())
     {
@@ -77,18 +97,19 @@ void GameManager::Play()
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
         inputManager.handleInput(deltaTime, eventBus, gameWindow);
+        spawnManager->update(deltaTime);
         // In this section the gameplayerView changes in specific order so 
         // background is first, then the player and at the end is UI that is static
         // relativly to player, so the player is always in the center of view
         changeGameplayViewBasedOnPlayer();
         gameWindow.setView(gameplayView);
         mapManager.drawMap(gameWindow, currentGameState);
-        entityManager.updateEntities(deltaTime,eventBus);
+        entityManager.updateEntities(deltaTime);
+        enemyManager->drawEnemies(gameWindow);
         entityManager.drawEntities(gameWindow);
         gameWindow.setView(defaultView);
         uiManager.updateActiveUI(currentGameState);
         uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game
-        
         gameWindow.display();
     }
 }

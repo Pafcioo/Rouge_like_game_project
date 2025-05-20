@@ -11,11 +11,11 @@ class Button : public UIElement {
 public:
     // Pointer to function, there the action for button is stored
     using ClickAction = std::function<void()>;
-    Button(EventBus& eventBus,
+    Button(std::shared_ptr<EventBus> eventBus,
         const std::string& buttonLabel = "",
         const sf::Vector2f& buttonSize = {0.f, 0.f},
         const sf::Vector2f& buttonPosition = {0.f, 0.f},
-        sf::Color buttonColor = sf::Color::White,
+        const sf::Color& buttonColor = sf::Color::White,
         const std::string& buttonTextString = "",
         const sf::Font& buttonFont = sf::Font(),
         unsigned int buttonCharacterSize = 12,
