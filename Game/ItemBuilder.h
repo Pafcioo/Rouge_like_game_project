@@ -12,10 +12,10 @@ public:
 
 class HealPotionBuilder : public ItemBuilder {
 private:
-    std::shared_ptr<Item> healPotion;
+    std::shared_ptr<Potion> healPotion;
 public:
     HealPotionBuilder() = default;
     ~HealPotionBuilder() override = default;
     void reset() override;
-    std::shared_ptr<Item> build();
+    std::shared_ptr<Potion> build();
 };

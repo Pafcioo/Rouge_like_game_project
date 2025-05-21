@@ -2,5 +2,5 @@
 #include "Potion.h"
 
 void HealPotion::activate(Entity *entity) {
-    entity->setHealth(entity->getHealth()+value);
+    entity->setHealth(entity->getHealth()+effectAmount);
 }
