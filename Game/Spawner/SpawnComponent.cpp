@@ -16,7 +16,7 @@ ItemComponent::ItemComponent(std::shared_ptr<Item> item)
     : item(item) {}
 
 void ItemComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->addItem(item);
+    builder->setItem(item);
 }
 
 void ItemComponent::describe() const {
@@ -27,7 +27,7 @@ AbilityComponent::AbilityComponent(std::shared_ptr<Ability> ability)
     : ability(ability) {}
 
 void AbilityComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->addAbility(ability);
+    builder->setAbility(ability);
 }
 
 void AbilityComponent::describe() const {
