@@ -1,0 +1,83 @@
+#include "Game/AIController/AIController.h"
+
+EnemyAIController::EnemyAIController(std::shared_ptr<Entity> entity, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
+{
+    controlledEntity = entity;
+    gameplayInfo = gameplayInfoSource;
+}
+//Setters
+void AbstractAIController::setDecisionComponent(std::shared_ptr<AbstractAIDecision> decision)
+{
+    decisionComponent = decision;
+}
+
+void AbstractAIController::setMovementComponent(std::shared_ptr<AbstractAIMovement> movement)
+{
+    movementComponent = movement;
+}
+
+void AbstractAIController::setSensingComponent(std::shared_ptr<AbstractAISensing> sensing)
+{
+    sensingComponent = sensing;
+}
+
+void AbstractAIController::setCooldownComponent(std::shared_ptr<AbstractAICooldown> cooldown)
+{
+    cooldownComponent = cooldown;
+}
+
+void AbstractAIController::setDifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty)
+{
+    difficultyComponent = difficulty;
+}
+
+void AbstractAIController::setCurrentState(std::shared_ptr<AbstractAIState> state)
+{
+    currentState = state;
+}
+//Getters
+std::shared_ptr<AbstractAIDecision> AbstractAIController::getDecisionComponent()
+{
+    return decisionComponent;
+}
+
+std::shared_ptr<AbstractAIMovement> AbstractAIController::getMovementComponent()
+{
+    return movementComponent;
+}
+
+std::shared_ptr<AbstractAISensing> AbstractAIController::getSensingComponent()
+{
+    return sensingComponent;
+}
+
+std::shared_ptr<AbstractAICooldown> AbstractAIController::getCooldownComponent()
+{
+    return cooldownComponent;
+}
+
+std::shared_ptr<AIControllerDifficulty> AbstractAIController::getDifficultyComponent()
+{
+    return difficultyComponent;
+}
+
+std::shared_ptr<AbstractAIState> AbstractAIController::getCurrentState()
+{
+    return currentState;
+}
+
+std::shared_ptr<GameplayInfoSource> AbstractAIController::getGameplayInfo()
+{
+    return gameplayInfo;
+}
+
+std::shared_ptr<Entity> AbstractAIController::getControlledEntity()
+{
+    return controlledEntity;
+}
+
+EnemyAIController::EnemyAIController(std::shared_ptr<Entity> entity, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
+{
+    controlledEntity = entity;
+    gameplayInfo = gameplayInfoSource;
+}

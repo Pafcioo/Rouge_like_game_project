@@ -1,35 +1,35 @@
 #include <iostream>
 #include "Game/Spawner/SpawnComponent.h"
 
-WeaponComponent::WeaponComponent(std::shared_ptr<Weapon> weapon)
-    : weapon(weapon) {}
+// WeaponComponent::WeaponComponent(std::shared_ptr<Weapon> weapon)
+//     : weapon(weapon) {}
 
-void WeaponComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->setWeapon(weapon);
-}
+// void WeaponComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+//     builder->setWeapon(weapon);
+// }
 
-void WeaponComponent::describe() const {
-    std::cout << "WeaponComponent with weapon: " << weapon->getName() << "\n";
-}
+// void WeaponComponent::describe() const {
+//     std::cout << "WeaponComponent with weapon: " << weapon->getName() << "\n";
+// }
 
-ItemComponent::ItemComponent(std::shared_ptr<Item> item)
-    : item(item) {}
+// ItemComponent::ItemComponent(std::shared_ptr<Item> item)
+//     : item(item) {}
 
-void ItemComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->setItem(item);
-}
+// void ItemComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+//     builder->setItem(item);
+// }
 
-void ItemComponent::describe() const {
-    std::cout << "ItemComponent with item: " << item->getName() << "\n";
-}
+// void ItemComponent::describe() const {
+//     std::cout << "ItemComponent with item: " << item->getName() << "\n";
+// }
 
-AbilityComponent::AbilityComponent(std::shared_ptr<Ability> ability)
-    : ability(ability) {}
+// AbilityComponent::AbilityComponent(std::shared_ptr<Ability> ability)
+//     : ability(ability) {}
 
-void AbilityComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->setAbility(ability);
-}
+// void AbilityComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+//     builder->setAbility(ability);
+// }
 
-void AbilityComponent::describe() const {
-    std::cout << "AbilityComponent with ability: " << ability->getName() << "\n";
-}
+// void AbilityComponent::describe() const {
+//     std::cout << "AbilityComponent with ability: " << ability->getName() << "\n";
+// }

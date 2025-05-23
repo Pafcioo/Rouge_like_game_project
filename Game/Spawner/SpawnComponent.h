@@ -9,29 +9,29 @@ public:
     virtual void describe() const = 0;
 };
 
-class WeaponComponent : public SpawnComponent {
-    std::shared_ptr<Weapon> weapon;
-public:
-    WeaponComponent(std::shared_ptr<Weapon> weapon);
+// class WeaponComponent : public SpawnComponent {
+//     std::shared_ptr<Weapon> weapon;
+// public:
+//     WeaponComponent(std::shared_ptr<Weapon> weapon);
 
-    void apply(std::shared_ptr<EntityBuilder> builder) const override;
-    void describe() const override;
-};
+//     void apply(std::shared_ptr<EntityBuilder> builder) const override;
+//     void describe() const override;
+// };
 
-class ItemComponent : public SpawnComponent {
-    std::shared_ptr<Item> item;
-public:
-    ItemComponent(std::shared_ptr<Item> item);
+// class ItemComponent : public SpawnComponent {
+//     std::shared_ptr<Item> item;
+// public:
+//     ItemComponent(std::shared_ptr<Item> item);
 
-    void apply(std::shared_ptr<EntityBuilder> builder) const override;
-    void describe() const override;
-};
+//     void apply(std::shared_ptr<EntityBuilder> builder) const override;
+//     void describe() const override;
+// };
 
-class AbilityComponent : public SpawnComponent {
-    std::shared_ptr<Ability> ability;
-public:
-    AbilityComponent(std::shared_ptr<Ability> ability);
+// class AbilityComponent : public SpawnComponent {
+//     std::shared_ptr<Ability> ability;
+// public:
+//     AbilityComponent(std::shared_ptr<Ability> ability);
 
-    void apply(std::shared_ptr<EntityBuilder> builder) const override;
-    void describe() const override;
-};
+//     void apply(std::shared_ptr<EntityBuilder> builder) const override;
+//     void describe() const override;
+// };
