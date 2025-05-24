@@ -9,7 +9,7 @@ void WeaponComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
 }
 
 void WeaponComponent::describe() const {
-    std::cout << "WeaponComponent with weapon: " << weapon->getName() << "\n";
+    std::cout << "WeaponComponent with weapon: " << weapon->getWeaponName() << "\n";
 }
 
 ItemComponent::ItemComponent(std::shared_ptr<Item> item)
@@ -31,5 +31,5 @@ void AbilityComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
 }
 
 void AbilityComponent::describe() const {
-    std::cout << "AbilityComponent with ability: " << ability->getName() << "\n";
+    std::cout << "AbilityComponent with ability: " << ability->getAbilityName() << "\n";
 }

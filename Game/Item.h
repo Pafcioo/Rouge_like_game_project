@@ -17,6 +17,7 @@ protected:
     std::string name;
     Rarity rarity;
     float effectAmount;
+    bool isUsed = false;
 public:
     Item() = default;
     virtual ~Item() = default;
@@ -29,4 +30,6 @@ public:
     int getId() { return id; }
     std::string getName() { return name; }
     Rarity getRarity() { return rarity; }
+    void setIsUsed(bool isUsed) { this->isUsed = isUsed; }
+    bool getIsUsed() { return isUsed; }
 };

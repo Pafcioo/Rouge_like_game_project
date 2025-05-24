@@ -1,13 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include <iostream>
-#include <math.h>
-
-float Player::getEntitySpeed() {return entitySpeed;}
+#include <cmath>
 
 void Player::move(const sf::Vector2f direction)
 {
-    this->entitySprite.move(direction*entitySpeed);
+    this->entitySprite.move(direction*entityCurrentSpeed);
     entityPosition = entitySprite.getPosition();
 }
 
@@ -18,12 +16,19 @@ void Player::attack(sf::Vector2f direction)
     if (magnitude != 0.f) {
         direction /= magnitude; // Normalize the vector
     }
-    gun.shoot(entityPosition, direction, 500);
+    entityWeapon->shoot(entityPosition, direction, 500);
 }
 
 void Player::useItem(std::shared_ptr<Item> item) {
     item->activate(this);
+    item->setIsUsed(true);
 }
+
+void Player::useAbility() {
+    entityAbility->activate();
+}
+
+
 
 
 
