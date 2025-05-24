@@ -4,6 +4,24 @@ EnemyAIController::EnemyAIController(std::shared_ptr<Entity> entity, std::shared
 {
     controlledEntity = entity;
     gameplayInfo = gameplayInfoSource;
+    decisionComponent = std::make_shared<AIDecision>();
+    currentState = std::make_shared<PatrolState>();
+}
+
+void EnemyAIController::update(float deltaTime)
+{
+    if (currentState) {
+        currentState->update(shared_from_this(),deltaTime);
+    }
+    if (sensingComponent){
+        sensingComponent->update(shared_from_this());
+    }
+    if (decisionComponent){
+        decisionComponent->update(shared_from_this());
+    }
+    if (cooldownComponent){
+        cooldownComponent->update(shared_from_this(), deltaTime);
+    }
 }
 //Setters
 void AbstractAIController::setDecisionComponent(std::shared_ptr<AbstractAIDecision> decision)
@@ -24,6 +42,11 @@ void AbstractAIController::setSensingComponent(std::shared_ptr<AbstractAISensing
 void AbstractAIController::setCooldownComponent(std::shared_ptr<AbstractAICooldown> cooldown)
 {
     cooldownComponent = cooldown;
+}
+
+void AbstractAIController::setAttackComponent(std::shared_ptr<AbstractAIAttack> attack)
+{
+    attackComponent = attack;
 }
 
 void AbstractAIController::setDifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty)
@@ -56,6 +79,11 @@ std::shared_ptr<AbstractAICooldown> AbstractAIController::getCooldownComponent()
     return cooldownComponent;
 }
 
+std::shared_ptr<AbstractAIAttack> AbstractAIController::getAttackComponent()
+{
+    return attackComponent;
+}
+
 std::shared_ptr<AIControllerDifficulty> AbstractAIController::getDifficultyComponent()
 {
     return difficultyComponent;
@@ -74,10 +102,4 @@ std::shared_ptr<GameplayInfoSource> AbstractAIController::getGameplayInfo()
 std::shared_ptr<Entity> AbstractAIController::getControlledEntity()
 {
     return controlledEntity;
-}
-
-EnemyAIController::EnemyAIController(std::shared_ptr<Entity> entity, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
-{
-    controlledEntity = entity;
-    gameplayInfo = gameplayInfoSource;
 }

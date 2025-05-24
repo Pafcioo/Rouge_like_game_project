@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Spawner.h"
+#include "Game/Spawner/Spawner.h"
 
 // EnemySpawner constructor: initializes base members
 EnemySpawner::EnemySpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSource,

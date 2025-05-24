@@ -6,10 +6,12 @@
 #include "Game/AIController/AIMovement.h"
 #include "Game/AIController/AISensing.h"
 #include "Game/AIController/AIState.h"
+#include "Game/AIController/AIAttack.h"
 #include "Game/AIController/AIControllerDifficulty.h"
 #include "Game/Entity.h"
 
-class AbstractAIController
+
+class AbstractAIController : public std::enable_shared_from_this<AbstractAIController>
 {
     protected:
         std::shared_ptr<AbstractAIState> currentState;
@@ -18,6 +20,7 @@ class AbstractAIController
         std::shared_ptr<AbstractAIMovement> movementComponent;
         std::shared_ptr<AbstractAISensing> sensingComponent;
         std::shared_ptr<AbstractAICooldown> cooldownComponent;
+        std::shared_ptr<AbstractAIAttack> attackComponent;
         std::shared_ptr<AIControllerDifficulty> difficultyComponent;
         std::shared_ptr<Entity> controlledEntity;
     public:
@@ -27,6 +30,7 @@ class AbstractAIController
         virtual void setMovementComponent(std::shared_ptr<AbstractAIMovement> movement);
         virtual void setSensingComponent(std::shared_ptr<AbstractAISensing> sensing);
         virtual void setCooldownComponent(std::shared_ptr<AbstractAICooldown> cooldown);
+        virtual void setAttackComponent(std::shared_ptr<AbstractAIAttack> attack);
         virtual void setDifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty);
         virtual void setCurrentState(std::shared_ptr<AbstractAIState> state);
         //Getters
@@ -34,12 +38,13 @@ class AbstractAIController
         virtual std::shared_ptr<AbstractAIMovement> getMovementComponent();
         virtual std::shared_ptr<AbstractAISensing> getSensingComponent();
         virtual std::shared_ptr<AbstractAICooldown> getCooldownComponent();
+        virtual std::shared_ptr<AbstractAIAttack> getAttackComponent();
         virtual std::shared_ptr<AIControllerDifficulty> getDifficultyComponent();
         virtual std::shared_ptr<AbstractAIState> getCurrentState();
         virtual std::shared_ptr<GameplayInfoSource> getGameplayInfo();
         virtual std::shared_ptr<Entity> getControlledEntity();
         //Update method
-        virtual void update() = 0; 
+        virtual void update(float deltaTime) = 0; 
 };
 
 class EnemyAIController : public AbstractAIController
@@ -47,5 +52,5 @@ class EnemyAIController : public AbstractAIController
     public:
         EnemyAIController(std::shared_ptr<Entity> entity, std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
         ~EnemyAIController() override = default;
-        void update() override;
+        void update(float deltaTime) override;
 };

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "EnemyManager.h"
+#include "Game/Spawner/EnemyManager.h"
 
 void EnemyManager::addEnemy(std::shared_ptr<Entity> enemy)
 {

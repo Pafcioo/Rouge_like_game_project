@@ -5,6 +5,18 @@
 #include <algorithm>
 #include <cmath>
 
+EntityManager::EntityManager()
+{
+    player = new Player(100, 250, {0, 0}, sf::Texture("Assets/player.png"));
+    player->setGameplayInfo(gameplayInfo);
+    isEntityManagerActive = false;
+}
+
+void EntityManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
+{
+    gameplayInfo = gameplayInfoSource;
+}
+
 std::vector<Projectile*> EntityManager::projectiles;
 // Method for subscribing events where player subscribe to events like movement and attack
 void EntityManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)

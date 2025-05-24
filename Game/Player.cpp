@@ -9,6 +9,7 @@ void Player::move(const sf::Vector2f direction)
 {
     this->entitySprite.move(direction*entitySpeed);
     entityPosition = entitySprite.getPosition();
+    gameplayInfo->setInfo<sf::Vector2f>("playerPos",entityPosition);
 }
 
 void Player::attack(sf::Vector2f direction)

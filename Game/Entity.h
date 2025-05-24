@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Weapon.h"
+#include "Game/GameplayInfoSource.h"
 
 class Entity : public sf::Drawable
 {
@@ -10,6 +11,7 @@ class Entity : public sf::Drawable
         sf::Vector2f entityPosition;
         sf::Texture entityTexture;
         sf::Sprite entitySprite;
+        std::shared_ptr<GameplayInfoSource> gameplayInfo;
         bool entityCanMeleeAttack = true;
         Weapon gun;
     public:
@@ -32,6 +34,10 @@ class Entity : public sf::Drawable
         virtual float getEntitySpeed() = 0;
         virtual void move(sf::Vector2f direction) = 0;
         virtual void attack(sf::Vector2f direction) = 0;
+        virtual void setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
+        {
+            gameplayInfo = gameplayInfoSource;
+        }
         sf::Vector2f getPosition() const { return entityPosition; }
         Weapon* getWeapon() {return &gun;}
 };

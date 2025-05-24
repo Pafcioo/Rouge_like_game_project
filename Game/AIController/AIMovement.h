@@ -1,9 +1,12 @@
 #pragma once
+#include <memory>
 
 class AbstractAIController;
 
 class AbstractAIMovement
 {
+    protected:
+        int movementMulti;
     public:
         virtual ~AbstractAIMovement() = default;
         virtual void update(std::shared_ptr<AbstractAIController> aiController) = 0;
@@ -12,8 +15,8 @@ class AbstractAIMovement
 class AIMovement : public AbstractAIMovement
 {
     public:
-        AIMovement() = default;
+        AIMovement(int movement);
         ~AIMovement() = default;
-        virtual void update(std::shared_ptr<AbstractAIController> aiController) = 0;
+        void update(std::shared_ptr<AbstractAIController> aiController) override;
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "SpawnRule.h"
+#include "Game/Spawner/SpawnRule.h"
 
 class AbstractSpawner;
 

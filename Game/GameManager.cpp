@@ -9,11 +9,12 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
     eventBus = std::make_shared<EventBus>();
     spawnManager = std::make_unique<SpawnManager>();
     uiManager.initAllUI(eventBus, font);
-    entityManager.subscribeToEvents(eventBus);
     currentGameState = GameState::MainMenu;
     defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
+    entityManager.setGameplayInfo(gameplayInfoSource);
+    entityManager.subscribeToEvents(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
     setUpSpawner();
 }

@@ -11,10 +11,13 @@ void AIDecision::update(std::shared_ptr<AbstractAIController> aiController)
         {
             aiController->setCurrentState(std::make_shared<ChaseState>());
         }
+        else if(vision->getInRange())
+        {
+            aiController->setCurrentState(std::make_shared<AttackState>());
+        }
         else
         {
             aiController->setCurrentState(std::make_shared<PatrolState>());
         }
     }
-    auto controlledEntity = aiController->getControlledEntity();
 }

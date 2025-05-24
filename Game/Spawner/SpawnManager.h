@@ -1,7 +1,8 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <algorithm>
-#include "Spawner.h"
-#include "SpawnStrategy.h"
+#include "Game/Spawner/Spawner.h"
+#include "Game/Spawner/SpawnStrategy.h"
 #include "Game/Event.h"
 
 class SpawnManager

@@ -1,16 +1,18 @@
 #include "Game/AIController/AISensing.h"
 #include "Game/AIController/AIController.h"
 
-VisionSensing::VisionSensing(float range)
+VisionSensing::VisionSensing(float vision, float attack)
 {
-    visionRange = range;
+    visionRange = vision;
+    attackRange = attack;
     isEntityVisible = false;
+    isInRangeToAttack = false;
 }
 
 void VisionSensing::update(std::shared_ptr<AbstractAIController> aiController)
 {
     auto gameplayInfo = aiController->getGameplayInfo();
-    auto playerPos = gameplayInfo->getInfo<sf::Vector2f>("playerPosition");
+    auto playerPos = gameplayInfo->getInfo<sf::Vector2f>("playerPos");
     auto controlledEntityPos = aiController->getControlledEntity()->getPosition();
 
     auto distanceBetweenEntitiesVector = playerPos - controlledEntityPos;
@@ -23,9 +25,22 @@ void VisionSensing::update(std::shared_ptr<AbstractAIController> aiController)
     {
         isEntityVisible = false;
     }
+    if(distance < attackRange)
+    {
+        isInRangeToAttack = true;
+    }
+    else
+    {
+        isInRangeToAttack = false;
+    }
 }
 
 bool VisionSensing::getVisibility()
 {
     return isEntityVisible;
+}
+
+bool VisionSensing::getInRange()
+{
+    return isInRangeToAttack;
 }
