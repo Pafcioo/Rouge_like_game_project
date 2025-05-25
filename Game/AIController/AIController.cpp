@@ -11,13 +11,13 @@ EnemyAIController::EnemyAIController(std::shared_ptr<Entity> entity, std::shared
 void EnemyAIController::update(float deltaTime)
 {
     if (currentState) {
-        currentState->update(shared_from_this(),deltaTime);
+        currentState->update(shared_from_this(), deltaTime);
     }
     if (sensingComponent){
         sensingComponent->update(shared_from_this());
     }
     if (decisionComponent){
-        decisionComponent->update(shared_from_this());
+        decisionComponent->update(shared_from_this(), deltaTime);
     }
     if (cooldownComponent){
         cooldownComponent->update(shared_from_this(), deltaTime);
@@ -49,11 +49,6 @@ void AbstractAIController::setAttackComponent(std::shared_ptr<AbstractAIAttack> 
     attackComponent = attack;
 }
 
-void AbstractAIController::setDifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty)
-{
-    difficultyComponent = difficulty;
-}
-
 void AbstractAIController::setCurrentState(std::shared_ptr<AbstractAIState> state)
 {
     currentState = state;
@@ -82,11 +77,6 @@ std::shared_ptr<AbstractAICooldown> AbstractAIController::getCooldownComponent()
 std::shared_ptr<AbstractAIAttack> AbstractAIController::getAttackComponent()
 {
     return attackComponent;
-}
-
-std::shared_ptr<AIControllerDifficulty> AbstractAIController::getDifficultyComponent()
-{
-    return difficultyComponent;
 }
 
 std::shared_ptr<AbstractAIState> AbstractAIController::getCurrentState()

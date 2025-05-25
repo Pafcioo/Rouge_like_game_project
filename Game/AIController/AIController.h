@@ -21,7 +21,6 @@ class AbstractAIController : public std::enable_shared_from_this<AbstractAIContr
         std::shared_ptr<AbstractAISensing> sensingComponent;
         std::shared_ptr<AbstractAICooldown> cooldownComponent;
         std::shared_ptr<AbstractAIAttack> attackComponent;
-        std::shared_ptr<AIControllerDifficulty> difficultyComponent;
         std::shared_ptr<Entity> controlledEntity;
     public:
         virtual ~AbstractAIController() = default;
@@ -31,7 +30,6 @@ class AbstractAIController : public std::enable_shared_from_this<AbstractAIContr
         virtual void setSensingComponent(std::shared_ptr<AbstractAISensing> sensing);
         virtual void setCooldownComponent(std::shared_ptr<AbstractAICooldown> cooldown);
         virtual void setAttackComponent(std::shared_ptr<AbstractAIAttack> attack);
-        virtual void setDifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty);
         virtual void setCurrentState(std::shared_ptr<AbstractAIState> state);
         //Getters
         virtual std::shared_ptr<AbstractAIDecision> getDecisionComponent();
@@ -39,7 +37,6 @@ class AbstractAIController : public std::enable_shared_from_this<AbstractAIContr
         virtual std::shared_ptr<AbstractAISensing> getSensingComponent();
         virtual std::shared_ptr<AbstractAICooldown> getCooldownComponent();
         virtual std::shared_ptr<AbstractAIAttack> getAttackComponent();
-        virtual std::shared_ptr<AIControllerDifficulty> getDifficultyComponent();
         virtual std::shared_ptr<AbstractAIState> getCurrentState();
         virtual std::shared_ptr<GameplayInfoSource> getGameplayInfo();
         virtual std::shared_ptr<Entity> getControlledEntity();

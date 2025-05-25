@@ -8,13 +8,13 @@
 EntityManager::EntityManager()
 {
     player = new Player(100, 250, {0, 0}, sf::Texture("Assets/player.png"));
-    player->setGameplayInfo(gameplayInfo);
     isEntityManagerActive = false;
 }
 
 void EntityManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
     gameplayInfo = gameplayInfoSource;
+    player->setGameplayInfo(gameplayInfo);
 }
 
 std::vector<Projectile*> EntityManager::projectiles;

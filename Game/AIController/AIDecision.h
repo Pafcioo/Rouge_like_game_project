@@ -5,15 +5,18 @@ class AbstractAIController;
 
 class AbstractAIDecision
 {
+    protected:
+        float stateSwitchDelay; // seconds, adjust as needed
+        float stateSwitchTimer;
     public:
         virtual ~AbstractAIDecision() = default;
-        virtual void update(std::shared_ptr<AbstractAIController> aiController) = 0;
+        virtual void update(std::shared_ptr<AbstractAIController> aiController, float deltaTime) = 0;
 };
 
 class AIDecision : public AbstractAIDecision
 {
     public:
-        AIDecision() = default;
+        AIDecision();
         ~AIDecision() override = default;
-        void update(std::shared_ptr<AbstractAIController> aiController) override;
+        void update(std::shared_ptr<AbstractAIController> aiController, float deltaTime) override;
 };

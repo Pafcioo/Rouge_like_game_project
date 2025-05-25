@@ -9,6 +9,9 @@ AIAttack::AIAttack(int attack)
 void AIAttack::update(std::shared_ptr<AbstractAIController> aiController)
 {
     auto enemy = aiController->getControlledEntity();
-    sf::Vector2f playerPos = aiController->getGameplayInfo()->getInfo<sf::Vector2f>("playerPos");
-    enemy->attack(playerPos);
+    if(aiController->getGameplayInfo()->hasInfo("playerPos"))
+    {
+        sf::Vector2f playerPos = aiController->getGameplayInfo()->getInfo<sf::Vector2f>("playerPos");
+        enemy->attack(playerPos);
+    }
 }

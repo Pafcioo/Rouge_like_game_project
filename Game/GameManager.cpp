@@ -23,13 +23,13 @@ void GameManager::setUpSpawner() {
     auto zombieSpawner = std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager);
     spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
         zombieSpawner,
-        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{5.f, 1.f, 60.f}),
-        std::make_shared<EnemySpawnConfig>(100, 100.f, sf::Vector2f(0.f, 0.f), new sf::Texture("Assets/ability1.png"))
+        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{5.f, 1.f, 10.f}),
+        std::make_shared<EnemySpawnConfig>(100, 250.f, sf::Vector2f(0.f, 0.f), new sf::Texture("Assets/ability1.png"))
     ));
     spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
         zombieSpawner,
-        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{55.f, 2.f, 180.f}),
-        std::make_shared<EnemySpawnConfig>(100, 100.f, sf::Vector2f(200.f, 0.f), new sf::Texture("Assets/ability2.png"))
+        std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{10.f, 2.f, 18.f}),
+        std::make_shared<EnemySpawnConfig>(100, 250.f, sf::Vector2f(200.f, 0.f), new sf::Texture("Assets/ability2.png"))
     ));
 }
 
@@ -106,6 +106,7 @@ void GameManager::Play()
         gameWindow.setView(gameplayView);
         mapManager.drawMap(gameWindow, currentGameState);
         entityManager.updateEntities(deltaTime);
+        enemyManager->update(deltaTime);
         enemyManager->drawEnemies(gameWindow);
         entityManager.drawEntities(gameWindow);
         gameWindow.setView(defaultView);

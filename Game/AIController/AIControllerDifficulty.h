@@ -3,7 +3,7 @@
 
 class AbstractAIController;
 
-class AIControllerDifficulty : public std::enable_shared_from_this<AIControllerDifficulty>
+class AIControllerDifficulty
 {
     protected:
         std::shared_ptr<AbstractAIController> aiController;

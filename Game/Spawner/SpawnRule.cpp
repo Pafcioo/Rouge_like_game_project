@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "Game/Spawner/SpawnRule.h"
 #include "Game/Spawner/Spawner.h"
 #include "Game/Factory/EntityBuilder.h"

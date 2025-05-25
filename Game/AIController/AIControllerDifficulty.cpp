@@ -18,7 +18,6 @@ DifficultAIControllerDifficulty::DifficultAIControllerDifficulty(std::shared_ptr
 
 void EasyAIControllerDifficulty::execute()
 {
-    aiController->setDifficultyComponent(shared_from_this());
     aiController->setSensingComponent(std::make_shared<VisionSensing>(500.f,200.f));// In future implementation there will be attack and vision range based on entities properties
     aiController->setMovementComponent(std::make_shared<AIMovement>(1));
     aiController->setAttackComponent(std::make_shared<AIAttack>(1));
@@ -27,7 +26,6 @@ void EasyAIControllerDifficulty::execute()
 
 void BalancedAIControllerDifficulty::execute()
 {
-    aiController->setDifficultyComponent(shared_from_this());
     aiController->setSensingComponent(std::make_shared<VisionSensing>(500.f,200.f));// In future implementation there will be attack and vision range based on entities properties
     aiController->setMovementComponent(std::make_shared<AIMovement>(1.25f));
     aiController->setAttackComponent(std::make_shared<AIAttack>(1.25f));
@@ -36,7 +34,6 @@ void BalancedAIControllerDifficulty::execute()
 
 void DifficultAIControllerDifficulty::execute()
 {
-    aiController->setDifficultyComponent(shared_from_this());
     aiController->setSensingComponent(std::make_shared<VisionSensing>(500.f,200.f));// In future implementation there will be attack and vision range based on entities properties
     aiController->setMovementComponent(std::make_shared<AIMovement>(1.75f));
     aiController->setAttackComponent(std::make_shared<AIAttack>(1.75f));

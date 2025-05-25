@@ -27,7 +27,7 @@ ZombieSpawner::ZombieSpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSou
                              std::shared_ptr<EnemyManager> enemyManager)
     : EnemySpawner(gameplayInfoSource, enemyManager)
 {
-    factory = std::make_shared<ZombieFactory>();
+    factory = std::make_shared<ZombieFactory>(gameplayInfoSource);
 }
 
 void ZombieSpawner::spawn(std::shared_ptr<SpawnConfig> config)

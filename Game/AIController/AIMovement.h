@@ -9,7 +9,7 @@ class AbstractAIMovement
         int movementMulti;
     public:
         virtual ~AbstractAIMovement() = default;
-        virtual void update(std::shared_ptr<AbstractAIController> aiController) = 0;
+        virtual void update(std::shared_ptr<AbstractAIController> aiController, float deltaTime) = 0;
 };
 
 class AIMovement : public AbstractAIMovement
@@ -17,6 +17,6 @@ class AIMovement : public AbstractAIMovement
     public:
         AIMovement(int movement);
         ~AIMovement() = default;
-        void update(std::shared_ptr<AbstractAIController> aiController) override;
+        void update(std::shared_ptr<AbstractAIController> aiController, float deltaTime) override;
 };
 

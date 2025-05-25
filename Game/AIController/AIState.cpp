@@ -4,7 +4,7 @@
 void ChaseState::update(std::shared_ptr<AbstractAIController> aiController, float deltaTime)
 {
     auto movementComponent = aiController->getMovementComponent();
-    movementComponent->update(aiController);
+    movementComponent->update(aiController, deltaTime);
 }
 
 void AttackState::update(std::shared_ptr<AbstractAIController> aiController, float deltaTime)

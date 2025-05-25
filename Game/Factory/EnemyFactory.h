@@ -4,10 +4,10 @@
 
 class EntityFactory
 {
+    protected:
+        std::shared_ptr<GameplayInfoSource> gameplayInfo;
     public:
-        EntityFactory() = default;
         virtual ~EntityFactory() = default;
-
         virtual std::shared_ptr<Entity> createEntity(const int health, const float speed, const sf::Vector2f position, const sf::Texture &texture) = 0;
 };
 
@@ -21,7 +21,7 @@ class EnemyFactory: public EntityFactory
 class ZombieFactory : public EnemyFactory
 {
     public:
-        ZombieFactory() = default;
+        ZombieFactory(std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
         ~ZombieFactory() override = default;
         std::shared_ptr<Entity> createEntity(const int health, const float speed, const sf::Vector2f position, const sf::Texture &texture) override;
 };

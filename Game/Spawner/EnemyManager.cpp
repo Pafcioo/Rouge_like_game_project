@@ -13,3 +13,14 @@ void EnemyManager::drawEnemies(sf::RenderWindow& window)
         enemy->draw(window, sf::RenderStates::Default);
     }
 }
+
+void EnemyManager::update(float deltaTime)
+{
+    for (const auto& entity : vectorOfEnemies)
+    {
+        if(auto enemy = std::dynamic_pointer_cast<Enemy>(entity))
+        {
+            enemy->update(deltaTime);
+        }
+    }
+}
