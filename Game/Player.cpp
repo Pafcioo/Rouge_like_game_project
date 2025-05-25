@@ -28,6 +28,12 @@ void Player::useAbility() {
     entityAbility->activate();
 }
 
+void Player::update(float deltaTime) {
+    entityWeapon->update(deltaTime);
+    entityAbility->update(deltaTime);
+    entityAbility->influence(this);
+}
+
 
 
 

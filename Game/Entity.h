@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <memory>
 #include "Weapon.h"
 #include "Item.h"
 #include "Potion.h"
@@ -11,13 +12,13 @@ class Entity : public sf::Drawable
     protected:
         float entityBaseHealth;
         float entityBaseSpeed;
-        float entityCurrentHealth = entityBaseHealth;
-        float entityCurrentSpeed = entityBaseSpeed;
+        float entityCurrentHealth;
+        float entityCurrentSpeed;
         sf::Vector2f entityPosition;
         sf::Texture entityTexture;
         sf::Sprite entitySprite;
         bool entityCanMeleeAttack = true;
-        std::shared_ptr<Weapon> entityWeapon;
+        std::shared_ptr<Weapon> entityWeapon = std::make_shared<BasicWeapon>();
         std::shared_ptr<Item> entityItem;
         std::shared_ptr<Ability> entityAbility = std::make_shared<SprintAbility>();
     public:
@@ -25,7 +26,9 @@ class Entity : public sf::Drawable
             entityTexture(texture), entitySprite(entityTexture)
         {
             entityBaseHealth = health;
+            entityCurrentHealth = health;
             entityBaseSpeed = speed;
+            entityCurrentSpeed = speed;
             entityPosition = position;
             entitySprite.setOrigin(static_cast<sf::Vector2f>(entityTexture.getSize())/2.f);
             entitySprite.setPosition(entityPosition);
@@ -49,6 +52,7 @@ class Entity : public sf::Drawable
         std::shared_ptr<Weapon> getWeapon() {return entityWeapon;}
         virtual void useItem(std::shared_ptr<Item> item) = 0;
         virtual void useAbility() = 0;
+        virtual void update(float deltaTime) = 0;
         float getHealth() const { return entityCurrentHealth; }
         void setHealth(float health) { entityCurrentHealth = health; }
         void setSpeed(float speed) { entityCurrentSpeed = speed; }

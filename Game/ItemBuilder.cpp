@@ -1,5 +1,7 @@
-#include <SFML/Graphics.hpp>
+#pragma once
 #include "ItemBuilder.h"
+#include "Potion.h"
+
 
 void HealPotionBuilder::reset() {
     this->healPotion = std::make_shared<HealPotion>();
@@ -13,6 +15,3 @@ std::shared_ptr<Item> HealPotionBuilder::build() {
     this->healPotion->setRarity(COMMON);
     return healPotion;
 }
-
-
-

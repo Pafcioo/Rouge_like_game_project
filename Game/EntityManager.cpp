@@ -19,6 +19,11 @@ void EntityManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
             player->attack(attackEvent.direction);
         }
     });
+    eventBus->subscribe<useAbilityEvent>([this](const useAbilityEvent&) {
+        if (player && isEntityManagerActive) {
+            player->useAbility();
+        }
+    });
 }
 
 void EntityManager::drawEntities(sf::RenderWindow& window)
@@ -36,7 +41,7 @@ void EntityManager::drawEntities(sf::RenderWindow& window)
 
 void EntityManager::updateEntities(float deltaTime) {
     
-    player->getWeapon()->update(deltaTime);
+    player->update(deltaTime);
     for (auto& proj : projectiles) {
         proj->update(deltaTime);
         double distance = sqrt(pow(proj->getShape().getPosition().x - proj->getInitialPosition().x, 2) + pow(proj->getShape().getPosition().y - proj->getInitialPosition().y, 2));

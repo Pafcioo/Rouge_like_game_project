@@ -23,7 +23,7 @@ public:
     virtual ~Item() = default;
     virtual void activate(Entity* entity) = 0;
     void setId(int id) { this->id = id; }
-    void setName(std::string name) { this->name = std::move(name); }
+    void setName(std::string name) { this->name = name; }
     void setRarity(Rarity rarity) { this->rarity = rarity; }
     void setEffectAmount(float amount) { effectAmount = amount; }
     float getEffectAmount() { return effectAmount; }

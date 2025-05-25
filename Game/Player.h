@@ -15,4 +15,5 @@ class Player : public Entity
     void attack(sf::Vector2f direction) override;
     void useItem(std::shared_ptr<Item> item) override;
     void useAbility() override;
+    void update(float deltaTime) override;
 };
