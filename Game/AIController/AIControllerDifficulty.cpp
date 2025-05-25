@@ -1,19 +1,9 @@
 #include "Game/AIController/AIControllerDifficulty.h"
 #include "Game/AIController/AIController.h"
 
-EasyAIControllerDifficulty::EasyAIControllerDifficulty(std::shared_ptr<AbstractAIController> aiController)
+void AIControllerDifficulty::setAIController(std::shared_ptr<AbstractAIController> controller)
 {
-    this->aiController = aiController;
-}
-
-BalancedAIControllerDifficulty::BalancedAIControllerDifficulty(std::shared_ptr<AbstractAIController> aiController)
-{
-    this->aiController = aiController;
-}
-
-DifficultAIControllerDifficulty::DifficultAIControllerDifficulty(std::shared_ptr<AbstractAIController> aiController)
-{
-    this->aiController = aiController;
+    aiController = controller;
 }
 
 void EasyAIControllerDifficulty::execute()

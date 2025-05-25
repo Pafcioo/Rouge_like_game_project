@@ -18,7 +18,7 @@ void EnemySpawner::spawn(std::shared_ptr<SpawnConfig> config)
         return;
     }
     auto builder = std::make_shared<EnemyBuilder>(factory);
-    enemyConfig->configureBuilder(builder);
+    enemyConfig->configureBuilder(builder, gameplayInfoSource);
     enemyManager->addEnemy(builder->getEnemy());
 }
 
@@ -27,7 +27,7 @@ ZombieSpawner::ZombieSpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSou
                              std::shared_ptr<EnemyManager> enemyManager)
     : EnemySpawner(gameplayInfoSource, enemyManager)
 {
-    factory = std::make_shared<ZombieFactory>(gameplayInfoSource);
+    factory = std::make_shared<ZombieFactory>();
 }
 
 void ZombieSpawner::spawn(std::shared_ptr<SpawnConfig> config)

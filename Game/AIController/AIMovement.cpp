@@ -18,7 +18,7 @@ void AIMovement::update(std::shared_ptr<AbstractAIController> aiController, floa
         if(distance > 0.01f)
         {
             direction = direction.normalized();
-            enemy->move(direction*deltaTime);
+            enemy->move(direction*deltaTime*static_cast<float>(movementMulti));
         }
     }
 }

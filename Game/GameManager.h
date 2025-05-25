@@ -11,6 +11,7 @@
 #include "Game/Spawner/SpawnManager.h"
 #include "Game/GameplayInfoSource.h"
 #include "Game/Spawner/EnemyManager.h"
+#include "Game/Spawner/SpawnComponent.h"
 // The most important class of the game, that handles everything
 class GameManager
 {

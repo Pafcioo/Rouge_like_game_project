@@ -33,3 +33,14 @@
 // void AbilityComponent::describe() const {
 //     std::cout << "AbilityComponent with ability: " << ability->getName() << "\n";
 // }
+
+DifficultyComponent::DifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty)
+    : difficultyComponent(difficulty) {}
+
+void DifficultyComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+    builder->setDifficulty(difficultyComponent);
+}
+
+void DifficultyComponent::describe() const {
+    std::cout << "Difficulty";
+}

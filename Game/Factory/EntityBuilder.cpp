@@ -2,8 +2,9 @@
 #include "EntityBuilder.h"
 #include "Game/Spawner/SpawnRule.h"
 
-void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config)
+void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
+    gameplayInfo = gameplayInfoSource;
     auto entityConfig = std::dynamic_pointer_cast<EnemySpawnConfig>(config);
     if (!entityConfig)
     {
@@ -31,5 +32,17 @@ void EnemyBuilder::setItem() const
 void EnemyBuilder::setAbility() const
 {
     // Future implementation
+}
+
+void EnemyBuilder::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty) const
+{
+    auto controller = std::make_shared<EnemyAIController>(enemy,gameplayInfo);
+    difficulty->setAIController(controller);
+    difficulty->execute();
+    if (auto enemyBuilt = std::dynamic_pointer_cast<Enemy>(enemy))
+    {
+        enemyBuilt->setDifficulty(difficulty);
+        enemyBuilt->setEnemyController(controller);
+    }
 }
 

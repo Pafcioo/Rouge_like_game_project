@@ -6,7 +6,7 @@
 class Enemy : public Entity, public std::enable_shared_from_this<Enemy>
 {
     private:
-        std::unique_ptr<AIControllerDifficulty> difficulty;
+        std::shared_ptr<AIControllerDifficulty> enemyDifficulty;
         std::shared_ptr<AbstractAIController> enemyController;
     public:
     Enemy(const int health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
@@ -14,7 +14,8 @@ class Enemy : public Entity, public std::enable_shared_from_this<Enemy>
     ~Enemy() override = default;
     void move(sf::Vector2f direction) override;
     void attack(sf::Vector2f direction) override;
-    void setAIController();
+    void setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty);
+    void setEnemyController(std::shared_ptr<AbstractAIController> controller);
     void update(float deltaTime);
 };
 

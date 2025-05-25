@@ -35,3 +35,12 @@ public:
 //     void apply(std::shared_ptr<EntityBuilder> builder) const override;
 //     void describe() const override;
 // };
+
+class DifficultyComponent : public SpawnComponent {
+    std::shared_ptr<AIControllerDifficulty> difficultyComponent;
+public:
+    DifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty);
+
+    void apply(std::shared_ptr<EntityBuilder> builder) const override;
+    void describe() const override;
+};

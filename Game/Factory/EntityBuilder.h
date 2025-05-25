@@ -6,11 +6,14 @@
 
 class EntityBuilder
 {
+    protected:
+        std::shared_ptr<GameplayInfoSource> gameplayInfo;
     public:
         virtual ~EntityBuilder(){};
         virtual void setWeapon() const = 0;
         virtual void setItem() const = 0;
         virtual void setAbility() const = 0;
+        virtual void setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty) const = 0;
 };
 
 class EnemyBuilder : public EntityBuilder
@@ -24,7 +27,8 @@ class EnemyBuilder : public EntityBuilder
         void setWeapon() const override;
         void setItem() const override;
         void setAbility() const override;
-        void reset(std::shared_ptr<SpawnConfig> config);
+        void setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty) const override;
+        void reset(std::shared_ptr<SpawnConfig> config, std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
         std::shared_ptr<Entity> getEnemy() const { return enemy; }
 };
 

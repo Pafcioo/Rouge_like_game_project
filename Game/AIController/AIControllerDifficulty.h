@@ -10,25 +10,26 @@ class AIControllerDifficulty
     public:
         virtual ~AIControllerDifficulty() = default;
         virtual void execute() = 0;
+        virtual void setAIController(std::shared_ptr<AbstractAIController> controller);
 };
 
 class EasyAIControllerDifficulty : public AIControllerDifficulty
 {
     public:
-        EasyAIControllerDifficulty(std::shared_ptr<AbstractAIController> aiController);
+        EasyAIControllerDifficulty() = default;
         void execute() override;
 };
 
 class BalancedAIControllerDifficulty : public AIControllerDifficulty
 {
     public:
-        BalancedAIControllerDifficulty(std::shared_ptr<AbstractAIController> aiController);
+        BalancedAIControllerDifficulty() = default;
         void execute() override;
 };  
 
 class DifficultAIControllerDifficulty : public AIControllerDifficulty
 {
     public:
-        DifficultAIControllerDifficulty(std::shared_ptr<AbstractAIController> aiController);
+        DifficultAIControllerDifficulty() = default;
         void execute() override;
 };

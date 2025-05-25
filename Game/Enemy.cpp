@@ -19,12 +19,16 @@ void Enemy::attack(sf::Vector2f direction)
     gun.shoot(entityPosition, direction, 500);
 }
 
-void Enemy::setAIController()
+void Enemy::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty)
 {
-    enemyController = std::make_shared<EnemyAIController>(shared_from_this(),gameplayInfo);
-    difficulty = std::make_unique<EasyAIControllerDifficulty>(enemyController);
-    difficulty->execute();
+    enemyDifficulty = difficulty;
 }
+
+void Enemy::setEnemyController(std::shared_ptr<AbstractAIController> controller)
+{
+    enemyController = controller;
+}
+
 void Enemy::update(float deltaTime)
 {
     enemyController->update(deltaTime);
