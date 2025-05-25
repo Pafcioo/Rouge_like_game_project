@@ -6,46 +6,23 @@
 
 GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
 {
+    // Bus for events in game
     eventBus = std::make_shared<EventBus>();
-    spawnManager = std::make_unique<SpawnManager>();
+    // Manager for all UIs
     uiManager.initAllUI(eventBus, font);
     currentGameState = GameState::MainMenu;
+    // View set up
     defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    // Source for all game info like level, hp, position of player...
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
+    // Managers for entities like player and enemy
     entityManager.setGameplayInfo(gameplayInfoSource);
     entityManager.subscribeToEvents(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
-    setUpSpawner();
-}
-
-void GameManager::setUpSpawner() {
-    struct EnemyParams {
-        int health;
-        float speed;
-        sf::Vector2f position;
-        std::string texturePath;
-        std::shared_ptr<AIControllerDifficulty> difficulty;
-        TimeBasedRule::TimeRule rule;
-    };
-
-    std::vector<EnemyParams> zombieParams = {
-        {100, 250.f, {500.f, 0.f}, "Assets/ability1.png", std::make_shared<DifficultAIControllerDifficulty>(), {5.f, 2.f, 10.f}},
-        {120, 200.f, {-500.f, 0.f}, "Assets/ability1.png", std::make_shared<EasyAIControllerDifficulty>(), {5.f, 1.f, 15.f}}
-    };
-    // Zombies spawner
-    auto zombieSpawner = std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager);
-    for (const auto& params : zombieParams) {
-        auto config = std::make_shared<EnemySpawnConfig>(params.health, params.speed, params.position, new sf::Texture(params.texturePath));
-        config->add(std::make_shared<DifficultyComponent>(params.difficulty));
-        auto rule = std::make_shared<TimeBasedRule>(params.rule);
-        spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
-            zombieSpawner,
-            rule,
-            config
-        ));
-    }
-    // Other spawners...
+    // Spawner set up
+    spawnManager = std::make_unique<SpawnManager>();
+    spawnManager->setUpStrategies(gameplayInfoSource,enemyManager);
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
