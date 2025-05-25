@@ -20,26 +20,32 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
 }
 
 void GameManager::setUpSpawner() {
-    auto zombieSpawner = std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager);
-    auto zombieSpawnConfig = std::make_shared<EnemySpawnConfig>(100, 250.f, sf::Vector2f(0.f, 0.f), new sf::Texture("Assets/ability1.png"));
-    auto zombieDifficulty = std::make_shared<DifficultAIControllerDifficulty>();
-    auto zombieRule = std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{5.f, 1.f, 10.f});
-    zombieSpawnConfig->add(std::make_shared<DifficultyComponent>(zombieDifficulty));
-    spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
-        zombieSpawner,
-        zombieRule,
-        zombieSpawnConfig
-    ));
+    struct EnemyParams {
+        int health;
+        float speed;
+        sf::Vector2f position;
+        std::string texturePath;
+        std::shared_ptr<AIControllerDifficulty> difficulty;
+        TimeBasedRule::TimeRule rule;
+    };
 
-    auto zombieSpawnConfig2 = std::make_shared<EnemySpawnConfig>(120, 200.f, sf::Vector2f(100.f, 50.f), new sf::Texture("Assets/ability2.png"));
-    auto zombieDifficulty2 = std::make_shared<EasyAIControllerDifficulty>();
-    auto zombieRule2 = std::make_shared<TimeBasedRule>(TimeBasedRule::TimeRule{2.f, 2.f, 15.f});
-    zombieSpawnConfig2->add(std::make_shared<DifficultyComponent>(zombieDifficulty2));
-    spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
-        zombieSpawner,
-        zombieRule2,
-        zombieSpawnConfig2
-    ));
+    std::vector<EnemyParams> zombieParams = {
+        {100, 250.f, {500.f, 0.f}, "Assets/ability1.png", std::make_shared<DifficultAIControllerDifficulty>(), {5.f, 2.f, 10.f}},
+        {120, 200.f, {-500.f, 0.f}, "Assets/ability1.png", std::make_shared<EasyAIControllerDifficulty>(), {5.f, 1.f, 15.f}}
+    };
+    // Zombies spawner
+    auto zombieSpawner = std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager);
+    for (const auto& params : zombieParams) {
+        auto config = std::make_shared<EnemySpawnConfig>(params.health, params.speed, params.position, new sf::Texture(params.texturePath));
+        config->add(std::make_shared<DifficultyComponent>(params.difficulty));
+        auto rule = std::make_shared<TimeBasedRule>(params.rule);
+        spawnManager->addStrategy(std::make_shared<SpawnStrategy>(
+            zombieSpawner,
+            rule,
+            config
+        ));
+    }
+    // Other spawners...
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
