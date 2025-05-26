@@ -67,3 +67,5 @@ void EntityManager::updateEntityManager(GameState currentState){
         isEntityManagerActive = false;
     }
 }
+
+Entity* EntityManager::getPlayer() {return player;}

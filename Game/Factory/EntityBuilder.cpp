@@ -33,3 +33,4 @@ void EnemyBuilder::setAbility() const
     // Future implementation
 }
 
+std::shared_ptr<Entity> EnemyBuilder::getEnemy() const {return enemy;}

@@ -14,25 +14,18 @@ public:
     virtual ~Ability() = default;
     void update(float deltaTime);
     virtual void influence(Entity* entity) = 0;
-    float getCooldown() {return cooldown;}
-    float getCurrentCooldown() {return currentCooldown;}
-    float getDuration() {return duration;}
-    void setCooldown(float newCooldown) {cooldown = newCooldown;}
-    void setCurrentCooldown(float newCurrentCooldown) {currentCooldown = newCurrentCooldown;}
-    void setDuration(float newDuration) {duration = newDuration;}
-    void activate() {
-        if (isReady) {
-            isActive = true;
-            currentCooldown = cooldown;
-            currentDuration = duration;
-        }
-    }
-    void deactivate() {isActive = false;}
-    bool isAbilityActive() {return isActive;}
-    bool isAbilityReady() {return isReady;}
-    void setReady(bool newReady) {isReady = newReady;}
-    std::string getAbilityName() {return abilityName;}
-    void setAbilityName(std::string &newAbilityName) {abilityName = newAbilityName;}
+    float getCooldown();
+    float getCurrentCooldown();
+    float getDuration();
+    void setCooldown(float newCooldown);
+    void setCurrentCooldown(float newCurrentCooldown);
+    void setDuration(float newDuration);
+    void activate();
+    bool isAbilityActive();
+    bool isAbilityReady();
+    void setReady(bool newReady);
+    std::string getAbilityName();
+    void setAbilityName(std::string &newAbilityName);
 protected:
     float cooldown;
     float currentCooldown;

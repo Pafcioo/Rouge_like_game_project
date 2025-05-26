@@ -44,16 +44,16 @@ class Entity : public sf::Drawable
         {
             target.draw(entitySprite, states);
         }
-        float getEntitySpeed() {return entityCurrentSpeed;}
-        float getEntityBaseSpeed() {return entityBaseSpeed;}
+        float getEntitySpeed();
+        float getEntityBaseSpeed();
         virtual void move(sf::Vector2f direction) = 0;
         virtual void attack(sf::Vector2f direction) = 0;
-        sf::Vector2f getPosition() const { return entityPosition; }
-        std::shared_ptr<Weapon> getWeapon() {return entityWeapon;}
+        sf::Vector2f getPosition();
+        std::shared_ptr<Weapon> getWeapon();
         virtual void useItem(std::shared_ptr<Item> item) = 0;
         virtual void useAbility() = 0;
         virtual void update(float deltaTime) = 0;
-        float getHealth() const { return entityCurrentHealth; }
-        void setHealth(float health) { entityCurrentHealth = health; }
-        void setSpeed(float speed) { entityCurrentSpeed = speed; }
+        float getHealth();
+        void setHealth(float health);
+        void setSpeed(float speed);
 };

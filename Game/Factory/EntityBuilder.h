@@ -25,7 +25,7 @@ class EnemyBuilder : public EntityBuilder
         void setItem() const override;
         void setAbility() const override;
         void reset(std::shared_ptr<SpawnConfig> config);
-        std::shared_ptr<Entity> getEnemy() const { return enemy; }
+        std::shared_ptr<Entity> getEnemy() const;
 };
 
 // class PlayerBuilder : public EntityBuilder
