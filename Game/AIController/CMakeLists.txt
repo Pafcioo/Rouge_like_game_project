@@ -6,4 +6,11 @@ file(GLOB AI_SOURCES
 )
 
 add_library(AIController STATIC ${AI_SOURCES})
-target_include_directories(AIController PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Game)
+target_include_directories(AIController PUBLIC ${CMAKE_SOURCE_DIR})
+
+target_link_libraries(AIController
+    PUBLIC
+        SFML::Graphics
+        SFML::Window
+        SFML::System
+)

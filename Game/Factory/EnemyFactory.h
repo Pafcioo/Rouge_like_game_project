@@ -5,9 +5,7 @@
 class EntityFactory
 {
     public:
-        EntityFactory() = default;
         virtual ~EntityFactory() = default;
-
         virtual std::shared_ptr<Entity> createEntity(const int health, const float speed, const sf::Vector2f position, const sf::Texture &texture) = 0;
 };
 

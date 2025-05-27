@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Spawner.h"
+#include "Game/Spawner/Spawner.h"
 
 // EnemySpawner constructor: initializes base members
 EnemySpawner::EnemySpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSource,
@@ -18,7 +18,7 @@ void EnemySpawner::spawn(std::shared_ptr<SpawnConfig> config)
         return;
     }
     auto builder = std::make_shared<EnemyBuilder>(factory);
-    enemyConfig->configureBuilder(builder);
+    enemyConfig->configureBuilder(builder, gameplayInfoSource);
     enemyManager->addEnemy(builder->getEnemy());
 }
 

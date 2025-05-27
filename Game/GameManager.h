@@ -11,6 +11,7 @@
 #include "Game/Spawner/SpawnManager.h"
 #include "Game/GameplayInfoSource.h"
 #include "Game/Spawner/EnemyManager.h"
+
 // The most important class of the game, that handles everything
 class GameManager
 {
@@ -37,6 +38,5 @@ public:
     GameState getGameState() const;
     MapManager& getMapManager();
     void changeGameplayViewBasedOnPlayer();
-    void setUpSpawner();
     void Play();
 };

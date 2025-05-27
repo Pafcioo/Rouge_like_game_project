@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 #include "Game/GameplayInfoSource.h"
-#include "EnemyManager.h"
+#include "Game/Spawner/EnemyManager.h"
 #include "Game/Factory/EnemyFactory.h"
 #include "Game/Factory/EntityBuilder.h"
 #include "Game/Event.h"

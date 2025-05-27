@@ -2,8 +2,9 @@
 #include "EntityBuilder.h"
 #include "Game/Spawner/SpawnRule.h"
 
-void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config)
+void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
+    gameplayInfo = gameplayInfoSource;
     auto entityConfig = std::dynamic_pointer_cast<EnemySpawnConfig>(config);
     if (!entityConfig)
     {
@@ -18,19 +19,34 @@ void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config)
     );
 }
 
-void EnemyBuilder::setWeapon() const
+void EnemyBuilder::setWeapon(std::shared_ptr<Weapon> weapon) const
 {
-    // Future implementation
+    enemy->setWeapon(weapon);
 }
 
-void EnemyBuilder::setItem() const
+void EnemyBuilder::setItem(std::shared_ptr<Item> item) const
 {
-    // Future implementation
+    enemy->setItem(item);
 }
 
-void EnemyBuilder::setAbility() const
+void EnemyBuilder::setAbility(std::shared_ptr<Ability> ability) const
 {
-    // Future implementation
+    enemy->setAbility(ability);
 }
 
-std::shared_ptr<Entity> EnemyBuilder::getEnemy() const {return enemy;}
+void EnemyBuilder::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty) const
+{
+    auto controller = std::make_shared<EnemyAIController>(enemy,gameplayInfo);
+    difficulty->setAIController(controller);
+    difficulty->execute();
+    if (auto enemyBuilt = std::dynamic_pointer_cast<Enemy>(enemy))
+    {
+        enemyBuilt->setDifficulty(difficulty);
+        enemyBuilt->setEnemyController(controller);
+    }
+}
+
+std::shared_ptr<Entity> EnemyBuilder::getEnemy() const 
+{
+  return enemy;
+}

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "SpawnManager.h"
+#include "Game/Spawner/SpawnManager.h"
 
 SpawnManager::SpawnManager(){
 
@@ -16,4 +16,25 @@ void SpawnManager::update(float deltaTime)
     {
         strategy->executeStrategy(deltaTime);
     }
+}
+
+void SpawnManager::setUpStrategies(std::shared_ptr<GameplayInfoSource> gameplayInfoSource, std::shared_ptr<EnemyManager> enemyManager)
+{
+    std::vector<EnemyParams> zombieParams = {
+        {100, 250.f, {500.f, 0.f}, "Assets/ability1.png", std::make_shared<DifficultAIControllerDifficulty>(), {5.f, 2.f, 10.f}},
+        {120, 200.f, {-500.f, 0.f}, "Assets/ability1.png", std::make_shared<EasyAIControllerDifficulty>(), {5.f, 1.f, 15.f}}
+    };
+    // Zombies spawner
+    auto zombieSpawner = std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager);
+    for (const auto& params : zombieParams) {
+        auto config = std::make_shared<EnemySpawnConfig>(params.health, params.speed, params.position, new sf::Texture(params.texturePath));
+        config->add(std::make_shared<DifficultyComponent>(params.difficulty));
+        auto rule = std::make_shared<TimeBasedRule>(params.rule);
+        addStrategy(std::make_shared<SpawnStrategy>(
+            zombieSpawner,
+            rule,
+            config
+        ));
+    }
+    // Other spawners...
 }

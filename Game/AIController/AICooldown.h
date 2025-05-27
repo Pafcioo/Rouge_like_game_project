@@ -3,20 +3,20 @@
 
 class AbstractAIController;
 
-class AbstractAIMovement
+class AbstractAICooldown
 {
     protected:
-        int movementMulti;
+        float cooldownMulti;
+        float timeSinceLastAction;
     public:
-        virtual ~AbstractAIMovement() = default;
+        virtual ~AbstractAICooldown() = default;
         virtual void update(std::shared_ptr<AbstractAIController> aiController, float deltaTime) = 0;
 };
 
-class AIMovement : public AbstractAIMovement
+class AICooldown : public AbstractAICooldown
 {
     public:
-        AIMovement(int movement);
-        ~AIMovement() = default;
+        AICooldown(float cooldown);
+        ~AICooldown() = default;
         void update(std::shared_ptr<AbstractAIController> aiController, float deltaTime) override;
 };
-

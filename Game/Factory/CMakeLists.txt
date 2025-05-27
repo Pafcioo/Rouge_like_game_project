@@ -10,6 +10,7 @@ target_include_directories(Factory PUBLIC ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(Factory
     PUBLIC
+        AIController
         SFML::Graphics
         SFML::Window
         SFML::System

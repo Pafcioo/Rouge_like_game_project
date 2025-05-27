@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
+class GameplayInfoSource;
+
 class AbstractSpawner;
 
 class EntityBuilder;
@@ -36,7 +38,7 @@ public:
     int getHealth() const;
     float getSpeed() const;
     sf::Texture* getTexture() const;
-    virtual void configureBuilder(std::shared_ptr<EntityBuilder> builder){};
+    virtual void configureBuilder(std::shared_ptr<EntityBuilder> builder, std::shared_ptr<GameplayInfoSource> gameplayInfoSource){};
     void add(std::shared_ptr<SpawnComponent> component);
     void remove(std::shared_ptr<SpawnComponent> component);
 };
@@ -47,7 +49,7 @@ public:
     EnemySpawnConfig(int health, float speed, sf::Vector2f position, sf::Texture* texture)
         : EntitySpawnConfig(health, speed, position, texture) {}
     ~EnemySpawnConfig() = default;
-    void configureBuilder(std::shared_ptr<EntityBuilder> builder) override;
+    void configureBuilder(std::shared_ptr<EntityBuilder> builder, std::shared_ptr<GameplayInfoSource> gameplayInfoSource) override;
 };
 
 class SpawnRule

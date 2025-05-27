@@ -5,7 +5,7 @@ WeaponComponent::WeaponComponent(std::shared_ptr<Weapon> weapon)
     : weapon(weapon) {}
 
 void WeaponComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->setWeapon();
+    builder->setWeapon(weapon);
 }
 
 void WeaponComponent::describe() const {
@@ -16,7 +16,7 @@ ItemComponent::ItemComponent(std::shared_ptr<Item> item)
     : item(item) {}
 
 void ItemComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->setItem();
+    builder->setItem(item);
 }
 
 void ItemComponent::describe() const {
@@ -27,9 +27,20 @@ AbilityComponent::AbilityComponent(std::shared_ptr<Ability> ability)
     : ability(ability) {}
 
 void AbilityComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-    builder->setAbility();
+    builder->setAbility(ability);
 }
 
 void AbilityComponent::describe() const {
     std::cout << "AbilityComponent with ability: " << ability->getAbilityName() << "\n";
+}
+
+DifficultyComponent::DifficultyComponent(std::shared_ptr<AIControllerDifficulty> difficulty)
+    : difficultyComponent(difficulty) {}
+
+void DifficultyComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+    builder->setDifficulty(difficultyComponent);
+}
+
+void DifficultyComponent::describe() const {
+    std::cout << "Difficulty";
 }

@@ -1,8 +1,10 @@
 #include <iostream>
+#include <algorithm>
 #include "Game/Spawner/SpawnRule.h"
 #include "Game/Spawner/Spawner.h"
 #include "Game/Factory/EntityBuilder.h"
 #include "Game/Spawner/SpawnComponent.h"
+#include "Game/GameplayInfoSource.h"
 
 void TimeBasedRule::update(float deltaTime, std::shared_ptr<AbstractSpawner> spawner, std::shared_ptr<SpawnConfig> config)
 {
@@ -46,11 +48,11 @@ void EntitySpawnConfig::remove(std::shared_ptr<SpawnComponent> component) {
     components.erase(std::remove(components.begin(), components.end(), component), components.end());
 }
 
-void EnemySpawnConfig::configureBuilder(std::shared_ptr<EntityBuilder> builder)
+void EnemySpawnConfig::configureBuilder(std::shared_ptr<EntityBuilder> builder, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
     if(auto enemyBuilder = std::dynamic_pointer_cast<EnemyBuilder>(builder))
     {
-        enemyBuilder->reset(std::make_shared<EnemySpawnConfig>(health, speed, position, texture));
+        enemyBuilder->reset(std::make_shared<EnemySpawnConfig>(health, speed, position, texture), gameplayInfoSource);
         for (const auto& component : components) {
             component->apply(builder);
         }

@@ -1,17 +1,40 @@
 #include <SFML/Graphics.hpp>
+#include <cmath>
 #include "Enemy.h"
+#include <iostream>
 
 Enemy::Enemy(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
         Entity(health, speed, position, texture) {}
 
 void Enemy::move(sf::Vector2f direction)
 {
-    this->entitySprite.move(direction);
+    entitySprite.move(direction*entityCurrentSpeed);
+    entityPosition = entitySprite.getPosition();
 }
 
 void Enemy::attack(sf::Vector2f direction)
 {
-    //Future implementation
+    // Normalize the direction vector
+    float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+    if (magnitude != 0.f) {
+        direction /= magnitude; // Normalize the vector
+    }
+    entityWeapon->shoot(entityPosition, direction, 500);
+}
+
+void Enemy::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty)
+{
+    enemyDifficulty = difficulty;
+}
+
+void Enemy::setEnemyController(std::shared_ptr<AbstractAIController> controller)
+{
+    enemyController = controller;
+}
+
+void Enemy::update(float deltaTime)
+{
+    enemyController->update(deltaTime);
 }
 
 Zombie::Zombie(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
@@ -19,11 +42,11 @@ Zombie::Zombie(const float health, const float speed, const sf::Vector2f positio
 
 void Zombie::move(sf::Vector2f direction)
 {
-    this->entitySprite.move(direction);
+    Enemy::move(direction);
 }
 
 void Zombie::attack(sf::Vector2f direction)
 {
-    //Future implementation
+    Enemy::attack(direction);
 }
 

@@ -9,13 +9,11 @@ class GameplayInfoSource
     public:
         GameplayInfoSource() = default;
         ~GameplayInfoSource() = default;
-
         template<typename T>
         void setInfo(const std::string& key, const T& value)
         {
             gameplayInfo[key] = value;
         }
-
         template<typename T>
         T getInfo(const std::string& key) const
         {
@@ -24,9 +22,5 @@ class GameplayInfoSource
             }
             return std::any_cast<T>(gameplayInfo.at(key));
         }
-
-        bool hasInfo(const std::string& key) const
-        {
-            return gameplayInfo.find(key) != gameplayInfo.end();
-        }
+        bool hasInfo(const std::string& key) const;
 };
