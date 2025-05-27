@@ -22,23 +22,7 @@ class Entity : public sf::Drawable
         std::shared_ptr<Item> entityItem;
         std::shared_ptr<Ability> entityAbility = std::make_shared<SprintAbility>();
     public:
-        Entity(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
-            entityTexture(texture), entitySprite(entityTexture)
-        {
-            entityBaseHealth = health;
-            entityCurrentHealth = health;
-            entityBaseSpeed = speed;
-            entityCurrentSpeed = speed;
-            entityPosition = position;
-            entitySprite.setOrigin(static_cast<sf::Vector2f>(entityTexture.getSize())/2.f);
-            entitySprite.setPosition(entityPosition);
-            entitySprite.setColor(sf::Color::White);
-            entitySprite.setScale({0.1, 0.1});
-            ItemBuilder* builder = new HealPotionBuilder();
-            entityItem = builder->build();
-            delete builder;
-
-        }
+        Entity(float health, float speed, sf::Vector2f position, const sf::Texture &texture);
         ~Entity() override = default;
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override
         {

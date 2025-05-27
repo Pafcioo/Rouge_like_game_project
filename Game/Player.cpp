@@ -3,6 +3,11 @@
 #include <iostream>
 #include <cmath>
 
+Player::Player(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
+        Entity(health, speed, position, texture) {
+    entityWeapon = std::make_shared<BasicWeapon>();
+}
+
 void Player::move(const sf::Vector2f direction)
 {
     this->entitySprite.move(direction*entityCurrentSpeed);

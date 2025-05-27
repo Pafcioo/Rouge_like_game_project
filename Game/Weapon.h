@@ -9,8 +9,7 @@ protected:
     float timeSinceLastShot;
     std::string weaponName;
 public:
-    Weapon(float fireRate)
-        : weaponFireCooldown(fireRate), timeSinceLastShot(0.f) {}
+    Weapon(float fireRate);
     virtual ~Weapon() = default;
     void shoot(sf::Vector2f position, sf::Vector2f velocity, float speed); //Shooting new projectiles
     void update(float deltaTime);
@@ -19,6 +18,6 @@ public:
 
 class BasicWeapon : public Weapon {
 public:
-    BasicWeapon(): Weapon(0.5f){weaponName = "Basic Weapon";}
+    BasicWeapon();
     ~BasicWeapon() override = default;
 };

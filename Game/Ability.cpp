@@ -1,9 +1,14 @@
 #include "Ability.h"
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 
+Ability::Ability() {
+    isActive = false;
+    isReady = true;
+    currentCooldown = 0;
+    currentDuration = 0;
+}
 float Ability::getCooldown() {return cooldown;}
 float Ability::getCurrentCooldown() {return currentCooldown;}
 float Ability::getDuration() {return duration;}
@@ -42,6 +47,11 @@ void Ability::update(float deltaTime) {
     }
 }
 
+SprintAbility::SprintAbility() {
+    cooldown = 10.f;
+    duration = 1.f;
+    boost = 200.f;
+}
 void SprintAbility::influence(Entity *entity) {
     if (isActive) {
         std::cout << "Sprinting" << std::endl;
