@@ -3,6 +3,8 @@
 #include "EntityManager.h"
 #include <iostream>
 
+Weapon::Weapon(float fireRate):
+    weaponFireCooldown(fireRate), timeSinceLastShot(0.f) {}
 void Weapon::shoot(sf::Vector2f position, sf::Vector2f velocity, float speed) {
     //std::cout << timeSinceLastShot << std::endl;
     if (timeSinceLastShot >= weaponFireCooldown) {
@@ -15,4 +17,6 @@ void Weapon::shoot(sf::Vector2f position, sf::Vector2f velocity, float speed) {
 void Weapon::update(float deltaTime) {
     timeSinceLastShot += deltaTime;
 }
+
+BasicWeapon::BasicWeapon(): Weapon(0.5f){weaponName = "Basic Weapon";}
 

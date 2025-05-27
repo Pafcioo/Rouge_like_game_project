@@ -17,6 +17,7 @@ void InputManager::handleInput(float deltaTime, std::shared_ptr<EventBus> eventB
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
             inputDirection.x++;
     if(inputDirection != sf::Vector2f(0,0)){
+        //std::cout << "Move event published" << std::endl;
         eventBus->publish<MoveEvent>({inputDirection, deltaTime});
     }
     while(const std::optional event = window.pollEvent())
@@ -44,6 +45,9 @@ void InputManager::handleInput(float deltaTime, std::shared_ptr<EventBus> eventB
                 eventBus->publish<AttackEvent>({inputDirection}); // Attacking
             if(keyPressed->scancode == sf::Keyboard::Scancode::Space)
                 eventBus->publish<DashEvent>({inputDirection}); // Dashing
+            if (keyPressed->scancode == sf::Keyboard::Scan::LShift) {
+                eventBus->publish<useAbilityEvent>({});
+            }
         }
     }
 }

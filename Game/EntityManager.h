@@ -22,5 +22,5 @@ class EntityManager
         void updateEntityManager(GameState currentState);
         void updateEntities(float deltaTime);
         void subscribeToEvents(std::shared_ptr<EventBus> eventBus);
-        Entity* getPlayer() { return player; }
+        Entity* getPlayer();
 };

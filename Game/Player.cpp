@@ -1,13 +1,16 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
-float Player::getEntitySpeed() {return entitySpeed;}
+Player::Player(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
+        Entity(health, speed, position, texture) {
+    entityWeapon = std::make_shared<BasicWeapon>();
+}
 
 void Player::move(const sf::Vector2f direction)
 {
-    this->entitySprite.move(direction*entitySpeed);
+    this->entitySprite.move(direction*entityCurrentSpeed);
     entityPosition = entitySprite.getPosition();
 }
 
@@ -18,7 +21,25 @@ void Player::attack(sf::Vector2f direction)
     if (magnitude != 0.f) {
         direction /= magnitude; // Normalize the vector
     }
-    gun.shoot(entityPosition, direction, 500);
+    entityWeapon->shoot(entityPosition, direction, 500);
 }
+
+void Player::useItem(std::shared_ptr<Item> item) {
+    item->activate(this);
+    item->setIsUsed(true);
+}
+
+void Player::useAbility() {
+    entityAbility->activate();
+}
+
+void Player::update(float deltaTime) {
+    entityWeapon->update(deltaTime);
+    entityAbility->update(deltaTime);
+    entityAbility->influence(this);
+}
+
+
+
 
 
