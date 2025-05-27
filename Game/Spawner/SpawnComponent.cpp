@@ -4,20 +4,21 @@
 // WeaponComponent::WeaponComponent(std::shared_ptr<Weapon> weapon)
 //     : weapon(weapon) {}
 
-// void WeaponComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-//     builder->setWeapon(weapon);
-// }
+void WeaponComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+    builder->setWeapon();
+}
 
-// void WeaponComponent::describe() const {
-//     std::cout << "WeaponComponent with weapon: " << weapon->getName() << "\n";
-// }
+void WeaponComponent::describe() const {
+    std::cout << "WeaponComponent with weapon: " << weapon->getWeaponName() << "\n";
+}
 
 // ItemComponent::ItemComponent(std::shared_ptr<Item> item)
 //     : item(item) {}
 
-// void ItemComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
-//     builder->setItem(item);
-// }
+void ItemComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+    builder->setItem();
+}
+>>>>>>> main
 
 // void ItemComponent::describe() const {
 //     std::cout << "ItemComponent with item: " << item->getName() << "\n";
@@ -43,4 +44,11 @@ void DifficultyComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
 
 void DifficultyComponent::describe() const {
     std::cout << "Difficulty";
+
+void AbilityComponent::apply(std::shared_ptr<EntityBuilder> builder) const {
+    builder->setAbility();
+}
+
+void AbilityComponent::describe() const {
+    std::cout << "AbilityComponent with ability: " << ability->getAbilityName() << "\n";
 }

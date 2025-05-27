@@ -46,3 +46,7 @@ void EnemyBuilder::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficu
     }
 }
 
+std::shared_ptr<Entity> EnemyBuilder::getEnemy() const 
+{
+  return enemy;
+}

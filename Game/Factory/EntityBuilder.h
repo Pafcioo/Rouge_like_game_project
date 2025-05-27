@@ -29,7 +29,7 @@ class EnemyBuilder : public EntityBuilder
         void setAbility() const override;
         void setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty) const override;
         void reset(std::shared_ptr<SpawnConfig> config, std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
-        std::shared_ptr<Entity> getEnemy() const { return enemy; }
+        std::shared_ptr<Entity> getEnemy() const;
 };
 
 // class PlayerBuilder : public EntityBuilder

@@ -3,6 +3,9 @@
 #include "Enemy.h"
 #include <iostream>
 
+Enemy::Enemy(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
+        Entity(health, speed, position, texture) {}
+
 void Enemy::move(sf::Vector2f direction)
 {
     entitySprite.move(direction*entitySpeed);
@@ -33,6 +36,9 @@ void Enemy::update(float deltaTime)
 {
     enemyController->update(deltaTime);
 }
+
+Zombie::Zombie(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
+            Enemy(health, speed, position, texture) {}
 
 void Zombie::move(sf::Vector2f direction)
 {

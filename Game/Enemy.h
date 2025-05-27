@@ -9,8 +9,7 @@ class Enemy : public Entity, public std::enable_shared_from_this<Enemy>
         std::shared_ptr<AIControllerDifficulty> enemyDifficulty;
         std::shared_ptr<AbstractAIController> enemyController;
     public:
-    Enemy(const int health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
-        Entity(health, speed, position, texture) {}
+    Enemy(float health, float speed, sf::Vector2f position, const sf::Texture &texture);
     ~Enemy() override = default;
     void move(sf::Vector2f direction) override;
     void attack(sf::Vector2f direction) override;
@@ -22,10 +21,11 @@ class Enemy : public Entity, public std::enable_shared_from_this<Enemy>
 class Zombie : public Enemy
 {
     public:
-        Zombie(const int health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
-            Enemy(health, speed, position, texture) {}
+        Zombie(float health, float speed, sf::Vector2f position, const sf::Texture &texture);
         ~Zombie() override = default;
         void move(sf::Vector2f direction) override;
         void attack(sf::Vector2f direction) override;
-        float getEntitySpeed() override { return entitySpeed; }
+        void update(float deltaTime) override {}
+        void useItem(std::shared_ptr<Item> item) override {}
+        void useAbility() override {}
 };
