@@ -8,7 +8,7 @@ Enemy::Enemy(const float health, const float speed, const sf::Vector2f position,
 
 void Enemy::move(sf::Vector2f direction)
 {
-    entitySprite.move(direction*entitySpeed);
+    entitySprite.move(direction*entityCurrentSpeed);
     entityPosition = entitySprite.getPosition();
 }
 
@@ -19,7 +19,7 @@ void Enemy::attack(sf::Vector2f direction)
     if (magnitude != 0.f) {
         direction /= magnitude; // Normalize the vector
     }
-    gun.shoot(entityPosition, direction, 500);
+    entityWeapon->shoot(entityPosition, direction, 500);
 }
 
 void Enemy::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty)

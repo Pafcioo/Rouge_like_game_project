@@ -19,19 +19,19 @@ void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config, std::shared_ptr<Ga
     );
 }
 
-void EnemyBuilder::setWeapon() const
+void EnemyBuilder::setWeapon(std::shared_ptr<Weapon> weapon) const
 {
-    // Future implementation
+    enemy->setWeapon(weapon);
 }
 
-void EnemyBuilder::setItem() const
+void EnemyBuilder::setItem(std::shared_ptr<Item> item) const
 {
-    // Future implementation
+    enemy->setItem(item);
 }
 
-void EnemyBuilder::setAbility() const
+void EnemyBuilder::setAbility(std::shared_ptr<Ability> ability) const
 {
-    // Future implementation
+    enemy->setAbility(ability);
 }
 
 void EnemyBuilder::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty) const

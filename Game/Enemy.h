@@ -25,7 +25,6 @@ class Zombie : public Enemy
         ~Zombie() override = default;
         void move(sf::Vector2f direction) override;
         void attack(sf::Vector2f direction) override;
-        void update(float deltaTime) override {}
         void useItem(std::shared_ptr<Item> item) override {}
         void useAbility() override {}
 };
