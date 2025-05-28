@@ -1,10 +1,11 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <functional>
 #include <unordered_map>
 #include <vector>
 #include <typeindex>
 #include <memory>
-#include <SFML/Graphics.hpp>
+#include "Game/States/GameState.h"
 
 // Structures for custom events
 struct PlayerDamagedEvent {
@@ -27,6 +28,16 @@ struct DashEvent {
 
 struct SpawnEvent {
     std::string labelOfSpawner;
+};
+
+struct ChangeStateEvent {
+    std::shared_ptr<GameState> gameState;
+};
+
+struct RevertStateEvent {};
+
+struct MapChoiceEvent {
+    std::string mapLabel;
 };
 
 struct useAbilityEvent {};

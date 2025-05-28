@@ -24,7 +24,6 @@ private:
     UIManager uiManager;
     MapManager mapManager;
     sf::Font font;
-    GameState currentGameState;
     sf::View defaultView;
     sf::View gameplayView;
     std::unique_ptr<SpawnManager> spawnManager;
@@ -33,9 +32,7 @@ private:
 public:
     GameManager();
     ~GameManager(){};
-    void changeGameState(GameState newState);
     UIManager getUIManager();
-    GameState getGameState() const;
     MapManager& getMapManager();
     void changeGameplayViewBasedOnPlayer();
     void Play();

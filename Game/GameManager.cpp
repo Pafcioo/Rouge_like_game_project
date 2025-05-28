@@ -10,7 +10,6 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
     eventBus = std::make_shared<EventBus>();
     // Manager for all UIs
     uiManager.initAllUI(eventBus, font);
-    currentGameState = GameState::MainMenu;
     // View set up
     defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
@@ -56,20 +55,9 @@ void GameManager::changeGameplayViewBasedOnPlayer() {
     }
 }
 
-
-void GameManager::changeGameState(GameState newState) {
-    currentGameState = newState;
-    uiManager.updateActiveUI(currentGameState);
-    entityManager.updateEntityManager(newState);
-}
-
 UIManager GameManager::getUIManager()
 {
     return uiManager;
-}
-
-GameState GameManager::getGameState() const {
-    return currentGameState; 
 }
 
 MapManager& GameManager::getMapManager() {
@@ -96,14 +84,14 @@ void GameManager::Play()
         // relativly to player, so the player is always in the center of view
         changeGameplayViewBasedOnPlayer();
         gameWindow.setView(gameplayView);
-        mapManager.drawMap(gameWindow, currentGameState);
+        mapManager.drawMap(gameWindow, currentGameState);//STATE
         entityManager.updateEntities(deltaTime);
         enemyManager->update(deltaTime);
         enemyManager->drawEnemies(gameWindow);
         entityManager.drawEntities(gameWindow);
         gameWindow.setView(defaultView);
-        uiManager.updateActiveUI(currentGameState);
-        uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game
+        uiManager.updateActiveUI(currentGameState);//STATE
+        uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game, STATE
         gameWindow.display();
     }
 }
