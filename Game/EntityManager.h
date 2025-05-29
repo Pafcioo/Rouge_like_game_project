@@ -8,7 +8,6 @@
 
 // Forward declaration of classes
 class EventBus;
-enum class GameState;
 
 class EntityManager
 {

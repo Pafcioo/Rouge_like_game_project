@@ -3,21 +3,29 @@
 #include "UIManager.h"
 #include "GameManager.h"
 
-void UIManager::addLayer(UILayer uiLayer, std::shared_ptr<UIContainer> container)
+void UIManager::addToLayer(UILayer layer, std::shared_ptr<UIContainer> container) 
 {
-    uiLayers[uiLayer].push_back(container);
+    uiLayers[layer].push_back(container);
 }
 
-void UIManager::removeLayer(UILayer uiLayer)
+void UIManager::removeFromLayer(UILayer layer, std::shared_ptr<UIContainer> container) 
 {
-    uiLayers.erase(uiLayer);
+    auto& vec = uiLayers[layer];
+    vec.erase(std::remove(vec.begin(), vec.end(), container), vec.end());
 }
 
-void UIManager::draw(sf::RenderTarget& target)
+void UIManager::drawAll(sf::RenderTarget& target) 
 {
-    for (auto& [layer, uiList] : uiLayers) {
-        for (auto& ui : uiList) {
-            ui->draw(target,sf::RenderStates::Default);
-        }
+    for (auto& [layer, vec] : uiLayers) {
+        for (auto& c : vec)
+            c->draw(target, sf::RenderStates::Default);
+    }
+}
+
+void UIManager::updateAll(float deltaTime) 
+{
+    for (auto& [layer, vec] : uiLayers) {
+        for (auto& c : vec)
+            c->update(deltaTime);
     }
 }

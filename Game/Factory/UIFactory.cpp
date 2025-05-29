@@ -1,5 +1,12 @@
 #include "Game/Factory/UIFactory.h"
 
+UIFactory::UIFactory()
+{
+    if (!font.openFromFile("Assets/Roboto_Condensed-Black.ttf")) {
+        throw std::runtime_error("Failed to load font");
+    }
+}
+
 std::shared_ptr<UIContainer> MainMenuUI::createUI(std::shared_ptr<EventBus> eventBus)
 {
     auto container = std::make_shared<UIContainer>(eventBus);

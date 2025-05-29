@@ -1,21 +1,24 @@
 #include "Game/States/GameState.h"
 
-UIFactory::UIFactory()
+std::vector<std::pair<UILayer, std::shared_ptr<UIContainer>>> GameState::getStateUIContainers() const
 {
-    if (!font.openFromFile("Assets/Roboto_Condensed-Black.ttf")) {
-        throw std::runtime_error("Failed to load font");
-    }
+    return uiContainers;
 }
 
-void InMenu::onEnter() const
+void GameState::onExit() 
+{
+    uiContainers.clear();
+}
+
+void InMenu::onEnter()
 {
     auto uiFactory = std::unique_ptr<MainMenuUI>();
-    uiManager.addLayer(UILayer::State, uiFactory->createUI(eventBus));
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus)});
 }
 
-void InMenu::onExit() const
+void InMenu::onExit() 
 {
-    uiManager.removeLayer(UILayer::State);
+    
 }
 
 void InMenu::update(float deltaTime) const
@@ -23,15 +26,15 @@ void InMenu::update(float deltaTime) const
 
 }
 
-void MapChoosing::onEnter() const
+void MapChoosing::onEnter() 
 {
     auto uiFactory = std::unique_ptr<MapChoiceUI>();
-    uiManager.addLayer(UILayer::State, uiFactory->createUI(eventBus));
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus)});
 }
 
-void MapChoosing::onExit() const
+void MapChoosing::onExit() 
 {
-    uiManager.removeLayer(UILayer::State);
+    
 }
 
 void MapChoosing::update(float deltaTime) const
@@ -39,15 +42,15 @@ void MapChoosing::update(float deltaTime) const
     
 }
 
-void InGame::onEnter() const
+void InGame::onEnter() 
 {
     auto uiFactory = std::unique_ptr<InGameUI>();
-    uiManager.addLayer(UILayer::State, uiFactory->createUI(eventBus));
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus)});
 }
 
-void InGame::onExit() const
+void InGame::onExit() 
 {
-    uiManager.removeLayer(UILayer::State);
+    
 }
 
 void InMenu::update(float deltaTime) const
@@ -55,15 +58,15 @@ void InMenu::update(float deltaTime) const
     
 }
 
-void Paused::onEnter() const
+void Paused::onEnter() 
 {
     auto uiFactory = std::unique_ptr<PauseUI>();
-    uiManager.addLayer(UILayer::State, uiFactory->createUI(eventBus));
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus)});
 }
 
-void Paused::onExit() const
+void Paused::onExit() 
 {
-    uiManager.removeLayer(UILayer::State);
+    
 }
 
 void Paused::update(float deltaTime) const
@@ -71,15 +74,15 @@ void Paused::update(float deltaTime) const
     
 }
 
-void GameOver::onEnter() const
+void GameOver::onEnter() 
 {
     auto uiFactory = std::unique_ptr<GameOverUI>();
-    uiManager.addLayer(UILayer::State, uiFactory->createUI(eventBus));
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus)});
 }
 
-void GameOver::onExit() const
+void GameOver::onExit() 
 {
-    uiManager.removeLayer(UILayer::State);
+    
 }
 
 void GameOver::update(float deltaTime) const

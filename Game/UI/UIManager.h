@@ -18,10 +18,11 @@ public:
     UIManager() = default;
     ~UIManager() = default;
     // Method for adding a UI to unordered map of UIs
-    void addLayer(UILayer uiLayer, std::shared_ptr<UIContainer> container);
-    void removeLayer(UILayer uiLayer);
+    void addToLayer(UILayer layer, std::shared_ptr<UIContainer> container);
+    void removeFromLayer(UILayer layer, std::shared_ptr<UIContainer> container);
     // Draw methods for UIs
-    void draw(sf::RenderTarget& target);
+    void drawAll(sf::RenderTarget& target);
+    void updateAll(float deltaTime);
 private:
     std::map<UILayer, std::vector<std::shared_ptr<UIContainer>>> uiLayers;
 };

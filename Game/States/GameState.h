@@ -6,63 +6,69 @@ class GameState
 {
 protected:
     std::shared_ptr<EventBus> eventBus;
-    UIManager& uiManager;
-    GameState(UIManager& uiManager, std::shared_ptr<EventBus> eventBus)
-        : uiManager(uiManager), eventBus(eventBus) {}
+    std::shared_ptr<UIManager> uiManager;
+    std::vector<std::pair<UILayer, std::shared_ptr<UIContainer>>> uiContainers;
+    GameState(std::shared_ptr<EventBus> eventBus, std::shared_ptr<UIManager> uiManager)
+        :eventBus(eventBus),uiManager(uiManager) {}
 public:
     virtual ~GameState() = default;
-    virtual void onEnter() const = 0;
-    virtual void onExit() const = 0;
+    virtual bool isTransparent() const = 0;
+    virtual bool isTranscendent() const = 0;
+    virtual void onEnter() = 0;
+    virtual void onExit();
+    virtual void onPause() = 0;
+    virtual void onResume() = 0;
     virtual void update(float deltaTime) const = 0;
+    virtual std::vector<std::pair<UILayer, std::shared_ptr<UIContainer>>> getStateUIContainers() const;
 };
 
 class InMenu : public GameState
 {
 public:
-    InMenu(UIManager& uiManager, std::shared_ptr<EventBus> eventBus)
-        : GameState(uiManager, eventBus) {}
+    InMenu(std::shared_ptr<EventBus> eventBus, std::shared_ptr<UIManager> uiManager)
+        : GameState(eventBus, uiManager) {}
     ~InMenu() = default;
-    void onEnter() const override;
-    void onExit() const override;
+    void onEnter() override;
+    void onExit() override;
     void update(float deltaTime) const override;
 };
 
 class MapChoosing : public GameState
 {
 public:
-    MapChoosing(UIManager& uiManager, std::shared_ptr<EventBus> eventBus)
-        : GameState(uiManager, eventBus) {}
-    void onEnter() const override;
-    void onExit() const override;
+    MapChoosing(std::shared_ptr<EventBus> eventBus, std::shared_ptr<UIManager> uiManager)
+        : GameState(eventBus, uiManager) {}
+    void onEnter() override;
+    void onExit() override;
     void update(float deltaTime) const override;
 };
 
 class InGame : public GameState
 {
 public:
-    InGame(UIManager& uiManager, std::shared_ptr<EventBus> eventBus)
-        : GameState(uiManager, eventBus) {}
-    void onEnter() const override;
-    void onExit() const override;
+    InGame(std::shared_ptr<EventBus> eventBus, std::shared_ptr<UIManager> uiManager)
+        : GameState(eventBus, uiManager) {}
+    void onEnter() override;
+    void onExit() override;
     void update(float deltaTime) const override;
 };
 
 class Paused : public GameState
 {
 public:
-    Paused(UIManager& uiManager, std::shared_ptr<EventBus> eventBus)
-        : GameState(uiManager, eventBus) {}
-    void onEnter() const override;
-    void onExit() const override;
+    Paused(std::shared_ptr<EventBus> eventBus, std::shared_ptr<UIManager> uiManager)
+        : GameState(eventBus, uiManager) {}
+    void onEnter() override;
+    void onExit() override;
     void update(float deltaTime) const override;
 };
 
 class GameOver: public GameState
 {
 public:
-    GameOver(UIManager& uiManager, std::shared_ptr<EventBus> eventBus)
-        : GameState(uiManager, eventBus) {}
-    void onEnter() const override;
-    void onExit() const override;
+    GameOver(std::shared_ptr<EventBus> eventBus, std::shared_ptr<UIManager> uiManager)
+        : GameState(eventBus, uiManager) {}
+    void onEnter() override;
+    void onExit() override;
     void update(float deltaTime) const override;   
 };
