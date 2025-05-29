@@ -24,3 +24,7 @@ void EnemyManager::update(float deltaTime)
         }
     }
 }
+
+std::vector<std::shared_ptr<Entity> > EnemyManager::getEnemies() {
+    return vectorOfEnemies;
+}

@@ -8,6 +8,7 @@ Entity::Entity(const float health, const float speed, const sf::Vector2f positio
     entityBaseSpeed = speed;
     entityCurrentSpeed = speed;
     entityPosition = position;
+    entityDirection = sf::Vector2f(1,0);
     entitySprite.setOrigin(static_cast<sf::Vector2f>(entityTexture.getSize())/2.f);
     entitySprite.setPosition(entityPosition);
     entitySprite.setColor(sf::Color::White);
@@ -25,6 +26,15 @@ float Entity::getEntitySpeed() {
 float Entity::getEntityBaseSpeed() {
     return entityBaseSpeed;
 }
+
+sf::Vector2f Entity::getEntityDirection() {
+    return entityDirection;
+}
+
+void Entity::setEntityDirection(sf::Vector2f direction) {
+    entityDirection = direction;
+}
+
 
 void Entity::setSpeed(float newSpeed) {
     entityCurrentSpeed = newSpeed;
@@ -70,3 +80,8 @@ void Entity::setWeapon(std::shared_ptr<Weapon> weapon)
 {
     entityWeapon = weapon;
 }
+
+sf::FloatRect Entity::getEntityGlobalBounds() {
+    return entitySprite.getGlobalBounds();
+}
+

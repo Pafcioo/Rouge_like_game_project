@@ -8,21 +8,25 @@ private:
     float projectileSpeed;
     bool projectileIsActive;
     sf::CircleShape projectileShape;
+    float projectileDamage;
 public:
-    Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float radius = 5.f, sf::Color color = sf::Color::White):
+    Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float damage, float radius = 5.f, sf::Color color = sf::Color::White):
         projectileInitialPosition(position), projectileVelocity(velocity), projectileSpeed(speed), projectileIsActive(true) {
         projectileShape.setRadius(radius);
         projectileShape.setFillColor(color);
         projectileShape.setOrigin({radius, radius});
         projectileShape.setPosition(projectileInitialPosition);
+        projectileDamage = damage;
     }
     ~Projectile() override = default;
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
         target.draw(projectileShape, states);
     }
     void update(float deltaTime);
-    bool isActive() const { return projectileIsActive; }
-    void deactivate() { projectileIsActive = false; }
-    sf::Vector2f getInitialPosition() const { return projectileInitialPosition; }
-    sf::CircleShape getShape() const { return projectileShape; }
+    bool isActive() const;// { return projectileIsActive; }
+    void deactivate();// { projectileIsActive = false; }
+    sf::Vector2f getInitialPosition() const;// { return projectileInitialPosition; }
+    sf::CircleShape getShape() const;// { return projectileShape; }
+    sf::FloatRect getGlobalBounds();
+    float getDamage() const;
 };

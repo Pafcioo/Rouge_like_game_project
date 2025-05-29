@@ -76,6 +76,28 @@ MapManager& GameManager::getMapManager() {
     return mapManager;
 }
 
+void GameManager::update(float deltaTime) {
+    entityManager.updateEntities(deltaTime);
+    projectileManager.updateProjectiles(deltaTime);
+    enemyManager->update(deltaTime);
+}
+
+void GameManager::draw() {
+    entityManager.drawEntities(gameWindow);
+    projectileManager.drawProjectiles(gameWindow);
+    enemyManager->drawEnemies(gameWindow);
+}
+
+void GameManager::manageCollisions() {
+    for (auto& proj : projectileManager.getProjectiles()) {
+        collisionManager.manageCollision(entityManager.getPlayer(), proj);
+        for (auto& enemy: enemyManager->getEnemies()) {
+            collisionManager.manageCollision(enemy, proj);
+        }
+    }
+}
+
+
 void GameManager::Play()
 {
     // Create a window
@@ -97,10 +119,13 @@ void GameManager::Play()
         changeGameplayViewBasedOnPlayer();
         gameWindow.setView(gameplayView);
         mapManager.drawMap(gameWindow, currentGameState);
-        entityManager.updateEntities(deltaTime);
-        enemyManager->update(deltaTime);
-        enemyManager->drawEnemies(gameWindow);
-        entityManager.drawEntities(gameWindow);
+        //entityManager.updateEntities(deltaTime);
+        //enemyManager->update(deltaTime);
+        update(deltaTime);
+        //enemyManager->drawEnemies(gameWindow);
+        //entityManager.drawEntities(gameWindow);
+        manageCollisions();
+        draw();
         gameWindow.setView(defaultView);
         uiManager.updateActiveUI(currentGameState);
         uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game

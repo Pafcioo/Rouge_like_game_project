@@ -11,7 +11,9 @@
 #include "Game/Spawner/SpawnManager.h"
 #include "Game/GameplayInfoSource.h"
 #include "Game/Spawner/EnemyManager.h"
-
+#include "ProjectileManager.h"
+#include <memory>
+#include "CollisionManager.h"
 // The most important class of the game, that handles everything
 class GameManager
 {
@@ -30,6 +32,8 @@ private:
     std::unique_ptr<SpawnManager> spawnManager;
     std::shared_ptr<GameplayInfoSource> gameplayInfoSource;
     std::shared_ptr<EnemyManager> enemyManager;
+    ProjectileManager projectileManager;
+    CollisionManager collisionManager;
 public:
     GameManager();
     ~GameManager(){};
@@ -38,5 +42,8 @@ public:
     GameState getGameState() const;
     MapManager& getMapManager();
     void changeGameplayViewBasedOnPlayer();
+    void update(float deltaTime);
+    void draw();
+    void manageCollisions();
     void Play();
 };

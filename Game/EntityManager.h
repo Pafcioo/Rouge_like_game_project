@@ -19,7 +19,7 @@ class EntityManager
     public:
         EntityManager();
         ~EntityManager() = default;
-        static std::vector<Projectile*> projectiles;
+        //static std::vector<Projectile*> projectiles;
         void drawEntities(sf::RenderWindow& window);
         void updateEntityManager(GameState currentState);
         void updateEntities(float deltaTime);
