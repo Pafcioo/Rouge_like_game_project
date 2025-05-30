@@ -76,6 +76,19 @@ MapManager& GameManager::getMapManager() {
     return mapManager;
 }
 
+PlayerManager& GameManager::getPlayerManager() {
+    return playerManager;
+}
+
+ProjectileManager& GameManager::getProjectileManager() {
+    return projectileManager;
+}
+
+std::shared_ptr<EnemyManager> GameManager::getEnemyManager() {
+    return enemyManager;
+}
+
+
 void GameManager::update(float deltaTime) {
     playerManager.updateEntities(deltaTime);
     projectileManager.updateProjectiles(deltaTime);
@@ -88,7 +101,7 @@ void GameManager::draw() {
     enemyManager->drawEnemies(gameWindow);
 }
 
-void GameManager::manageCollisions() {
+/*void GameManager::manageCollisions() {
     for (auto& proj : projectileManager.getProjectiles()) {
         collisionManager.manageCollision(playerManager.getPlayer(), proj);
         for (auto& enemy: enemyManager->getEnemies()) {
@@ -98,7 +111,7 @@ void GameManager::manageCollisions() {
     for (auto& enemy: enemyManager->getEnemies()) {
         collisionManager.manageCollision(playerManager.getPlayer(), enemy);
     }
-}
+}*/
 
 
 void GameManager::Play()
@@ -127,7 +140,7 @@ void GameManager::Play()
         update(deltaTime);
         //enemyManager->drawEnemies(gameWindow);
         //entityManager.drawEntities(gameWindow);
-        manageCollisions();
+        collisionManager.manageCollisions(this, deltaTime);
         draw();
         gameWindow.setView(defaultView);
         uiManager.updateActiveUI(currentGameState);

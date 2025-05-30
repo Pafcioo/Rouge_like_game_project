@@ -41,6 +41,9 @@ public:
     UIManager getUIManager();
     GameState getGameState() const;
     MapManager& getMapManager();
+    PlayerManager& getPlayerManager();
+    ProjectileManager& getProjectileManager();
+    std::shared_ptr<EnemyManager> getEnemyManager();
     void changeGameplayViewBasedOnPlayer();
     void update(float deltaTime);
     void draw();

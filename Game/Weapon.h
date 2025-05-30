@@ -16,7 +16,7 @@ public:
     virtual ~Weapon() = default;
     virtual void shoot(sf::Vector2f position, sf::Vector2f velocity) = 0; //Shooting new projectiles
     void update(float deltaTime);
-    std::string getWeaponName() {return weaponName;}
+    std::string getWeaponName();
 };
 
 class BasicWeapon : public Weapon {

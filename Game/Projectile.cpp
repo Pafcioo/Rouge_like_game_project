@@ -1,6 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include "Projectile.h"
 
+Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float damage, float radius, sf::Color color):
+        projectileInitialPosition(position), projectileVelocity(velocity), projectileSpeed(speed), projectileIsActive(true) {
+    projectileShape.setRadius(radius);
+    projectileShape.setFillColor(color);
+    projectileShape.setOrigin({radius, radius});
+    projectileShape.setPosition(projectileInitialPosition);
+    projectileDamage = damage;
+}
+
+void Projectile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    target.draw(projectileShape, states);
+}
+
 sf::FloatRect Projectile::getGlobalBounds() {
     return projectileShape.getGlobalBounds();
 }

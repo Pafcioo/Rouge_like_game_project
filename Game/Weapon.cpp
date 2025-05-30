@@ -6,6 +6,11 @@
 Weapon::Weapon(float fireRate):
     weaponFireCooldown(fireRate), timeSinceLastShot(0.f) {}
 
+std::string Weapon::getWeaponName() {
+    return weaponName;
+}
+
+
 BasicWeapon::BasicWeapon(): Weapon(0.25f) {
     weaponName = "Basic Weapon";
     projSpeed = 500;
