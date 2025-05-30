@@ -17,8 +17,8 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
     // Source for all game info like level, hp, position of player...
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
     // Managers for entities like player and enemy
-    entityManager.setGameplayInfo(gameplayInfoSource);
-    entityManager.subscribeToEvents(eventBus);
+    playerManager.setGameplayInfo(gameplayInfoSource);
+    playerManager.subscribeToEvents(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
     // Spawner set up
     spawnManager = std::make_unique<SpawnManager>();
@@ -26,7 +26,7 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
-    Entity* player = entityManager.getPlayer();
+    Entity* player = playerManager.getPlayer();
     if (!player) return;
 
     sf::Vector2f playerPosition = player->getPosition();
@@ -60,7 +60,7 @@ void GameManager::changeGameplayViewBasedOnPlayer() {
 void GameManager::changeGameState(GameState newState) {
     currentGameState = newState;
     uiManager.updateActiveUI(currentGameState);
-    entityManager.updateEntityManager(newState);
+    playerManager.updateEntityManager(newState);
 }
 
 UIManager GameManager::getUIManager()
@@ -75,6 +75,44 @@ GameState GameManager::getGameState() const {
 MapManager& GameManager::getMapManager() {
     return mapManager;
 }
+
+PlayerManager& GameManager::getPlayerManager() {
+    return playerManager;
+}
+
+ProjectileManager& GameManager::getProjectileManager() {
+    return projectileManager;
+}
+
+std::shared_ptr<EnemyManager> GameManager::getEnemyManager() {
+    return enemyManager;
+}
+
+
+void GameManager::update(float deltaTime) {
+    playerManager.updateEntities(deltaTime);
+    projectileManager.updateProjectiles(deltaTime);
+    enemyManager->update(deltaTime);
+}
+
+void GameManager::draw() {
+    playerManager.drawEntities(gameWindow);
+    projectileManager.drawProjectiles(gameWindow);
+    enemyManager->drawEnemies(gameWindow);
+}
+
+/*void GameManager::manageCollisions() {
+    for (auto& proj : projectileManager.getProjectiles()) {
+        collisionManager.manageCollision(playerManager.getPlayer(), proj);
+        for (auto& enemy: enemyManager->getEnemies()) {
+            collisionManager.manageCollision(enemy, proj);
+        }
+    }
+    for (auto& enemy: enemyManager->getEnemies()) {
+        collisionManager.manageCollision(playerManager.getPlayer(), enemy);
+    }
+}*/
+
 
 void GameManager::Play()
 {
@@ -97,10 +135,13 @@ void GameManager::Play()
         changeGameplayViewBasedOnPlayer();
         gameWindow.setView(gameplayView);
         mapManager.drawMap(gameWindow, currentGameState);
-        entityManager.updateEntities(deltaTime);
-        enemyManager->update(deltaTime);
-        enemyManager->drawEnemies(gameWindow);
-        entityManager.drawEntities(gameWindow);
+        //entityManager.updateEntities(deltaTime);
+        //enemyManager->update(deltaTime);
+        update(deltaTime);
+        //enemyManager->drawEnemies(gameWindow);
+        //entityManager.drawEntities(gameWindow);
+        collisionManager.manageCollisions(this, deltaTime);
+        draw();
         gameWindow.setView(defaultView);
         uiManager.updateActiveUI(currentGameState);
         uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game

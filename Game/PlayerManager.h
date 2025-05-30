@@ -10,16 +10,16 @@
 class EventBus;
 enum class GameState;
 
-class EntityManager
+class PlayerManager
 {
     private:
         Entity* player;
         bool isEntityManagerActive; // Bolean responsible for managing input for UI
         std::shared_ptr<GameplayInfoSource> gameplayInfo;
     public:
-        EntityManager();
-        ~EntityManager() = default;
-        static std::vector<Projectile*> projectiles;
+        PlayerManager();
+        ~PlayerManager() = default;
+        //static std::vector<Projectile*> projectiles;
         void drawEntities(sf::RenderWindow& window);
         void updateEntityManager(GameState currentState);
         void updateEntities(float deltaTime);
