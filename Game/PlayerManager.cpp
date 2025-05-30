@@ -1,17 +1,17 @@
 #include <iostream>
-#include "EntityManager.h"
+#include "PlayerManager.h"
 #include "Event.h"
 #include "GameManager.h"
 #include <algorithm>
 #include <cmath>
 
-EntityManager::EntityManager()
+PlayerManager::PlayerManager()
 {
     player = new Player(100, 250, {0, 0}, sf::Texture("Assets/player.png"));
     isEntityManagerActive = false;
 }
 
-void EntityManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
+void PlayerManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
     gameplayInfo = gameplayInfoSource;
     player->setGameplayInfo(gameplayInfo);
@@ -19,7 +19,7 @@ void EntityManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplay
 
 //std::vector<Projectile*> EntityManager::projectiles;
 // Method for subscribing events where player subscribe to events like movement and attack
-void EntityManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
+void PlayerManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
 {
     eventBus->subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
         if (player && isEntityManagerActive) {
@@ -42,7 +42,7 @@ void EntityManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
     });
 }
 
-void EntityManager::drawEntities(sf::RenderWindow& window)
+void PlayerManager::drawEntities(sf::RenderWindow& window)
 {
     // Placeholder for drawing entities
     // In a real implementation, you would loop through your entities and draw them here
@@ -55,7 +55,7 @@ void EntityManager::drawEntities(sf::RenderWindow& window)
     //std::cout << "Drawing entities..." << std::endl;
 }
 
-void EntityManager::updateEntities(float deltaTime) {
+void PlayerManager::updateEntities(float deltaTime) {
     
     player->update(deltaTime);
     /*for (auto& proj : projectiles) {
@@ -74,7 +74,7 @@ void EntityManager::updateEntities(float deltaTime) {
     );*/
 }
 // Method for changing the activity of entity manager, which is only active when the game is in playing state
-void EntityManager::updateEntityManager(GameState currentState){
+void PlayerManager::updateEntityManager(GameState currentState){
     if(currentState == GameState::Playing)
     {
         isEntityManagerActive = true;
@@ -84,4 +84,4 @@ void EntityManager::updateEntityManager(GameState currentState){
     }
 }
 
-Entity* EntityManager::getPlayer() {return player;}
+Entity* PlayerManager::getPlayer() {return player;}

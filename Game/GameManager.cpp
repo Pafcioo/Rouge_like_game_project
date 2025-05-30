@@ -17,8 +17,8 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
     // Source for all game info like level, hp, position of player...
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
     // Managers for entities like player and enemy
-    entityManager.setGameplayInfo(gameplayInfoSource);
-    entityManager.subscribeToEvents(eventBus);
+    playerManager.setGameplayInfo(gameplayInfoSource);
+    playerManager.subscribeToEvents(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
     // Spawner set up
     spawnManager = std::make_unique<SpawnManager>();
@@ -26,7 +26,7 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
-    Entity* player = entityManager.getPlayer();
+    Entity* player = playerManager.getPlayer();
     if (!player) return;
 
     sf::Vector2f playerPosition = player->getPosition();
@@ -60,7 +60,7 @@ void GameManager::changeGameplayViewBasedOnPlayer() {
 void GameManager::changeGameState(GameState newState) {
     currentGameState = newState;
     uiManager.updateActiveUI(currentGameState);
-    entityManager.updateEntityManager(newState);
+    playerManager.updateEntityManager(newState);
 }
 
 UIManager GameManager::getUIManager()
@@ -77,23 +77,26 @@ MapManager& GameManager::getMapManager() {
 }
 
 void GameManager::update(float deltaTime) {
-    entityManager.updateEntities(deltaTime);
+    playerManager.updateEntities(deltaTime);
     projectileManager.updateProjectiles(deltaTime);
     enemyManager->update(deltaTime);
 }
 
 void GameManager::draw() {
-    entityManager.drawEntities(gameWindow);
+    playerManager.drawEntities(gameWindow);
     projectileManager.drawProjectiles(gameWindow);
     enemyManager->drawEnemies(gameWindow);
 }
 
 void GameManager::manageCollisions() {
     for (auto& proj : projectileManager.getProjectiles()) {
-        collisionManager.manageCollision(entityManager.getPlayer(), proj);
+        collisionManager.manageCollision(playerManager.getPlayer(), proj);
         for (auto& enemy: enemyManager->getEnemies()) {
             collisionManager.manageCollision(enemy, proj);
         }
+    }
+    for (auto& enemy: enemyManager->getEnemies()) {
+        collisionManager.manageCollision(playerManager.getPlayer(), enemy);
     }
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "EntityManager.h"
+#include "PlayerManager.h"
 #include "InputManager.h"
 #include "UIManager.h"
 #include "Button.h"
@@ -20,7 +20,7 @@ class GameManager
 private:
     sf::RenderWindow gameWindow;
     sf::Clock gameClock;
-    EntityManager entityManager;
+    PlayerManager playerManager;
     InputManager inputManager;
     std::shared_ptr<EventBus> eventBus;
     UIManager uiManager;

@@ -14,7 +14,7 @@ protected:
 public:
     Weapon(float fireRate);
     virtual ~Weapon() = default;
-    void shoot(sf::Vector2f position, sf::Vector2f velocity); //Shooting new projectiles
+    virtual void shoot(sf::Vector2f position, sf::Vector2f velocity) = 0; //Shooting new projectiles
     void update(float deltaTime);
     std::string getWeaponName() {return weaponName;}
 };
@@ -23,4 +23,5 @@ class BasicWeapon : public Weapon {
 public:
     BasicWeapon();
     ~BasicWeapon() override = default;
+    void shoot(sf::Vector2f position, sf::Vector2f velocity) override;
 };

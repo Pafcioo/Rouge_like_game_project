@@ -1,8 +1,10 @@
 #include "CollisionManager.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 void CollisionManager::manageCollision(Entity* entity, Projectile* proj) {
-    if (proj->getGlobalBounds().findIntersection(entity->getEntityGlobalBounds())) {
+    auto intersection = entity->getEntityGlobalBounds().findIntersection(proj->getShape().getGlobalBounds());
+    if (intersection.has_value()) {
         entity->setHealth(entity->getHealth()-proj->getDamage());
         proj->deactivate();
     }
@@ -29,8 +31,19 @@ void CollisionManager::manageCollision(Entity* entity, sf::RectangleShape& wall,
     }
 }
 
+void CollisionManager::manageCollision(Entity *entity1, std::shared_ptr<Entity>& entity2) {
+    auto intersection = entity1->getEntityGlobalBounds().findIntersection(entity2->getEntityGlobalBounds());
+    if (intersection.has_value()) {
+        entity1->setHealth(entity1->getHealth()-1);
+        entity2->setHealth(entity2->getHealth()-1);
+        std::cout << "Collision detected" << std::endl;
+    }
+}
+
+
 void CollisionManager::manageCollision(std::shared_ptr<Entity> entity, Projectile *proj) {
-    if (proj->getGlobalBounds().findIntersection(entity->getEntityGlobalBounds())) {
+    auto intersection = entity->getEntityGlobalBounds().findIntersection(proj->getShape().getGlobalBounds());
+    if (intersection.has_value()) {
         entity->setHealth(entity->getHealth()-proj->getDamage());
         proj->deactivate();
     }
