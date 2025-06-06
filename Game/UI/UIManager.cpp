@@ -1,7 +1,8 @@
 #include <iostream>
-#include "math.h"
-#include "UIManager.h"
-#include "GameManager.h"
+#include <algorithm>
+#include "Game/UI/UIManager.h"
+#include "Game/UI/UIContainer.h"
+
 
 void UIManager::addToLayer(UILayer layer, std::shared_ptr<UIContainer> container) 
 {

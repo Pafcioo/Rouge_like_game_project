@@ -5,7 +5,8 @@
 #include <vector>
 #include <typeindex>
 #include <memory>
-#include "Game/States/GameState.h"
+
+class GameState;
 
 // Structures for custom events
 struct PlayerDamagedEvent {
@@ -60,9 +61,8 @@ public:
 class EventBus {
 public:
     template<typename EventType>
-    using Handler = std::function<void(const EventType&)>; // action that will be triggered after receving a publish
+    using Handler = std::function<void(const EventType&)>;
 
-    // Subscription of event, the handler(action) is added to map of handlers
     template<typename EventType>
     void subscribe(Handler<EventType> handler) {
         auto& handlers = handlers_[std::type_index(typeid(EventType))];
@@ -71,7 +71,11 @@ public:
         });
     }
 
-    // Publication of event, after publishing every subscriber activate his action (handler)
+    template<typename EventType>
+    void unsubscribeAll() {
+        handlers_.erase(std::type_index(typeid(EventType)));
+    }
+
     template<typename EventType>
     void publish(const EventType& event) {
         auto it = handlers_.find(std::type_index(typeid(EventType)));

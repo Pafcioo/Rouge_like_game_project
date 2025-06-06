@@ -1,9 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "UIContainer.h"
 #include <unordered_map>
 #include <memory>
 #include <map>
+
+class UIContainer;
 
 enum class UILayer
 {

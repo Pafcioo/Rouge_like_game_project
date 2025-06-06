@@ -1,4 +1,4 @@
-# Game/Spawner/CMakeLists.txt
+# Game/Factory/CMakeLists.txt
 file(GLOB FACTORY_SOURCES
     CONFIGURE_DEPENDS
     *.cpp

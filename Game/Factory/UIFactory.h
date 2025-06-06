@@ -4,40 +4,48 @@
 
 class UIFactory
 {
-    protected:
-        sf::Font font;
     public:
         UIFactory();
-        virtual ~UIFactory(){};
-        virtual std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus) = 0;
+        virtual ~UIFactory() = default;
+        virtual std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) = 0;
 };
 
 class MainMenuUI : public UIFactory
 {
     public:
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus);
+        MainMenuUI();
+        ~MainMenuUI();
+        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
 };
 
 class MapChoiceUI : public UIFactory
 {
     public:
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus);
+        MapChoiceUI();
+        ~MapChoiceUI();
+        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
 };
 
 class InGameUI : public UIFactory
 {
     public:
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus);
+        InGameUI();
+        ~InGameUI();
+        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
 };
 
 class PauseUI : public UIFactory
 {
     public:
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus);
+        PauseUI();
+        ~PauseUI();
+        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
 };
 
 class GameOverUI : public UIFactory
 {
     public:
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus);
+        GameOverUI();
+        ~GameOverUI();
+        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
 };

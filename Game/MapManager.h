@@ -4,8 +4,6 @@
 #include "Event.h"
 #include "GameMap.h"
 
-enum class GameState;
-
 struct MapData
 {
     std::string pathToMap;
@@ -31,5 +29,6 @@ public:
     const std::string& getCurrentMapLabel() const;
     void loadMaps(const std::string& pathToMaps);
     void setMap(const std::string& labelOfMap);
-    void drawMap(sf::RenderTarget& window, GameState currentGameState) const;
+    void subscribeToEvents(std::shared_ptr<EventBus> eventBus);
+    void drawMap(sf::RenderTarget& target) const;
 };

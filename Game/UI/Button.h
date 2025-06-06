@@ -2,9 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <functional>
-#include "InputManager.h"
-#include "UIElement.h"
-#include "Event.h"
+#include "Game/InputManager.h"
+#include "Game/UI/UIElement.h"
+#include "Game/Event.h"
 
 // Button inherits from UIElement so it can be in the same vector of UIElements
 class Button : public UIElement {

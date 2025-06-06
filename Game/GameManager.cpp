@@ -3,13 +3,15 @@
 #include "Entity.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Game/Spawner/EnemyManager.h"
+#include "Game/GameplayInfoSource.h"
+#include "Game/States/StateManager.h"
+#include "Game/Spawner/SpawnManager.h"
 
-GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
+GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
 {
     // Bus for events in game
     eventBus = std::make_shared<EventBus>();
-    // Manager for all UIs
-    uiManager.initAllUI(eventBus, font);
     // View set up
     defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
     gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
@@ -20,8 +22,21 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
     entityManager.subscribeToEvents(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
     // Spawner set up
-    spawnManager = std::make_unique<SpawnManager>();
+    spawnManager = std::make_shared<SpawnManager>();
     spawnManager->setUpStrategies(gameplayInfoSource,enemyManager);
+    // UIManager set up
+    uiManager = std::make_shared<UIManager>();
+}
+
+void GameManager::setStateManager()
+{
+    stateManager = std::make_shared<StateManager>(uiManager, shared_from_this(), eventBus);
+    stateManager->subscribeToEvents();
+    auto newState = std::make_shared<InMenu>();
+    newState->setEventBus(eventBus);
+    newState->setUIManager(uiManager);
+    newState->setGameManager(shared_from_this());
+    stateManager->pushState(newState);
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
@@ -55,8 +70,12 @@ void GameManager::changeGameplayViewBasedOnPlayer() {
     }
 }
 
-UIManager GameManager::getUIManager()
+sf::Font& GameManager::getFont()
 {
+    return font;
+}
+
+std::shared_ptr<UIManager> GameManager::getUIManager() {
     return uiManager;
 }
 
@@ -64,11 +83,52 @@ MapManager& GameManager::getMapManager() {
     return mapManager;
 }
 
+EntityManager& GameManager::getEntityManager() {
+    return entityManager;
+}
+
+InputManager& GameManager::getInputManager() {
+    return inputManager;
+}
+
+std::shared_ptr<EventBus> GameManager::getEventBus() {
+    return eventBus;
+}
+
+sf::RenderWindow& GameManager::getGameWindow() {
+    return gameWindow;
+}
+
+sf::View& GameManager::getDefaultView() {
+    return defaultView;
+}
+
+sf::View& GameManager::getGameplayView() {
+    return gameplayView;
+}
+
+std::shared_ptr<StateManager> GameManager::getStateManager() {
+    return stateManager;
+}
+
+std::shared_ptr<SpawnManager> GameManager::getSpawnManager() {
+    return spawnManager;
+}
+
+std::shared_ptr<GameplayInfoSource> GameManager::getGameplayInfoSource() {
+    return gameplayInfoSource;
+}
+
+std::shared_ptr<EnemyManager> GameManager::getEnemyManager() {
+    return enemyManager;
+}
+
 void GameManager::Play()
 {
     // Create a window
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
+    setStateManager();
     
     // Main loop
     while (gameWindow.isOpen())
@@ -77,21 +137,8 @@ void GameManager::Play()
         float deltaTime = elapsed.asSeconds();
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
         gameWindow.clear();
-        inputManager.handleInput(deltaTime, eventBus, gameWindow);
-        spawnManager->update(deltaTime);
-        // In this section the gameplayerView changes in specific order so 
-        // background is first, then the player and at the end is UI that is static
-        // relativly to player, so the player is always in the center of view
-        changeGameplayViewBasedOnPlayer();
-        gameWindow.setView(gameplayView);
-        mapManager.drawMap(gameWindow, currentGameState);//STATE
-        entityManager.updateEntities(deltaTime);
-        enemyManager->update(deltaTime);
-        enemyManager->drawEnemies(gameWindow);
-        entityManager.drawEntities(gameWindow);
-        gameWindow.setView(defaultView);
-        uiManager.updateActiveUI(currentGameState);//STATE
-        uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game, STATE
+        stateManager->update(deltaTime);
+        stateManager->draw(gameWindow);
         gameWindow.display();
     }
 }

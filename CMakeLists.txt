@@ -47,8 +47,8 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         Spawner
         AIController
-        Factory
         States
+        Factory
         UI
         SFML::Graphics
         SFML::Window

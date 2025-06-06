@@ -67,6 +67,7 @@ void UIContainer::activateFocused() {
 void UIContainer::subscribeToEvents() {
     // Subscribe to mouse button press events
     eventBus_->subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& event) {
+        if(!isUIActive_) return;
         sf::Vector2f mousePosition(static_cast<float>(event.position.x), static_cast<float>(event.position.y));
         for (int i = 0; i < (int)uiElements_.size(); ++i) {
             if (auto* btn = dynamic_cast<Button*>(uiElements_[i].get())) {
@@ -80,6 +81,7 @@ void UIContainer::subscribeToEvents() {
 
     // Subscribe to mouse move events (hover effect)
     eventBus_->subscribe<sf::Event::MouseMoved>([this](const sf::Event::MouseMoved& event) {
+        if(!isUIActive_) return;
         sf::Vector2f mousePosition(static_cast<float>(event.position.x), static_cast<float>(event.position.y));
         for (int i = 0; i < (int)uiElements_.size(); ++i) {
             if (auto* btn = dynamic_cast<Button*>(uiElements_[i].get())) {
@@ -99,6 +101,7 @@ void UIContainer::subscribeToEvents() {
         }
         // Unfocus if mouse is not over any button
         if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
+            if(!isUIActive_) return;
             if (auto* prevBtn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get())) {
                 prevBtn->setFocused(false);
             }
@@ -108,6 +111,7 @@ void UIContainer::subscribeToEvents() {
 
     // Subscribe to key press events
     eventBus_->subscribe<sf::Event::KeyPressed>([this](const sf::Event::KeyPressed& event) {
+        if(!isUIActive_) return;
         if (event.scancode == sf::Keyboard::Scancode::Up) {
             focusPrevious();
         }
@@ -134,5 +138,11 @@ void UIContainer::addElement(std::shared_ptr<UIElement> element) {
 void UIContainer::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     for (const auto& element : uiElements_) {
         element->draw(target, states);
+    }
+}
+
+void UIContainer::update(float deltaTime) {
+    for (const auto& element : uiElements_) {
+        element->update(deltaTime);
     }
 }

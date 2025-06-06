@@ -42,8 +42,8 @@ sf::FloatRect Text::getGlobalBounds() const {
     return text_.getGlobalBounds();
 }
 // Update method for text
-void Text::update(float /*deltaTime*/) {
-    // Jeśli nie potrzebujesz aktualizacji, zostaw puste ciało
+void Text::update(float deltaTime) {
+    // Add logic if needed
 }
 // Drawing method for text
 void Text::draw(sf::RenderTarget& target, sf::RenderStates states) const {

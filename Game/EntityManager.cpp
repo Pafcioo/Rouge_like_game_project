@@ -38,17 +38,19 @@ void EntityManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
     });
 }
 
-void EntityManager::drawEntities(sf::RenderWindow& window)
+void EntityManager::unsubscribeToEvents(std::shared_ptr<EventBus> eventBus)
 {
-    // Placeholder for drawing entities
-    // In a real implementation, you would loop through your entities and draw them here
-    if(isEntityManagerActive){
-        window.draw(*player);
-        for (auto& proj : projectiles) {
-            window.draw(*proj);
-        }
+    eventBus->unsubscribeAll<MoveEvent>();
+    eventBus->unsubscribeAll<AttackEvent>();
+    eventBus->unsubscribeAll<useAbilityEvent>();
+}
+
+void EntityManager::drawEntities(sf::RenderTarget& target)
+{
+    target.draw(*player);
+    for (auto& proj : projectiles) {
+        target.draw(*proj);
     }
-    //std::cout << "Drawing entities..." << std::endl;
 }
 
 void EntityManager::updateEntities(float deltaTime) {
@@ -69,15 +71,10 @@ void EntityManager::updateEntities(float deltaTime) {
         projectiles.end()
     );
 }
-// Method for changing the activity of entity manager, which is only active when the game is in playing state
-void EntityManager::updateEntityManager(GameState currentState){
-    if(currentState == GameState::Playing)
-    {
-        isEntityManagerActive = true;
-    }
-    else{
-        isEntityManagerActive = false;
-    }
+
+void EntityManager::setActivity(bool activity)
+{
+    isEntityManagerActive = activity;
 }
 
 Entity* EntityManager::getPlayer() {return player;}

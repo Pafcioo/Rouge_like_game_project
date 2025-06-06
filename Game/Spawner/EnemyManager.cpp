@@ -6,11 +6,11 @@ void EnemyManager::addEnemy(std::shared_ptr<Entity> enemy)
     vectorOfEnemies.push_back(enemy);
 }
 
-void EnemyManager::drawEnemies(sf::RenderWindow& window)
+void EnemyManager::drawEnemies(sf::RenderTarget& target)
 {
     for (const auto& enemy : vectorOfEnemies)
     {
-        enemy->draw(window, sf::RenderStates::Default);
+        enemy->draw(target, sf::RenderStates::Default);
     }
 }
 
