@@ -34,6 +34,7 @@ private:
     std::shared_ptr<EnemyManager> enemyManager;
     ProjectileManager projectileManager;
     CollisionManager collisionManager;
+    std::vector<sf::RectangleShape> barriers;
 public:
     GameManager();
     ~GameManager(){};
@@ -44,6 +45,7 @@ public:
     PlayerManager& getPlayerManager();
     ProjectileManager& getProjectileManager();
     std::shared_ptr<EnemyManager> getEnemyManager();
+    std::vector<sf::RectangleShape>& getBarriers();
     void changeGameplayViewBasedOnPlayer();
     void update(float deltaTime);
     void draw();
