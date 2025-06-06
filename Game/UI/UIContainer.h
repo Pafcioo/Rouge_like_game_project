@@ -25,7 +25,7 @@ public:
     void activateFocused();
 
     void subscribeToEvents();
-    void unsubscribeFromEvents(); // New method
+    void unsubscribeFromEvents();
 
     int getFocusedIndex() const;
     int getButtonCount() const;
@@ -47,16 +47,9 @@ public:
     void update(float deltaTime);
 
 private:
-    // Vector that stores pointers for UIElements
     std::vector<std::shared_ptr<UIElement>> uiElements_;
-
-    // Reference to eventBus to control hover effect
     std::shared_ptr<EventBus> eventBus_;
-
-    // Store callback IDs for unsubscribing
-    std::vector<std::size_t> subscriptionHandles_; // New member
-
-    // Index of currently focused element
+    std::vector<SubscriptionHandle> subscriptionHandles_;
     int focusedIndex_ = -1;
-    bool isUIActive_ = true; // Flag to check if UI is active
+    bool isUIActive_ = true;
 };

@@ -24,7 +24,7 @@ std::vector<std::pair<UILayer, std::shared_ptr<UIContainer>>> GameState::getStat
 std::shared_ptr<UIContainer> GameState::getStateContainer() const {
     auto stateContainerIt = std::find_if(uiContainers.begin(), uiContainers.end(),
         [](const auto& pair) { return pair.first == UILayer::State; });
-        
+
     return (stateContainerIt != uiContainers.end()) ? stateContainerIt->second : nullptr;
 }
 
@@ -42,7 +42,7 @@ void GameState::update(float deltaTime) const
 void GameState::draw(sf::RenderTarget& target) const
 {
     for (const auto& [layer, container] : uiContainers) {
-    if (container) {
+        if (container) {
             container->draw(target, sf::RenderStates::Default);
         }
     }
@@ -53,11 +53,15 @@ void InMenu::onEnter()
 {
     auto uiFactory = std::make_unique<MainMenuUI>();
     uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
+    
 }
 
 void InMenu::onExit() 
 {
     GameState::onExit();
+    for (auto& handle : subscriptions_)
+        eventBus->unsubscribe(handle);
+    subscriptions_.clear();
 }
 
 void InMenu::onPause() 
@@ -101,6 +105,9 @@ void MapChoosing::onEnter()
 void MapChoosing::onExit() 
 {
     GameState::onExit();
+    for (auto& handle : subscriptions_)
+        eventBus->unsubscribe(handle);
+    subscriptions_.clear();
 }
 
 void MapChoosing::update(float deltaTime) const
@@ -134,19 +141,20 @@ bool MapChoosing::isTransparent() const
 }
 
 // InGame state set up
-
 void InGame::onEnter() 
 {
     auto uiFactory = std::make_unique<InGameUI>();
     uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
     gameManager->getEntityManager().subscribeToEvents(eventBus);
-    std::cout<<"on enter";
     gameManager->getEntityManager().setActivity(true);
 }
 
 void InGame::onExit() 
 {
     GameState::onExit();
+    for (auto& handle : subscriptions_)
+        eventBus->unsubscribe(handle);
+    subscriptions_.clear();
 }
 
 void InGame::onPause()
@@ -186,27 +194,24 @@ bool InGame::isTransparent() const
 }
 
 // Paused state set up
-
 void Paused::onEnter() 
 {
     auto uiFactory = std::make_unique<PauseUI>();
-    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
+    auto container = uiFactory->createUI(eventBus, gameManager->getFont());
+    container->subscribeToEvents(); // Let it manage itself
+    uiContainers.push_back({UILayer::State, container});
 }
 
 void Paused::onExit() 
 {
     GameState::onExit();
+    for (auto& handle : subscriptions_)
+        eventBus->unsubscribe(handle);
+    subscriptions_.clear();
 }
 
-void Paused::onPause()
-{
-
-}
-
-void Paused::onResume()
-{
-
-}
+void Paused::onPause() {}
+void Paused::onResume() {}
 
 void Paused::update(float deltaTime) const
 {
@@ -229,7 +234,6 @@ bool Paused::isTransparent() const
 }
 
 // GameOver state set up
-
 void GameOver::onEnter() 
 {
     auto uiFactory = std::make_unique<GameOverUI>();
@@ -239,17 +243,13 @@ void GameOver::onEnter()
 void GameOver::onExit() 
 {
     GameState::onExit();
+    for (auto& handle : subscriptions_)
+        eventBus->unsubscribe(handle);
+    subscriptions_.clear();
 }
 
-void GameOver::onPause()
-{
-
-}
-
-void GameOver::onResume()
-{
-
-}
+void GameOver::onPause() {}
+void GameOver::onResume() {}
 
 void GameOver::update(float deltaTime) const
 {

@@ -5,6 +5,7 @@
 #include <vector>
 #include <typeindex>
 #include <memory>
+#include <algorithm>
 
 class GameState;
 
@@ -57,6 +58,15 @@ public:
     explicit Event(const T& data) : data(data) {}
 };
 
+class SubscriptionHandle {
+public:
+    std::type_index type;
+    size_t id;
+
+    SubscriptionHandle(std::type_index type, size_t id) : type(type), id(id) {}
+};
+
+
 // Generic system for events
 class EventBus {
 public:
@@ -64,11 +74,25 @@ public:
     using Handler = std::function<void(const EventType&)>;
 
     template<typename EventType>
-    void subscribe(Handler<EventType> handler) {
-        auto& handlers = handlers_[std::type_index(typeid(EventType))];
-        handlers.push_back([handler](const EventBase& e) {
+    SubscriptionHandle subscribe(Handler<EventType> handler) {
+        auto type = std::type_index(typeid(EventType));
+        size_t id = nextId_++;
+
+        handlers_[type].emplace_back(id, [handler](const EventBase& e) {
             handler(static_cast<const Event<EventType>&>(e).data);
         });
+
+        return SubscriptionHandle(type, id);
+    }
+
+    void unsubscribe(const SubscriptionHandle& handle) {
+        auto it = handlers_.find(handle.type);
+        if (it != handlers_.end()) {
+            auto& vec = it->second;
+            vec.erase(std::remove_if(vec.begin(), vec.end(), [&](const auto& pair) {
+                return pair.first == handle.id;
+            }), vec.end());
+        }
     }
 
     template<typename EventType>
@@ -81,12 +105,14 @@ public:
         auto it = handlers_.find(std::type_index(typeid(EventType)));
         if (it != handlers_.end()) {
             Event<EventType> e(event);
-            for (auto& handler : it->second) {
+            for (auto& [id, handler] : it->second) {
                 handler(e);
             }
         }
     }
 
 private:
-    std::unordered_map<std::type_index, std::vector<std::function<void(const EventBase&)>>> handlers_;
+    size_t nextId_ = 0;
+    std::unordered_map<std::type_index, std::vector<std::pair<size_t, std::function<void(const EventBase&)>>>> handlers_;
 };
+

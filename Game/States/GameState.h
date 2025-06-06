@@ -12,6 +12,7 @@ protected:
     std::shared_ptr<UIManager> uiManager;
     std::shared_ptr<GameManager> gameManager;  // Change to shared_ptr
     std::vector<std::pair<UILayer, std::shared_ptr<UIContainer>>> uiContainers;
+    std::vector<SubscriptionHandle> subscriptions_;
     GameState() = default;
 public:
     virtual ~GameState() = default;
