@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Game/EntityManager.h"
 #include "Game/InputManager.h"
 #include "Game/UI/UIManager.h"
 #include "Game/Player.h"
@@ -13,6 +12,9 @@ class SpawnManager;
 class GameplayInfoSourceManager;
 class EnemyManager;
 class ViewManager;
+class PlayerManager;
+class ProjectileManager;
+class CollisionManager;
 
 // Central game coordinator - manages all subsystems and their interactions
 class GameManager : public std::enable_shared_from_this<GameManager>
@@ -21,7 +23,6 @@ private:
     // Core systems
     sf::RenderWindow gameWindow;
     sf::Clock gameClock;
-    EntityManager entityManager;
     InputManager inputManager;
     MapManager mapManager;
     
@@ -36,7 +37,9 @@ private:
     std::shared_ptr<SpawnManager> spawnManager;
     std::shared_ptr<GameplayInfoSource> gameplayInfoSource;
     std::shared_ptr<EnemyManager> enemyManager;
-
+    std::shared_ptr<PlayerManager> playerManager;
+    std::shared_ptr<ProjectileManager> projectileManager;
+    std::shared_ptr<CollisionManager> collisionManager;
 public:
     GameManager();
     ~GameManager() = default;
@@ -49,13 +52,15 @@ public:
     // System getters
     std::shared_ptr<UIManager> getUIManager();
     MapManager& getMapManager();
-    EntityManager& getEntityManager();
     InputManager& getInputManager();
     std::shared_ptr<StateManager> getStateManager();
     std::shared_ptr<SpawnManager> getSpawnManager();
     std::shared_ptr<GameplayInfoSource> getGameplayInfoSource();
     std::shared_ptr<EnemyManager> getEnemyManager();
     std::shared_ptr<ViewManager> getViewManager();
+    std::shared_ptr<PlayerManager> getPlayerManager();
+    std::shared_ptr<ProjectileManager> getProjectileManager();
+    std::shared_ptr<CollisionManager> getCollisionManager();
     
     // Game lifecycle
     void initStateManager();

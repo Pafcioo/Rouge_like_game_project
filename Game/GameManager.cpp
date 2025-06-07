@@ -8,6 +8,9 @@
 #include "Game/States/StateManager.h"
 #include "Game/Spawner/SpawnManager.h"
 #include "Game/UI/ViewManager.h"
+#include "Game/PlayerManager.h"
+#include "Game/ProjectileManager.h"
+#include "Game/CollisionManager.h"
 
 // Constructor initializes all core game systems and managers
 GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
@@ -19,8 +22,11 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     // Source for all game info like level, hp, position of player...
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
     // Managers for entities like player and enemy
-    entityManager.setGameplayInfo(gameplayInfoSource);
+    playerManager = std::make_shared<PlayerManager>();
+    playerManager->setGameplayInfo(gameplayInfoSource);
     enemyManager = std::make_shared<EnemyManager>();
+    projectileManager = std::make_shared<ProjectileManager>();
+    collisionManager = std::make_shared<CollisionManager>();
     // Spawner set up
     spawnManager = std::make_shared<SpawnManager>();
     spawnManager->setUpStrategies(gameplayInfoSource,enemyManager);
@@ -57,10 +63,6 @@ MapManager& GameManager::getMapManager() {
     return mapManager;
 }
 
-EntityManager& GameManager::getEntityManager() {
-    return entityManager;
-}
-
 InputManager& GameManager::getInputManager() {
     return inputManager;
 }
@@ -91,6 +93,18 @@ std::shared_ptr<EnemyManager> GameManager::getEnemyManager() {
 
 std::shared_ptr<ViewManager> GameManager::getViewManager() {
     return viewManager;
+}
+
+std::shared_ptr<PlayerManager> GameManager::getPlayerManager() {
+    return playerManager;
+}
+
+std::shared_ptr<ProjectileManager> GameManager::getProjectileManager() {
+    return projectileManager;
+}
+
+std::shared_ptr<CollisionManager> GameManager::getCollisionManager() {
+    return collisionManager;
 }
 
 // Main game loop - handles window creation, timing, and rendering

@@ -1,6 +1,9 @@
 #include "Game/States/GameState.h"
 #include "Game/Spawner/SpawnManager.h"
 #include "Game/UI/ViewManager.h"
+#include "Game/PlayerManager.h"
+#include "Game/CollisionManager.h"
+#include "Game/ProjectileManager.h"
 
 // Base GameState implementation
 
@@ -162,26 +165,25 @@ void InGame::onEnter()
     // Setup game UI and activate entity systems
     auto uiFactory = std::make_unique<InGameUI>();
     uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
-    gameManager->getEntityManager().subscribeToEvents(eventBus);
-    gameManager->getEntityManager().setActivity(true);
+    gameManager->getPlayerManager()->subscribeToEvents(eventBus);
 }
 
 void InGame::onExit() 
 {
     GameState::onExit();
-    gameManager->getEntityManager().unsubscribeToEvents(eventBus);
+    gameManager->getPlayerManager()->unsubscribeToEvents(eventBus);
 }
 
 void InGame::onPause()
 {
     GameState::onPause();
-    gameManager->getEntityManager().unsubscribeToEvents(eventBus);
+    gameManager->getPlayerManager()->unsubscribeToEvents(eventBus);
 }
 
 void InGame::onResume()
 {
     GameState::onResume();
-    gameManager->getEntityManager().subscribeToEvents(eventBus);
+    gameManager->getPlayerManager()->subscribeToEvents(eventBus);
 }
 
 // Update all game systems
@@ -189,8 +191,10 @@ void InGame::update(float deltaTime) const
 {
     GameState::update(deltaTime);
     gameManager->getSpawnManager()->update(deltaTime);
-    gameManager->getEntityManager().updateEntities(deltaTime);
+    gameManager->getPlayerManager()->update(deltaTime);
     gameManager->getEnemyManager()->update(deltaTime);
+    gameManager->getCollisionManager()->manageCollisions(gameManager, deltaTime);
+    gameManager->getProjectileManager()->updateProjectiles(deltaTime);
 }
 
 void InGame::draw(sf::RenderTarget& target) const
@@ -198,8 +202,9 @@ void InGame::draw(sf::RenderTarget& target) const
     // Draw world elements with gameplay view (follows player)
     gameManager->getViewManager()->setGameplayView(gameManager);
     gameManager->getMapManager().drawMap(target);
-    gameManager->getEntityManager().drawEntities(target);
-    gameManager->getEnemyManager()->drawEnemies(target);
+    gameManager->getProjectileManager()->drawProjectiles(target);
+    gameManager->getPlayerManager()->draw(target);
+    gameManager->getEnemyManager()->draw(target);
     
     // Draw UI elements with default view (fixed position)
     gameManager->getViewManager()->setDefaultView(gameManager);

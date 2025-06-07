@@ -10,6 +10,7 @@ class EnemyManager
         EnemyManager() = default;
         ~EnemyManager() = default;
         void addEnemy(std::shared_ptr<Entity> enemy);
-        void drawEnemies(sf::RenderTarget& target);
+        void draw(sf::RenderTarget& target);
         void update(float deltaTime);
+        std::vector<std::shared_ptr<Entity>> getEnemies();
 };

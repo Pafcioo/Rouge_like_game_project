@@ -19,7 +19,7 @@ void Enemy::attack(sf::Vector2f direction)
     if (magnitude != 0.f) {
         direction /= magnitude; // Normalize the vector
     }
-    entityWeapon->shoot(entityPosition, direction, 500);
+    entityWeapon->shoot(entityPosition, direction);
 }
 
 void Enemy::setDifficulty(std::shared_ptr<AIControllerDifficulty> difficulty)

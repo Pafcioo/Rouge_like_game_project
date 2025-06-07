@@ -1,5 +1,6 @@
 #include "Game/UI/ViewManager.h"
 #include "Game/GameManager.h"
+#include "Game/PlayerManager.h"
 
 // Initialize both views with standard 1280x720 resolution
 ViewManager::ViewManager() {
@@ -23,7 +24,7 @@ void ViewManager::setDefaultView(std::shared_ptr<GameManager> gameManager)
 
 // Set gameplay view that follows player with map boundary clamping
 void ViewManager::setGameplayView(std::shared_ptr<GameManager> gameManager) {
-    Entity* player = gameManager->getEntityManager().getPlayer();
+    Entity* player = gameManager->getPlayerManager()->getPlayer();
     if (!player) return;
 
     sf::Vector2f playerPosition = player->getPosition();

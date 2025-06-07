@@ -1,12 +1,14 @@
 #include <iostream>
 #include "Game/Spawner/EnemyManager.h"
 
+#include <algorithm>
+
 void EnemyManager::addEnemy(std::shared_ptr<Entity> enemy)
 {
     vectorOfEnemies.push_back(enemy);
 }
 
-void EnemyManager::drawEnemies(sf::RenderTarget& target)
+void EnemyManager::draw(sf::RenderTarget& target)
 {
     for (const auto& enemy : vectorOfEnemies)
     {
@@ -22,5 +24,12 @@ void EnemyManager::update(float deltaTime)
         {
             enemy->update(deltaTime);
         }
+        vectorOfEnemies.erase(std::remove_if(vectorOfEnemies.begin(), vectorOfEnemies.end(), [](std::shared_ptr<Entity> entity) {
+            return entity->getHealth() <= 0;
+        }), vectorOfEnemies.end());
     }
+}
+
+std::vector<std::shared_ptr<Entity> > EnemyManager::getEnemies() {
+    return vectorOfEnemies;
 }
