@@ -61,7 +61,7 @@ public:
     void setWeapon(std::shared_ptr<Weapon> weapon);
     virtual void setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
 
-    // Abstract methods
+    // Actions
     virtual void move(sf::Vector2f direction);
     virtual void attack(sf::Vector2f direction);
     virtual void useItem(std::shared_ptr<Item> item);
