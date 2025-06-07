@@ -7,19 +7,19 @@
 #include "Game/GameplayInfoSource.h"
 #include "Game/States/StateManager.h"
 #include "Game/Spawner/SpawnManager.h"
+#include "Game/UI/ViewManager.h"
 
+// Constructor initializes all core game systems and managers
 GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
 {
     // Bus for events in game
     eventBus = std::make_shared<EventBus>();
     // View set up
-    defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
-    gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    viewManager = std::make_shared<ViewManager>();
     // Source for all game info like level, hp, position of player...
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
     // Managers for entities like player and enemy
     entityManager.setGameplayInfo(gameplayInfoSource);
-    entityManager.subscribeToEvents(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
     // Spawner set up
     spawnManager = std::make_shared<SpawnManager>();
@@ -28,10 +28,14 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     uiManager = std::make_shared<UIManager>();
 }
 
-void GameManager::setStateManager()
+// Initialize state manager after construction (requires shared_from_this)
+void GameManager::initStateManager()
 {
+    // Create state manager with dependencies
     stateManager = std::make_shared<StateManager>(uiManager, shared_from_this(), eventBus);
     stateManager->subscribeToEvents();
+    
+    // Set up initial menu state
     auto newState = std::make_shared<InMenu>();
     newState->setEventBus(eventBus);
     newState->setUIManager(uiManager);
@@ -39,37 +43,7 @@ void GameManager::setStateManager()
     stateManager->pushState(newState);
 }
 
-void GameManager::changeGameplayViewBasedOnPlayer() {
-    Entity* player = entityManager.getPlayer();
-    if (!player) return;
-
-    sf::Vector2f playerPosition = player->getPosition();
-
-    if (!mapManager.getCurrentMapLabel().empty()) {
-        sf::Vector2f halfMapSize = mapManager.getCurrentMap().getSize() / 2.f;
-        sf::Vector2f viewSize = gameplayView.getSize();
-        sf::Vector2f halfViewSize = viewSize / 2.f;
-
-        float clampedX = playerPosition.x;
-        float clampedY = playerPosition.y;
-
-        // Lewa do prawa: od -halfMapSize.x + halfViewSize.x do +halfMapSize.x - halfViewSize.x
-        clampedX = std::max(-halfMapSize.x + halfViewSize.x,
-                            std::min(clampedX, halfMapSize.x - halfViewSize.x));
-
-        // Góra do dołu: od -halfMapSize.y + halfViewSize.y do +halfMapSize.y - halfViewSize.y
-        clampedY = std::max(-halfMapSize.y + halfViewSize.y,
-                            std::min(clampedY, halfMapSize.y - halfViewSize.y));
-
-        gameplayView.setCenter({clampedX, clampedY});
-
-
-        gameplayView.setCenter({clampedX, clampedY});
-    } else {
-        gameplayView.setCenter(playerPosition);
-    }
-}
-
+// Getter methods for accessing game resources and managers
 sf::Font& GameManager::getFont()
 {
     return font;
@@ -99,14 +73,6 @@ sf::RenderWindow& GameManager::getGameWindow() {
     return gameWindow;
 }
 
-sf::View& GameManager::getDefaultView() {
-    return defaultView;
-}
-
-sf::View& GameManager::getGameplayView() {
-    return gameplayView;
-}
-
 std::shared_ptr<StateManager> GameManager::getStateManager() {
     return stateManager;
 }
@@ -123,19 +89,28 @@ std::shared_ptr<EnemyManager> GameManager::getEnemyManager() {
     return enemyManager;
 }
 
+std::shared_ptr<ViewManager> GameManager::getViewManager() {
+    return viewManager;
+}
+
+// Main game loop - handles window creation, timing, and rendering
 void GameManager::Play()
 {
-    // Create a window
+    // Create SFML window with 720p resolution and 60fps limit
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
-    setStateManager();
+    initStateManager();
     
-    // Main loop
+    // Main game loop
     while (gameWindow.isOpen())
     {
+        // Calculate delta time for frame-independent movement
         sf::Time elapsed = gameClock.restart();
         float deltaTime = elapsed.asSeconds();
+        // Cap delta time to prevent large jumps (e.g., during debugging pauses)
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
+        
+        // Clear, update, draw, and display frame
         gameWindow.clear();
         stateManager->update(deltaTime);
         stateManager->draw(gameWindow);

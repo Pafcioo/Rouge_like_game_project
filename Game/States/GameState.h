@@ -5,32 +5,43 @@
 #include "Game/UI/UIContainer.h"
 #include "Game/GameManager.h"
 
+// Base class for all game states with UI management and event handling
 class GameState
 {
 protected:
     std::shared_ptr<EventBus> eventBus;
     std::shared_ptr<UIManager> uiManager;
-    std::shared_ptr<GameManager> gameManager;  // Change to shared_ptr
+    std::shared_ptr<GameManager> gameManager;
     std::vector<std::pair<UILayer, std::shared_ptr<UIContainer>>> uiContainers;
     std::vector<SubscriptionHandle> subscriptions_;
     GameState() = default;
+
 public:
     virtual ~GameState() = default;
-    virtual bool isTransparent() const = 0;
-    virtual bool isTranscendent() const = 0;
+    
+    // State behavior properties
+    virtual bool isTransparent() const = 0;  // Can see through to underlying states
+    virtual bool isTranscendent() const = 0; // Other states can be updated
+    
+    // State lifecycle methods
     virtual void onEnter() = 0;
     virtual void onExit();
-    virtual void onPause() = 0;
-    virtual void onResume() = 0;
+    virtual void onPause();
+    virtual void onResume();
     virtual void update(float deltaTime) const;
     virtual void draw(sf::RenderTarget& target) const;
+    
+    // Dependency injection
     virtual void setEventBus(std::shared_ptr<EventBus> newEventBus);
     virtual void setUIManager(std::shared_ptr<UIManager> newUIManager);
     virtual void setGameManager(std::shared_ptr<GameManager> newGameManager);
+    
+    // UI container access
     virtual std::vector<std::pair<UILayer, std::shared_ptr<UIContainer>>> getStateUIContainers() const;
     std::shared_ptr<UIContainer> getStateContainer() const;
 };
 
+// Main menu state - Entry point of the game
 class InMenu : public GameState
 {
 public:
@@ -46,6 +57,7 @@ public:
     void draw(sf::RenderTarget& target) const override;
 };
 
+// Map selection state - Choose game level
 class MapChoosing : public GameState
 {
 public:
@@ -61,6 +73,7 @@ public:
     void draw(sf::RenderTarget& target) const override;
 };
 
+// Active gameplay state - Main game loop
 class InGame : public GameState
 {
 public:
@@ -76,6 +89,7 @@ public:
     void draw(sf::RenderTarget& target) const override;
 };
 
+// Pause overlay state - Game suspension with resume options
 class Paused : public GameState
 {
 public:
@@ -91,6 +105,7 @@ public:
     void draw(sf::RenderTarget& target) const override;
 };
 
+// Game over state - End game results and options
 class GameOver: public GameState
 {
 public:

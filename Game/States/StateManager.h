@@ -8,6 +8,7 @@ class GameManager;
 class UIManager;
 class EventBus;
 
+// Manages a stack of game states with deferred state changes for thread safety
 class StateManager {
 private:
     std::vector<std::shared_ptr<GameState>> stateStack;
@@ -15,7 +16,7 @@ private:
     std::shared_ptr<GameManager> gameManager;
     std::shared_ptr<EventBus> eventBus;
 
-    // Deferred state changes
+    // Deferred state changes to avoid modifying stack during iteration
     bool shouldPop = false;
     std::shared_ptr<GameState> stateToPush = nullptr;
 

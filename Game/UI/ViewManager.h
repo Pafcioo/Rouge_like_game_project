@@ -1,14 +1,23 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+class GameManager;
+
+// Manages different camera views for UI and gameplay rendering
 class ViewManager {
 private:
-    sf::View defaultView;
-    sf::View gameplayView;
+    sf::View defaultView;   // Fixed view for UI elements
+    sf::View gameplayView;  // Dynamic view that follows player
+
 public:
     ViewManager();
     ~ViewManager() = default;
+    
+    // View accessors
     const sf::View& getDefaultView() const;
     const sf::View& getGameplayView() const;
-    void setGameplayView(const sf::Vector2f& center, const sf::Vector2f& size);
+    
+    // Apply views to the game window
+    void setDefaultView(std::shared_ptr<GameManager> gameManager);     // For UI rendering
+    void setGameplayView(std::shared_ptr<GameManager> gameManager);    // For world rendering with camera following
 };
