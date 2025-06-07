@@ -5,6 +5,13 @@
 #include "Game/PlayerManager.h"
 #include "Game/Spawner/EnemyManager.h"
 
+CollisionManager::CollisionManager() {
+    for (int i = 0; i < 4; i++) {
+        barriers.emplace_back();
+        barriers[i].setPosition(sf::Vector2f(5000, 5000));
+    }
+}
+
 void CollisionManager::manageCollision(Entity* entity, Projectile* proj) {
     auto intersection = entity->getEntityGlobalBounds().findIntersection(proj->getShape().getGlobalBounds());
     if (intersection.has_value()) {
@@ -14,23 +21,28 @@ void CollisionManager::manageCollision(Entity* entity, Projectile* proj) {
 }
 
 void CollisionManager::manageCollision(Entity* entity, sf::RectangleShape& wall, float deltaTime) {
-    if (wall.getGlobalBounds().findIntersection(entity->getEntityGlobalBounds())) {
-        float dx = abs(wall.getPosition().x - entity->getPosition().x);
-        float dy = abs(wall.getPosition().y - entity->getPosition().y);
-        if (dx > dy) {
-            if (entity->getPosition().x > wall.getPosition().x) {
-                entity->move(sf::Vector2f(1, 0)*deltaTime*entity->getEntitySpeed());
-            } else {
-                entity->move(sf::Vector2f(-1, 0)*deltaTime*entity->getEntitySpeed());
-            }
+    auto intersection = entity->getEntityGlobalBounds().findIntersection(wall.getGlobalBounds());
+    if (intersection.has_value()) {
+        // Intersection area
+        sf::FloatRect overlap = intersection.value();
+
+        // Depth of intersection in both axes
+        float overlapX = overlap.size.x;
+        float overlapY = overlap.size.y;
+
+        float pushX = 0.0f;
+        float pushY = 0.0f;
+
+        //Choose axis with smaller intersection
+        if (overlapX < overlapY) {
+            pushX = (entity->getPosition().x < wall.getPosition().x) ? -1 : 1;
         } else {
-            if (entity->getPosition().y > wall.getPosition().y) {
-                entity->move(sf::Vector2f(0, 1)*deltaTime*entity->getEntitySpeed());
-            }
-            else {
-                entity->move(sf::Vector2f(0, -1)*deltaTime*entity->getEntitySpeed());
-            }
+            pushY = (entity->getPosition().y < wall.getPosition().y) ? -1 : 1;
         }
+
+        entity->move(sf::Vector2f(pushX, pushY) * deltaTime);
+
+        std::cout << "Collision detected" << std::endl;
     }
 }
 
@@ -61,6 +73,20 @@ void CollisionManager::manageCollisions(std::shared_ptr<GameManager> gameManager
     }
     for (auto& enemy: gameManager->getEnemyManager()->getEnemies()) {
         manageCollision(gameManager->getPlayerManager()->getPlayer(), enemy);
+    }
+    if (!gameManager->getMapManager().getCurrentMapLabel().empty()) {
+        sf::Vector2f size = gameManager->getMapManager().getCurrentMap().getSize();
+        for (auto& barrier : barriers) {
+            barrier.setSize(size);
+            barrier.setOrigin(size / 2.f);
+        }
+        barriers[0].setPosition(sf::Vector2f(size.x, 0));
+        barriers[1].setPosition(sf::Vector2f(-size.x, 0));
+        barriers[2].setPosition(sf::Vector2f(0, size.y));
+        barriers[3].setPosition(sf::Vector2f(0, -size.y));
+    }
+    for (auto& barrier : barriers) {
+        manageCollision(gameManager->getPlayerManager()->getPlayer(), barrier, deltaTime);
     }
 }
 
