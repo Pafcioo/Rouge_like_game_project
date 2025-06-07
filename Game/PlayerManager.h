@@ -14,13 +14,15 @@ class PlayerManager
     private:
         Entity* player;
         std::shared_ptr<GameplayInfoSource> gameplayInfo;
+        std::shared_ptr<EventBus> eventBus;
     public:
         PlayerManager();
         ~PlayerManager() = default;
         void draw(sf::RenderTarget& target);
         void update(float deltaTime);
-        void subscribeToEvents(std::shared_ptr<EventBus> eventBus);
-        void unsubscribeToEvents(std::shared_ptr<EventBus> eventBus);
+        void subscribeToEvents();
+        void unsubscribeToEvents();
         void setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
+        void setEventBus(std::shared_ptr<EventBus> eventBus);
         Entity* getPlayer();
 };

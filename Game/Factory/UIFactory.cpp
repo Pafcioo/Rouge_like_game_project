@@ -235,7 +235,7 @@ std::shared_ptr<UIContainer> GameOverUI::createUI(std::shared_ptr<EventBus> even
 
     container->createUIElement<GameElement>("GameOverBackground", sf::Vector2f(800, 600), sf::Vector2f(640, 360), sf::Color(0, 0, 0, 128), ShapeType::Rectangle, true);
 
-    container->createUIElement<Text>(sf::Vector2f(640.f, 200.f), font, "GAME OVER", 64, sf::Color::Red, "GameOverTitle");
+    container->createUIElement<Text>(sf::Vector2f(640.f, 200.f), font, "GAME OVER", 64, sf::Color::Red, "GameOverTitle", true);
 
     container->createUIElement<Button>(
         eventBus,
@@ -272,7 +272,7 @@ std::shared_ptr<UIContainer> GameOverUI::createUI(std::shared_ptr<EventBus> even
         "Quit Game",
         font,
         24,
-        [weakBus](){ if (auto bus = weakBus.lock()) {/* bus->publish(QuitGameEvent{}); */} },
+        [weakBus](){ if (auto bus = weakBus.lock()) {bus->publish(QuitGameEvent{}); } },
         true
     );
 

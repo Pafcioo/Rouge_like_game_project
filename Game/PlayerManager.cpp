@@ -2,6 +2,7 @@
 #include "Game/PlayerManager.h"
 #include "Game/Event.h"
 #include "Game/GameManager.h"
+#include "Game/States/GameState.h"
 #include <algorithm>
 #include <cmath>
 
@@ -21,8 +22,13 @@ void PlayerManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplay
     player->setGameplayInfo(gameplayInfo);
 }
 
+void PlayerManager::setEventBus(std::shared_ptr<EventBus> eventBus)
+{
+    this->eventBus = eventBus;
+}
+
 // Method for subscribing events where player subscribe to events like movement and attack
-void PlayerManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
+void PlayerManager::subscribeToEvents()
 {
     eventBus->subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
         if (player) {
@@ -45,7 +51,7 @@ void PlayerManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
     });
 }
 
-void PlayerManager::unsubscribeToEvents(std::shared_ptr<EventBus> eventBus)
+void PlayerManager::unsubscribeToEvents()
 {
     eventBus->unsubscribeAll<MoveEvent>();
     eventBus->unsubscribeAll<AttackEvent>();
@@ -60,6 +66,10 @@ void PlayerManager::draw(sf::RenderTarget& target)
 void PlayerManager::update(float deltaTime) 
 {
     player->update(deltaTime);
+    if(player->getHealth() <= 0)
+    {
+        eventBus->publish(ChangeStateEvent{std::make_shared<GameOver>()});
+    }
 }
 
 Entity* PlayerManager::getPlayer() {return player;}

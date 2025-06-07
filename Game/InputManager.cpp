@@ -1,10 +1,20 @@
 #include <iostream>
 #include "InputManager.h"
 #include "Event.h"
+#include "Game/States/GameState.h"
 #include <vector>
 
+InputManager::InputManager(std::shared_ptr<EventBus> eventBus, sf::RenderWindow& gameWindow)
+    : eventBus(eventBus), window(gameWindow)  // Inicjalizacja przez listę inicjalizacyjną
+{
+    // Poprawka w subscribe - prawdopodobnie chciałeś QuitGameEvent zamiast MoveEvent
+    eventBus->subscribe<QuitGameEvent>([this](const QuitGameEvent& quitEvent) {
+        window.close();  // Teraz możesz używać referencji do okna
+    });
+}
+
 // Handle input method for publishing events to event bus
-void InputManager::handleInput(float deltaTime, std::shared_ptr<EventBus> eventBus, sf::RenderWindow& window)
+void InputManager::handleInput(float deltaTime)
 {   
     // Section responsible for movement
     sf::Vector2f inputDirection(0,0);
@@ -42,9 +52,6 @@ void InputManager::handleInput(float deltaTime, std::shared_ptr<EventBus> eventB
             if (keyPressed->scancode == sf::Keyboard::Scancode::Up || keyPressed->scancode == sf::Keyboard::Scancode::Down || keyPressed->scancode == sf::Keyboard::Scancode::Enter) {
                 eventBus->publish<sf::Event::KeyPressed>(*keyPressed); // Navigating UI with arrows
             }
-            // Publishing events other tat KeyPressed
-            /*if(keyPressed->scancode == sf::Keyboard::Scancode::Q)
-                eventBus->publish<AttackEvent>({inputDirection}); // Attacking*/
             if(keyPressed->scancode == sf::Keyboard::Scancode::Space)
                 eventBus->publish<DashEvent>({inputDirection}); // Dashing
             if (keyPressed->scancode == sf::Keyboard::Scan::LShift) {

@@ -42,6 +42,8 @@ struct MapChoiceEvent {
     std::string mapLabel;
 };
 
+struct QuitGameEvent {};
+
 struct useAbilityEvent {};
 
 // Base class for events, needed for storing pointers to this base class

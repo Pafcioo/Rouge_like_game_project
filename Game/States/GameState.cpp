@@ -57,7 +57,7 @@ void GameState::onResume()
 // Base update logic - handle input and UI
 void GameState::update(float deltaTime) const
 {
-    gameManager->getInputManager().handleInput(deltaTime, eventBus, gameManager->getGameWindow());
+    gameManager->getInputManager()->handleInput(deltaTime);
     gameManager->getUIManager()->updateAll(deltaTime);    
 }
 
@@ -165,25 +165,25 @@ void InGame::onEnter()
     // Setup game UI and activate entity systems
     auto uiFactory = std::make_unique<InGameUI>();
     uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
-    gameManager->getPlayerManager()->subscribeToEvents(eventBus);
+    gameManager->getPlayerManager()->subscribeToEvents();
 }
 
 void InGame::onExit() 
 {
     GameState::onExit();
-    gameManager->getPlayerManager()->unsubscribeToEvents(eventBus);
+    gameManager->getPlayerManager()->unsubscribeToEvents();
 }
 
 void InGame::onPause()
 {
     GameState::onPause();
-    gameManager->getPlayerManager()->unsubscribeToEvents(eventBus);
+    gameManager->getPlayerManager()->unsubscribeToEvents();
 }
 
 void InGame::onResume()
 {
     GameState::onResume();
-    gameManager->getPlayerManager()->subscribeToEvents(eventBus);
+    gameManager->getPlayerManager()->subscribeToEvents();
 }
 
 // Update all game systems
@@ -303,7 +303,7 @@ void GameOver::draw(sf::RenderTarget& target) const
 // Transcendent - can be drawn over other states
 bool GameOver::isTranscendent() const 
 {
-    return true;
+    return false;
 }
 
 bool GameOver::isTransparent() const 
