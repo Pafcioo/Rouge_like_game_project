@@ -18,9 +18,9 @@ BasicWeapon::BasicWeapon(): Weapon(0.25f) {
 }
 
 void BasicWeapon::shoot(sf::Vector2f position, sf::Vector2f velocity) {
-    //std::cout << timeSinceLastShot << std::endl;
+    
     if (timeSinceLastShot >= weaponFireCooldown) {
-        std::cout << "Shooting from position: " << position.x << " " << position.y << std::endl;
+        //std::cout << "Shooting from position: " << position.x << " " << position.y << std::endl;
         ProjectileManager::projectiles.emplace_back(new Projectile(position, velocity, projSpeed, projDamage));
         timeSinceLastShot = 0.f;
     }

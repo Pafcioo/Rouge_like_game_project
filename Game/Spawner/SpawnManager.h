@@ -20,6 +20,7 @@ struct EnemyParams {
     sf::Vector2f position;
     std::string texturePath;
     std::shared_ptr<AIControllerDifficulty> difficulty;
+    std::shared_ptr<Weapon> weapon;
     TimeBasedRule::TimeRule rule;
 };
 

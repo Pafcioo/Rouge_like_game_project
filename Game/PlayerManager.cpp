@@ -8,6 +8,11 @@
 PlayerManager::PlayerManager()
 {
     player = new Player(100, 250, {0, 0}, sf::Texture("Assets/player.png"));
+    ItemBuilder* builder = new HealPotionBuilder();
+    player->setItem(builder->build());
+    delete builder;
+    player->setAbility(std::make_shared<SprintAbility>());
+    player->setWeapon(std::make_shared<BasicWeapon>());
 }
 
 void PlayerManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)

@@ -1,6 +1,6 @@
 #include "Game/AIController/AIController.h"
 #include "Game/AIController/AIAttack.h"
-
+#include <iostream>
 AIAttack::AIAttack(int attack)
 {
     attackMulti = attack;
