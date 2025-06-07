@@ -13,7 +13,7 @@ enum class ShapeType {
 class GameElement : public UIElement {
 public:
     // Constructor
-    GameElement(const std::string& label = "",
+    GameElement(std::string label = "",
         const sf::Vector2f& size = {50.f, 50.f},
         const sf::Vector2f& position = {0.f, 0.f},
         sf::Color color = sf::Color::White,

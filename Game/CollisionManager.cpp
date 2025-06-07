@@ -1,7 +1,9 @@
 #include "CollisionManager.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "GameManager.h"
+#include "Game/GameManager.h"
+#include "Game/PlayerManager.h"
+#include "Game/Spawner/EnemyManager.h"
 
 void CollisionManager::manageCollision(Entity* entity, Projectile* proj) {
     auto intersection = entity->getEntityGlobalBounds().findIntersection(proj->getShape().getGlobalBounds());
@@ -50,15 +52,15 @@ void CollisionManager::manageCollision(std::shared_ptr<Entity> entity, Projectil
     }
 }
 
-void CollisionManager::manageCollisions(GameManager *gameManager, float deltaTime) {
-    for (auto& proj : gameManager->getProjectileManager().getProjectiles()) {
-        manageCollision(gameManager->getPlayerManager().getPlayer(), proj);
+void CollisionManager::manageCollisions(std::shared_ptr<GameManager> gameManager, float deltaTime) {
+    for (auto& proj : gameManager->getProjectileManager()->getProjectiles()) {
+        manageCollision(gameManager->getPlayerManager()->getPlayer(), proj);
         for (auto& enemy: gameManager->getEnemyManager()->getEnemies()) {
             manageCollision(enemy, proj);
         }
     }
     for (auto& enemy: gameManager->getEnemyManager()->getEnemies()) {
-        manageCollision(gameManager->getPlayerManager().getPlayer(), enemy);
+        manageCollision(gameManager->getPlayerManager()->getPlayer(), enemy);
     }
 }
 

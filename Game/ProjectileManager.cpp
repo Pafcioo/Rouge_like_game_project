@@ -24,8 +24,8 @@ void ProjectileManager::updateProjectiles(float deltaTime) {
     }
 }
 
-void ProjectileManager::drawProjectiles(sf::RenderWindow& window) {
+void ProjectileManager::drawProjectiles(sf::RenderTarget& target) {
     for (auto &projectile : projectiles) {
-        window.draw(*projectile);
+        target.draw(*projectile);
     }
 }

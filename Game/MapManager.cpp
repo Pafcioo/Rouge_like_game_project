@@ -5,7 +5,7 @@
 #include <string>
 #include <regex>
 #include "MapManager.h"
-#include "UIManager.h"
+#include "Game/UI/UIManager.h"
 
 MapManager::MapManager()
 {
@@ -124,8 +124,13 @@ void MapManager::setMap(const std::string& labelOfMap) {
     std::cout << "Current map set to: " << currentMapLabel << std::endl;
 }
 
-void MapManager::drawMap(sf::RenderTarget& window, GameState currentGameState) const {
-    if (currentGameState == GameState::Playing && !currentMapLabel.empty()) {
-        window.draw(getCurrentMap());
-    }
+void MapManager::subscribeToEvents(std::shared_ptr<EventBus> eventBus)
+{
+    eventBus->subscribe<MapChoiceEvent>([this](const MapChoiceEvent& mapEvent) {
+        setMap(mapEvent.mapLabel);
+    });
+}
+
+void MapManager::drawMap(sf::RenderTarget& target) const {
+    target.draw(getCurrentMap());
 }

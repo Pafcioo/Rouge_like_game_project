@@ -5,41 +5,18 @@
 #include "GameElement.h"
 
 // Constructor for UI container
-UIContainer::UIContainer(GameState overlayStateOfGame, std::shared_ptr<EventBus> eventBus, sf::Clock& globalCooldownClock)
-    : overlayStateOfGame_(overlayStateOfGame), globalCooldownClock_(globalCooldownClock) {
-        eventBus_ = eventBus;
-        canHaveBackgroundUI_ = false;
+UIContainer::UIContainer(std::shared_ptr<EventBus> eventBus) {
+    eventBus_ = eventBus;
 }
 
-// Setters and getters for background and active state
-void UIContainer::setCanHaveBackgroundUI(bool value) {
-    canHaveBackgroundUI_ = value;
+UIContainer::~UIContainer() {
+    unsubscribeFromEvents();
 }
-bool UIContainer::canHaveBackgroundUI() const {
-    return canHaveBackgroundUI_;
+
+void UIContainer::addElement(std::shared_ptr<UIElement> element) {
+    uiElements_.push_back(std::move(element));
 }
-void UIContainer::setIsUIActive(bool value) {
-    isUIActive_ = value;
-    if (!isUIActive_) {
-        // Reset focus when the UI becomes inactive
-        if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
-            if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get())) {
-                btn->setFocused(false);
-            }
-        }
-        focusedIndex_ = -1; // Reset the focused index
-    }
-}
-bool UIContainer::isUIActive() const {
-    return isUIActive_;
-}
-int UIContainer::getButtonCount() const {
-    return static_cast<int>(uiElements_.size());
-}
-int UIContainer::getFocusedIndex() const {
-    return focusedIndex_;
-}
-// Focusing methods with wrapping functionality
+
 void UIContainer::focusNext() {
     if (uiElements_.empty()) return;
     if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
@@ -54,8 +31,8 @@ void UIContainer::focusNext() {
         }
     }
     if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size() && uiElements_[focusedIndex_]) {
-    if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get()))
-        btn->setFocused(true);
+        if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get()))
+            btn->setFocused(true);
     }
 }
 
@@ -73,8 +50,8 @@ void UIContainer::focusPrevious() {
         }
     }
     if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size() && uiElements_[focusedIndex_]) {
-    if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get()))
-        btn->setFocused(true);
+        if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get()))
+            btn->setFocused(true);
     }
 }
 
@@ -82,32 +59,39 @@ void UIContainer::activateFocused() {
     if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
         if (auto* btn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get())) {
             if (btn->getClickAction()) {
-                btn->getClickAction()(); // Activate on click action of a button
+                btn->getClickAction()();
             }
         }
     }
 }
 
 void UIContainer::subscribeToEvents() {
-    // Subscribe to mouse button press events
-    eventBus_->subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& event) {
-        if (!isUIActive_) return; // Only process events if active
-        if (globalCooldownClock_.getElapsedTime() < sf::milliseconds(200)) return;
+    // Mouse Button Pressed
+    subscriptionHandles_.push_back(eventBus_->subscribe<sf::Event::MouseButtonPressed>([this](const sf::Event::MouseButtonPressed& event) {
+        if (!isUIActive_) return;
         sf::Vector2f mousePosition(static_cast<float>(event.position.x), static_cast<float>(event.position.y));
         for (int i = 0; i < (int)uiElements_.size(); ++i) {
             if (auto* btn = dynamic_cast<Button*>(uiElements_[i].get())) {
                 if (btn->getGlobalBoundsOfButton().contains(mousePosition)) {
+                    if (focusedIndex_ != i) {
+                        if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
+                            if (auto* prevBtn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get())) {
+                                prevBtn->setFocused(false);
+                            }
+                        }
+                        btn->setFocused(true);
+                        focusedIndex_ = i;
+                    }
                     activateFocused();
-                    globalCooldownClock_.restart(); // Restart the cooldown clock after processing
-                    return; // Stop processing after the first button reacts
+                    return;
                 }
             }
         }
-    });
+    }));
 
-    // Subscribe to mouse move events (hover effect)
-    eventBus_->subscribe<sf::Event::MouseMoved>([this](const sf::Event::MouseMoved& event) {
-        if (!isUIActive_) return; // Only process events if active
+    // Mouse Moved
+    subscriptionHandles_.push_back(eventBus_->subscribe<sf::Event::MouseMoved>([this](const sf::Event::MouseMoved& event) {
+        if (!isUIActive_) return;
         sf::Vector2f mousePosition(static_cast<float>(event.position.x), static_cast<float>(event.position.y));
         for (int i = 0; i < (int)uiElements_.size(); ++i) {
             if (auto* btn = dynamic_cast<Button*>(uiElements_[i].get())) {
@@ -125,19 +109,18 @@ void UIContainer::subscribeToEvents() {
                 }
             }
         }
-        // Unfocus if mouse is not over any button
         if (focusedIndex_ >= 0 && focusedIndex_ < (int)uiElements_.size()) {
+            if (!isUIActive_) return;
             if (auto* prevBtn = dynamic_cast<Button*>(uiElements_[focusedIndex_].get())) {
                 prevBtn->setFocused(false);
             }
             focusedIndex_ = -1;
         }
-    });
+    }));
 
-    // Subscribe to key press events
-    eventBus_->subscribe<sf::Event::KeyPressed>([this](const sf::Event::KeyPressed& event) {
-        if (!isUIActive_) return; // Only process events if active
-        if (globalCooldownClock_.getElapsedTime() < sf::milliseconds(200)) return;
+    // Key Pressed
+    subscriptionHandles_.push_back(eventBus_->subscribe<sf::Event::KeyPressed>([this](const sf::Event::KeyPressed& event) {
+        if (!isUIActive_) return;
         if (event.scancode == sf::Keyboard::Scancode::Up) {
             focusPrevious();
         }
@@ -146,24 +129,35 @@ void UIContainer::subscribeToEvents() {
         }
         if (event.scancode == sf::Keyboard::Scancode::Enter) {
             activateFocused();
-            globalCooldownClock_.restart(); // Restart the cooldown clock after processing
-            return; // Stop processing after the first button reacts
         }
-    });
+    }));
 }
 
-void UIContainer::addElement(std::shared_ptr<UIElement> element) {
-    if (uiElements_.empty()) {
-        if (auto* btn = dynamic_cast<Button*>(element.get())) {
-            btn->setFocused(true);
-            focusedIndex_ = 0;
-        }
+void UIContainer::unsubscribeFromEvents() {
+    for (const auto& handle : subscriptionHandles_) {
+        eventBus_->unsubscribe(handle);
     }
-    uiElements_.push_back(std::move(element));
+    subscriptionHandles_.clear();
 }
 
-void UIContainer::drawAll(sf::RenderTarget& target, sf::RenderStates states) const {
-    for (const auto& element : uiElements_) {
-        element->draw(target, states);
+int UIContainer::getFocusedIndex() const {
+    return focusedIndex_;
+}
+
+int UIContainer::getButtonCount() const {
+    return static_cast<int>(std::count_if(uiElements_.begin(), uiElements_.end(), [](const auto& el) {
+        return dynamic_cast<Button*>(el.get()) != nullptr;
+    }));
+}
+
+void UIContainer::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    for (const auto& el : uiElements_) {
+        el->draw(target, states);
+    }
+}
+
+void UIContainer::update(float deltaTime) {
+    for (auto& el : uiElements_) {
+        el->update(deltaTime);
     }
 }

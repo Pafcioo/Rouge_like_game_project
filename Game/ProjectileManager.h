@@ -7,7 +7,7 @@ public:
     ProjectileManager() = default;
     ~ProjectileManager() = default;
     void updateProjectiles(float deltaTime);
-    void drawProjectiles(sf::RenderWindow& window);
+    void drawProjectiles(sf::RenderTarget& target);
     static std::vector<Projectile*> projectiles;
     std::vector<Projectile*> getProjectiles();
 };

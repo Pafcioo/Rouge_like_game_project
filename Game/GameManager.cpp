@@ -3,148 +3,131 @@
 #include "Entity.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Game/Spawner/EnemyManager.h"
+#include "Game/GameplayInfoSource.h"
+#include "Game/States/StateManager.h"
+#include "Game/Spawner/SpawnManager.h"
+#include "Game/UI/ViewManager.h"
+#include "Game/PlayerManager.h"
+#include "Game/ProjectileManager.h"
+#include "Game/CollisionManager.h"
 
-GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Black.ttf")
+// Constructor initializes all core game systems and managers
+GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
 {
     // Bus for events in game
     eventBus = std::make_shared<EventBus>();
-    // Manager for all UIs
-    uiManager.initAllUI(eventBus, font);
-    currentGameState = GameState::MainMenu;
     // View set up
-    defaultView = sf::View(sf::FloatRect({0,0},{1280, 720}));
-    gameplayView = sf::View(sf::FloatRect({0,0},{1280, 720}));
+    viewManager = std::make_shared<ViewManager>();
     // Source for all game info like level, hp, position of player...
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
     // Managers for entities like player and enemy
-    playerManager.setGameplayInfo(gameplayInfoSource);
-    playerManager.subscribeToEvents(eventBus);
+    playerManager = std::make_shared<PlayerManager>();
+    playerManager->setGameplayInfo(gameplayInfoSource);
     enemyManager = std::make_shared<EnemyManager>();
+    projectileManager = std::make_shared<ProjectileManager>();
+    collisionManager = std::make_shared<CollisionManager>();
     // Spawner set up
-    spawnManager = std::make_unique<SpawnManager>();
+    spawnManager = std::make_shared<SpawnManager>();
     spawnManager->setUpStrategies(gameplayInfoSource,enemyManager);
+    // UIManager set up
+    uiManager = std::make_shared<UIManager>();
 }
 
-void GameManager::changeGameplayViewBasedOnPlayer() {
-    Entity* player = playerManager.getPlayer();
-    if (!player) return;
-
-    sf::Vector2f playerPosition = player->getPosition();
-
-    if (!mapManager.getCurrentMapLabel().empty()) {
-        sf::Vector2f halfMapSize = mapManager.getCurrentMap().getSize() / 2.f;
-        sf::Vector2f viewSize = gameplayView.getSize();
-        sf::Vector2f halfViewSize = viewSize / 2.f;
-
-        float clampedX = playerPosition.x;
-        float clampedY = playerPosition.y;
-
-        // Lewa do prawa: od -halfMapSize.x + halfViewSize.x do +halfMapSize.x - halfViewSize.x
-        clampedX = std::max(-halfMapSize.x + halfViewSize.x,
-                            std::min(clampedX, halfMapSize.x - halfViewSize.x));
-
-        // Góra do dołu: od -halfMapSize.y + halfViewSize.y do +halfMapSize.y - halfViewSize.y
-        clampedY = std::max(-halfMapSize.y + halfViewSize.y,
-                            std::min(clampedY, halfMapSize.y - halfViewSize.y));
-
-        gameplayView.setCenter({clampedX, clampedY});
-
-
-        gameplayView.setCenter({clampedX, clampedY});
-    } else {
-        gameplayView.setCenter(playerPosition);
-    }
-}
-
-
-void GameManager::changeGameState(GameState newState) {
-    currentGameState = newState;
-    uiManager.updateActiveUI(currentGameState);
-    playerManager.updateEntityManager(newState);
-}
-
-UIManager GameManager::getUIManager()
+// Initialize state manager after construction (requires shared_from_this)
+void GameManager::initStateManager()
 {
-    return uiManager;
+    // Create state manager with dependencies
+    stateManager = std::make_shared<StateManager>(uiManager, shared_from_this(), eventBus);
+    stateManager->subscribeToEvents();
+    
+    // Set up initial menu state
+    auto newState = std::make_shared<InMenu>();
+    newState->setEventBus(eventBus);
+    newState->setUIManager(uiManager);
+    newState->setGameManager(shared_from_this());
+    stateManager->pushState(newState);
 }
 
-GameState GameManager::getGameState() const {
-    return currentGameState; 
+// Getter methods for accessing game resources and managers
+sf::Font& GameManager::getFont()
+{
+    return font;
+}
+
+std::shared_ptr<UIManager> GameManager::getUIManager() {
+    return uiManager;
 }
 
 MapManager& GameManager::getMapManager() {
     return mapManager;
 }
 
-PlayerManager& GameManager::getPlayerManager() {
-    return playerManager;
+InputManager& GameManager::getInputManager() {
+    return inputManager;
 }
 
-ProjectileManager& GameManager::getProjectileManager() {
-    return projectileManager;
+std::shared_ptr<EventBus> GameManager::getEventBus() {
+    return eventBus;
+}
+
+sf::RenderWindow& GameManager::getGameWindow() {
+    return gameWindow;
+}
+
+std::shared_ptr<StateManager> GameManager::getStateManager() {
+    return stateManager;
+}
+
+std::shared_ptr<SpawnManager> GameManager::getSpawnManager() {
+    return spawnManager;
+}
+
+std::shared_ptr<GameplayInfoSource> GameManager::getGameplayInfoSource() {
+    return gameplayInfoSource;
 }
 
 std::shared_ptr<EnemyManager> GameManager::getEnemyManager() {
     return enemyManager;
 }
 
-
-void GameManager::update(float deltaTime) {
-    playerManager.updateEntities(deltaTime);
-    projectileManager.updateProjectiles(deltaTime);
-    enemyManager->update(deltaTime);
+std::shared_ptr<ViewManager> GameManager::getViewManager() {
+    return viewManager;
 }
 
-void GameManager::draw() {
-    playerManager.drawEntities(gameWindow);
-    projectileManager.drawProjectiles(gameWindow);
-    enemyManager->drawEnemies(gameWindow);
+std::shared_ptr<PlayerManager> GameManager::getPlayerManager() {
+    return playerManager;
 }
 
-/*void GameManager::manageCollisions() {
-    for (auto& proj : projectileManager.getProjectiles()) {
-        collisionManager.manageCollision(playerManager.getPlayer(), proj);
-        for (auto& enemy: enemyManager->getEnemies()) {
-            collisionManager.manageCollision(enemy, proj);
-        }
-    }
-    for (auto& enemy: enemyManager->getEnemies()) {
-        collisionManager.manageCollision(playerManager.getPlayer(), enemy);
-    }
-}*/
+std::shared_ptr<ProjectileManager> GameManager::getProjectileManager() {
+    return projectileManager;
+}
 
+std::shared_ptr<CollisionManager> GameManager::getCollisionManager() {
+    return collisionManager;
+}
 
+// Main game loop - handles window creation, timing, and rendering
 void GameManager::Play()
 {
-    // Create a window
+    // Create SFML window with 720p resolution and 60fps limit
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
+    initStateManager();
     
-    // Main loop
+    // Main game loop
     while (gameWindow.isOpen())
     {
+        // Calculate delta time for frame-independent movement
         sf::Time elapsed = gameClock.restart();
         float deltaTime = elapsed.asSeconds();
+        // Cap delta time to prevent large jumps (e.g., during debugging pauses)
         if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
+        
+        // Clear, update, draw, and display frame
         gameWindow.clear();
-        inputManager.handleInput(deltaTime, eventBus, gameWindow);
-        spawnManager->update(deltaTime);
-        // In this section the gameplayerView changes in specific order so 
-        // background is first, then the player and at the end is UI that is static
-        // relativly to player, so the player is always in the center of view
-        changeGameplayViewBasedOnPlayer();
-        gameWindow.setView(gameplayView);
-        mapManager.drawMap(gameWindow, currentGameState);
-        //entityManager.updateEntities(deltaTime);
-        //enemyManager->update(deltaTime);
-        update(deltaTime);
-        //enemyManager->drawEnemies(gameWindow);
-        //entityManager.drawEntities(gameWindow);
-        collisionManager.manageCollisions(this, deltaTime);
-        draw();
-        gameWindow.setView(defaultView);
-        uiManager.updateActiveUI(currentGameState);
-        uiManager.drawUI(gameWindow, currentGameState); // UI elements are drwan based on the current state of the game
+        stateManager->update(deltaTime);
+        stateManager->draw(gameWindow);
         gameWindow.display();
     }
 }

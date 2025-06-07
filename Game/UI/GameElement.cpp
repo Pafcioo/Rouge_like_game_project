@@ -1,7 +1,7 @@
 #include "GameElement.h"
 
 // Default constructor
-GameElement::GameElement(const std::string& label,
+GameElement::GameElement(std::string label,
     const sf::Vector2f& size,
     const sf::Vector2f& position,
     sf::Color color,   

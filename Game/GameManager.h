@@ -1,52 +1,68 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "PlayerManager.h"
-#include "InputManager.h"
-#include "UIManager.h"
-#include "Button.h"
-#include "Player.h"
-#include "Event.h"
-#include "GameMap.h"
-#include "MapManager.h"
-#include "Game/Spawner/SpawnManager.h"
-#include "Game/GameplayInfoSource.h"
-#include "Game/Spawner/EnemyManager.h"
-#include "ProjectileManager.h"
-#include <memory>
-#include "CollisionManager.h"
-// The most important class of the game, that handles everything
-class GameManager
+#include "Game/InputManager.h"
+#include "Game/UI/UIManager.h"
+#include "Game/Player.h"
+#include "Game/Event.h"
+#include "Game/GameMap.h"
+#include "Game/MapManager.h"
+
+class StateManager;
+class SpawnManager;
+class GameplayInfoSourceManager;
+class EnemyManager;
+class ViewManager;
+class PlayerManager;
+class ProjectileManager;
+class CollisionManager;
+
+// Central game coordinator - manages all subsystems and their interactions
+class GameManager : public std::enable_shared_from_this<GameManager>
 {
 private:
+    // Core systems
     sf::RenderWindow gameWindow;
     sf::Clock gameClock;
-    PlayerManager playerManager;
     InputManager inputManager;
-    std::shared_ptr<EventBus> eventBus;
-    UIManager uiManager;
     MapManager mapManager;
+    
+    // Shared resources
+    std::shared_ptr<EventBus> eventBus;
+    std::shared_ptr<UIManager> uiManager;
     sf::Font font;
-    GameState currentGameState;
-    sf::View defaultView;
-    sf::View gameplayView;
-    std::unique_ptr<SpawnManager> spawnManager;
+    
+    // Game subsystems
+    std::shared_ptr<ViewManager> viewManager;
+    std::shared_ptr<StateManager> stateManager;
+    std::shared_ptr<SpawnManager> spawnManager;
     std::shared_ptr<GameplayInfoSource> gameplayInfoSource;
     std::shared_ptr<EnemyManager> enemyManager;
-    ProjectileManager projectileManager;
-    CollisionManager collisionManager;
+    std::shared_ptr<PlayerManager> playerManager;
+    std::shared_ptr<ProjectileManager> projectileManager;
+    std::shared_ptr<CollisionManager> collisionManager;
 public:
     GameManager();
-    ~GameManager(){};
-    void changeGameState(GameState newState);
-    UIManager getUIManager();
-    GameState getGameState() const;
+    ~GameManager() = default;
+    
+    // Resource getters
+    sf::Font& getFont();
+    sf::RenderWindow& getGameWindow();
+    std::shared_ptr<EventBus> getEventBus();
+    
+    // System getters
+    std::shared_ptr<UIManager> getUIManager();
     MapManager& getMapManager();
-    PlayerManager& getPlayerManager();
-    ProjectileManager& getProjectileManager();
+    InputManager& getInputManager();
+    std::shared_ptr<StateManager> getStateManager();
+    std::shared_ptr<SpawnManager> getSpawnManager();
+    std::shared_ptr<GameplayInfoSource> getGameplayInfoSource();
     std::shared_ptr<EnemyManager> getEnemyManager();
-    void changeGameplayViewBasedOnPlayer();
-    void update(float deltaTime);
-    void draw();
-    void manageCollisions();
-    void Play();
+    std::shared_ptr<ViewManager> getViewManager();
+    std::shared_ptr<PlayerManager> getPlayerManager();
+    std::shared_ptr<ProjectileManager> getProjectileManager();
+    std::shared_ptr<CollisionManager> getCollisionManager();
+    
+    // Game lifecycle
+    void initStateManager();
+    void Play();  // Main game loop entry point
 };

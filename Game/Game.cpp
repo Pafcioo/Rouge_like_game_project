@@ -2,9 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "GameManager.h"
 
-int main(){
-    GameManager gameManager;
-    gameManager.Play();
-
+int main() {
+    auto gameManager = std::make_shared<GameManager>();
+    gameManager->Play();
     return 0;
 }
