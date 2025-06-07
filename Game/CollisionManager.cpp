@@ -3,6 +3,14 @@
 #include <iostream>
 #include "GameManager.h"
 
+CollisionManager::CollisionManager() {
+    for (int i = 0; i < 4; i++) {
+        barriers.emplace_back();
+        barriers[i].setPosition(sf::Vector2f(5000, 5000));
+    }
+}
+
+
 void CollisionManager::manageCollision(Entity* entity, Projectile* proj) {
     auto intersection = entity->getEntityGlobalBounds().findIntersection(proj->getShape().getGlobalBounds());
     if (intersection.has_value()) {
@@ -65,7 +73,18 @@ void CollisionManager::manageCollisions(GameManager *gameManager, float deltaTim
     for (auto& enemy: gameManager->getEnemyManager()->getEnemies()) {
         manageCollision(gameManager->getPlayerManager().getPlayer(), enemy);
     }
-    for (auto& barrier : gameManager->getBarriers()) {
+    if (!gameManager->getMapManager().getCurrentMapLabel().empty()) {
+        sf::Vector2f size = gameManager->getMapManager().getCurrentMap().getSize();
+        for (auto& barrier : barriers) {
+            barrier.setSize(size);
+            barrier.setOrigin(size / 2.f);
+        }
+        barriers[0].setPosition(sf::Vector2f(size.x, 0));
+        barriers[1].setPosition(sf::Vector2f(-size.x, 0));
+        barriers[2].setPosition(sf::Vector2f(0, size.y));
+        barriers[3].setPosition(sf::Vector2f(0, -size.y));
+    }
+    for (auto& barrier : barriers) {
         manageCollision(gameManager->getPlayerManager().getPlayer(), barrier, deltaTime);
     }
 }

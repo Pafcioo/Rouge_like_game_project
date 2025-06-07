@@ -7,8 +7,10 @@
 class GameManager;
 
 class CollisionManager {
+private:
+    std::vector<sf::RectangleShape> barriers;
 public:
-    CollisionManager() = default;
+    CollisionManager();
     ~CollisionManager() = default;
     void manageCollision(Entity* entity, Projectile* proj);
     void manageCollision(std::shared_ptr<Entity> entity, Projectile* proj);

@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "Event.h"
 #include <vector>
+#include <cmath>
 
 // Handle input method for publishing events to event bus
 void InputManager::handleInput(float deltaTime, std::shared_ptr<EventBus> eventBus, sf::RenderWindow& window)

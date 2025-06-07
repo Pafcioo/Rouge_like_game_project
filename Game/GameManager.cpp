@@ -23,11 +23,6 @@ GameManager::GameManager() : uiManager(*this),font("Assets/Roboto_Condensed-Blac
     // Spawner set up
     spawnManager = std::make_unique<SpawnManager>();
     spawnManager->setUpStrategies(gameplayInfoSource,enemyManager);
-    barriers.resize(0);
-    for (int i = 0; i < 4; i++) {
-        barriers.emplace_back(sf::Vector2f(500,500));
-        barriers[i].setPosition(sf::Vector2f(5000,5000));
-    }
 }
 
 void GameManager::changeGameplayViewBasedOnPlayer() {
@@ -93,35 +88,16 @@ std::shared_ptr<EnemyManager> GameManager::getEnemyManager() {
     return enemyManager;
 }
 
-std::vector<sf::RectangleShape>& GameManager::getBarriers() {
-    return barriers;
-}
-
 void GameManager::update(float deltaTime) {
     playerManager.updateEntities(deltaTime);
     projectileManager.updateProjectiles(deltaTime);
     enemyManager->update(deltaTime);
-    if (!mapManager.getCurrentMapLabel().empty()) {
-        for (auto &barrier : barriers) {
-            barrier.setFillColor(sf::Color::Red);
-            barrier.setSize(mapManager.getCurrentMap().getSize());
-            barrier.setOrigin(barrier.getSize()/2.f);
-            //barrier.setPosition({0, 0});
-        }
-        barriers[0].setPosition({barriers[0].getSize().x, 0});
-        barriers[1].setPosition({-barriers[1].getSize().x, 0});
-        barriers[2].setPosition({0, barriers[2].getSize().y});
-        barriers[3].setPosition({0, -barriers[3].getSize().y});
-    }
 }
 
 void GameManager::draw() {
     playerManager.drawEntities(gameWindow);
     projectileManager.drawProjectiles(gameWindow);
     enemyManager->drawEnemies(gameWindow);
-    for (auto &barrier : barriers) {
-        gameWindow.draw(barrier);
-    }
 }
 
 /*void GameManager::manageCollisions() {
