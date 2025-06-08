@@ -107,7 +107,7 @@ void Entity::attack(sf::Vector2f direction)
         initialPosition.y *= direction.y;
         initialPosition.y += entityPosition.y;
     }
-    entityWeapon->shoot(initialPosition, direction, &typeid(*this));
+    entityWeapon->shoot(initialPosition, direction, typeid(*this));
 }
 
 void Entity::useItem(std::shared_ptr<Item> item)
