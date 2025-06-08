@@ -7,8 +7,11 @@ class EventBus;
 
 class InputManager
 {
+private:
+    std::shared_ptr<EventBus> eventBus;
+    sf::RenderWindow& window;  // Referencja zamiast kopii
 public:
-    InputManager() = default;
+    InputManager(std::shared_ptr<EventBus> eventBus, sf::RenderWindow& gameWindow);
     ~InputManager() = default;
-    void handleInput(float deltaTime, std::shared_ptr<EventBus> eventBus, sf::RenderWindow& window);
+    void handleInput(float deltaTime);
 };

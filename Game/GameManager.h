@@ -23,7 +23,7 @@ private:
     // Core systems
     sf::RenderWindow gameWindow;
     sf::Clock gameClock;
-    InputManager inputManager;
+    std::shared_ptr<InputManager> inputManager;
     MapManager mapManager;
     
     // Shared resources
@@ -48,11 +48,11 @@ public:
     sf::Font& getFont();
     sf::RenderWindow& getGameWindow();
     std::shared_ptr<EventBus> getEventBus();
+    std::shared_ptr<InputManager> getInputManager();
     
     // System getters
     std::shared_ptr<UIManager> getUIManager();
     MapManager& getMapManager();
-    InputManager& getInputManager();
     std::shared_ptr<StateManager> getStateManager();
     std::shared_ptr<SpawnManager> getSpawnManager();
     std::shared_ptr<GameplayInfoSource> getGameplayInfoSource();

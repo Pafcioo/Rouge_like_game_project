@@ -12,19 +12,25 @@ public:
         const std::string& text, 
         unsigned int characterSize, 
         sf::Color color, 
-        const std::string& label = ""
+        const std::string& label = "",
+        bool centerText = false
     );
     // Setters
     void setPosition(const sf::Vector2f& position);
     void setString(const std::string& text);
     void setCharacterSize(unsigned int size);
     void setColor(const sf::Color& color);
+    void setCentered(bool centered);
     // Getters
     sf::FloatRect getGlobalBounds() const;
+    bool isCentered() const;
     void update(float deltaTime) override;
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
+    void updatePosition();
     sf::Text text_;
+    sf::Vector2f originalPosition_;
     unsigned int characterSize_;
     sf::Color color_;
+    bool centerText_;
 };

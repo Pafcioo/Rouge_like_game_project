@@ -1,5 +1,6 @@
 #include "Game/Factory/UIFactory.h"
 #include "Game/States/GameState.h"
+#include "Game/UI/DynamicGameElement.h"
 
 UIFactory::UIFactory(){}
 
@@ -10,19 +11,16 @@ InGameUI::InGameUI() : UIFactory() {}
 PauseUI::PauseUI() : UIFactory() {}
 GameOverUI::GameOverUI() : UIFactory() {}
 
-// Destructors
-MainMenuUI::~MainMenuUI() = default;
-MapChoiceUI::~MapChoiceUI() = default;
-InGameUI::~InGameUI() = default;
-PauseUI::~PauseUI() = default;
-GameOverUI::~GameOverUI() = default;
-
-std::shared_ptr<UIContainer> MainMenuUI::createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font)
-{
+std::shared_ptr<UIContainer> MainMenuUI::createUI(
+    std::shared_ptr<EventBus> eventBus, 
+    sf::Font& font,
+    std::shared_ptr<GameplayInfoSource> gameplayInfo
+) {
     auto container = std::make_shared<UIContainer>(eventBus);
     std::weak_ptr<EventBus> weakBus = eventBus;
 
-    container->createUIElement<Text>(
+    // Title
+    auto titleText = std::make_shared<Text>(
         sf::Vector2f(100.f,30.f),
         font,
         "Main Menu",
@@ -30,8 +28,10 @@ std::shared_ptr<UIContainer> MainMenuUI::createUI(std::shared_ptr<EventBus> even
         sf::Color::White,
         "MainMenuTitle"
     );
+    container->addElement(titleText);
 
-    container->createUIElement<Button>(
+    // Play button
+    auto playButton = std::make_shared<Button>(
         eventBus,
         "PlayTheGameButton",
         sf::Vector2f(100.f,50.f),
@@ -42,8 +42,10 @@ std::shared_ptr<UIContainer> MainMenuUI::createUI(std::shared_ptr<EventBus> even
         24,
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<MapChoosing>()}); }
     );
+    container->addElement(playButton);
 
-    container->createUIElement<Button>(
+    // Options button
+    auto optionsButton = std::make_shared<Button>(
         eventBus,
         "OptionsButton",
         sf::Vector2f(100.f, 50.f),
@@ -54,8 +56,10 @@ std::shared_ptr<UIContainer> MainMenuUI::createUI(std::shared_ptr<EventBus> even
         24,
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<Paused>()}); }
     );
+    container->addElement(optionsButton);
 
-    container->createUIElement<Button>(
+    // Map choice button
+    auto mapChoiceButton = std::make_shared<Button>(
         eventBus,
         "MapChooseButton",
         sf::Vector2f(100.f, 50.f),
@@ -66,8 +70,10 @@ std::shared_ptr<UIContainer> MainMenuUI::createUI(std::shared_ptr<EventBus> even
         24,
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<MapChoosing>()}); }
     );
+    container->addElement(mapChoiceButton);
 
-    container->createUIElement<Button>(
+    // Quit button
+    auto quitButton = std::make_shared<Button>(
         eventBus,
         "QuitButton",
         sf::Vector2f(100.f, 50.f),
@@ -78,25 +84,32 @@ std::shared_ptr<UIContainer> MainMenuUI::createUI(std::shared_ptr<EventBus> even
         24,
         [weakBus](){ if (auto bus = weakBus.lock()) {/* bus->publish(QuitGameEvent{}); */} }
     );
+    container->addElement(quitButton);
 
-    container->createUIElement<Image>(
+    // Player image
+    auto playerImage = std::make_shared<Image>(
         "PlayerImage",
         0.4,
         sf::Vector2f(840.f,360.f),
         sf::degrees(0),
         "Assets/player.png"
     );
+    container->addElement(playerImage);
 
     container->subscribeToEvents();
     return container;
 }
 
-std::shared_ptr<UIContainer> MapChoiceUI::createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font)
-{
+std::shared_ptr<UIContainer> MapChoiceUI::createUI(
+    std::shared_ptr<EventBus> eventBus, 
+    sf::Font& font,
+    std::shared_ptr<GameplayInfoSource> gameplayInfo
+) {
     auto container = std::make_shared<UIContainer>(eventBus);
     std::weak_ptr<EventBus> weakBus = eventBus;
 
-    container->createUIElement<Button>(
+    // Desert Strike button
+    auto desertButton = std::make_shared<Button>(
         eventBus,
         "MapButton1",
         sf::Vector2f(100.f, 100.f),
@@ -113,8 +126,10 @@ std::shared_ptr<UIContainer> MapChoiceUI::createUI(std::shared_ptr<EventBus> eve
         },
         true
     );
+    container->addElement(desertButton);
 
-    container->createUIElement<Button>(
+    // Forest Valley button
+    auto forestButton = std::make_shared<Button>(
         eventBus,
         "MapButton2",
         sf::Vector2f(100.f, 100.f),
@@ -131,8 +146,10 @@ std::shared_ptr<UIContainer> MapChoiceUI::createUI(std::shared_ptr<EventBus> eve
         },
         true
     );
+    container->addElement(forestButton);
 
-    container->createUIElement<Button>(
+    // Castle button
+    auto castleButton = std::make_shared<Button>(
         eventBus,
         "MapButton3",
         sf::Vector2f(100.f, 100.f),
@@ -149,20 +166,72 @@ std::shared_ptr<UIContainer> MapChoiceUI::createUI(std::shared_ptr<EventBus> eve
         },
         true
     );
+    container->addElement(castleButton);
 
     container->subscribeToEvents();
     return container;
 }
 
-std::shared_ptr<UIContainer> InGameUI::createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font)
-{
+std::shared_ptr<UIContainer> InGameUI::createUI(
+    std::shared_ptr<EventBus> eventBus, 
+    sf::Font& font,
+    std::shared_ptr<GameplayInfoSource> gameplayInfo
+) {
     auto container = std::make_shared<UIContainer>(eventBus);
     std::weak_ptr<EventBus> weakBus = eventBus;
 
-    container->createUIElement<GameElement>("EnergyBar", sf::Vector2f(300.f, 30.f), sf::Vector2f(50.f, 600.f), sf::Color::Red, ShapeType::Rectangle);
-    container->createUIElement<GameElement>("HealthBar", sf::Vector2f(300.f, 30.f), sf::Vector2f(50.f, 650.f), sf::Color::Red, ShapeType::Rectangle);
+    // Create health bar
+    auto healthBar = std::make_shared<DynamicGameElement>(
+        nullptr,
+        gameplayInfo,
+        "HealthBar",
+        sf::Vector2f(300.f, 30.f),
+        sf::Vector2f(50.f, 650.f),
+        sf::Color::Red,
+        ShapeType::Rectangle
+    );
+    
+    healthBar->setAction([healthBar](std::shared_ptr<GameplayInfoSource> info) {
+        if (info->hasInfo("playerHealth") && info->hasInfo("playerInitialHealth")) {
+            float health = info->getInfo<float>("playerHealth");
+            float maxHealth = info->getInfo<float>("playerInitialHealth");
+            float percentage = health / maxHealth;
+            healthBar->setWidthPercentage(percentage);
+        }
+    });
+    container->addElement(healthBar);
 
-    container->createUIElement<Button>(
+    // Create energy bar (modified to show ability cooldown)
+    auto energyBar = std::make_shared<DynamicGameElement>(
+        nullptr,
+        gameplayInfo,
+        "EnergyBar",
+        sf::Vector2f(300.f, 30.f),
+        sf::Vector2f(50.f, 600.f),
+        sf::Color::Blue,
+        ShapeType::Rectangle
+    );
+    
+    energyBar->setAction([energyBar](std::shared_ptr<GameplayInfoSource> info) {
+        if (info->hasInfo("playerAbilityCooldown") && info->hasInfo("playerAbilityMaxCooldown")) {
+            float currentCooldown = info->getInfo<float>("playerAbilityCooldown");
+            float maxCooldown = info->getInfo<float>("playerAbilityMaxCooldown");
+            // Invert the percentage since we want the bar to fill up as cooldown decreases
+            float percentage = 1.0f - (currentCooldown / maxCooldown);
+            energyBar->setWidthPercentage(percentage);
+            
+            // Make the bar more transparent while regenerating
+            if (percentage < 1.0f) {
+                energyBar->setAlpha(128); // Semi-transparent
+            } else {
+                energyBar->setAlpha(255); // Fully opaque when ready
+            }
+        }
+    });
+    container->addElement(energyBar);
+
+    // Create options button
+    auto optionsButton = std::make_shared<Button>(
         eventBus,
         "OptionsButton",
         sf::Vector2f(100.f, 50.f),
@@ -173,19 +242,33 @@ std::shared_ptr<UIContainer> InGameUI::createUI(std::shared_ptr<EventBus> eventB
         12,
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<Paused>()}); }
     );
+    container->addElement(optionsButton);
 
     container->subscribeToEvents();
     return container;
 }
 
-std::shared_ptr<UIContainer> PauseUI::createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font)
-{
+std::shared_ptr<UIContainer> PauseUI::createUI(
+    std::shared_ptr<EventBus> eventBus, 
+    sf::Font& font,
+    std::shared_ptr<GameplayInfoSource> gameplayInfo
+) {
     auto container = std::make_shared<UIContainer>(eventBus);
     std::weak_ptr<EventBus> weakBus = eventBus;
 
-    container->createUIElement<GameElement>("BackgroundOption", sf::Vector2f(600,300), sf::Vector2f(640,360), sf::Color::Black, ShapeType::Rectangle, true);
+    // Background
+    auto background = std::make_shared<GameElement>(
+        "BackgroundOption", 
+        sf::Vector2f(600,300), 
+        sf::Vector2f(640,360), 
+        sf::Color::Black, 
+        ShapeType::Rectangle, 
+        true
+    );
+    container->addElement(background);
 
-    container->createUIElement<Button>(
+    // Play button
+    auto playButton = std::make_shared<Button>(
         eventBus,
         "PlayTheGameButton",
         sf::Vector2f(100.f,100.f),
@@ -197,8 +280,10 @@ std::shared_ptr<UIContainer> PauseUI::createUI(std::shared_ptr<EventBus> eventBu
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<InGame>()}); },
         true
     );
+    container->addElement(playButton);
 
-    container->createUIElement<Button>(
+    // Back button
+    auto backButton = std::make_shared<Button>(
         eventBus,
         "GoBackButton",
         sf::Vector2f(100.f, 100.f),
@@ -210,8 +295,10 @@ std::shared_ptr<UIContainer> PauseUI::createUI(std::shared_ptr<EventBus> eventBu
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(RevertStateEvent{}); },
         true
     );
+    container->addElement(backButton);
 
-    container->createUIElement<Button>(
+    // Main menu button
+    auto menuButton = std::make_shared<Button>(
         eventBus,
         "GoBackToMenuButton",
         sf::Vector2f(100.f, 100.f),
@@ -223,21 +310,45 @@ std::shared_ptr<UIContainer> PauseUI::createUI(std::shared_ptr<EventBus> eventBu
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<InMenu>()}); },
         true
     );
+    container->addElement(menuButton);
 
     container->subscribeToEvents();
     return container;
 }
 
-std::shared_ptr<UIContainer> GameOverUI::createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font)
-{
+std::shared_ptr<UIContainer> GameOverUI::createUI(
+    std::shared_ptr<EventBus> eventBus, 
+    sf::Font& font,
+    std::shared_ptr<GameplayInfoSource> gameplayInfo
+) {
     auto container = std::make_shared<UIContainer>(eventBus);
     std::weak_ptr<EventBus> weakBus = eventBus;
 
-    container->createUIElement<GameElement>("GameOverBackground", sf::Vector2f(800, 600), sf::Vector2f(640, 360), sf::Color(0, 0, 0, 128), ShapeType::Rectangle, true);
+    // Background
+    auto background = std::make_shared<GameElement>(
+        "GameOverBackground", 
+        sf::Vector2f(800, 600), 
+        sf::Vector2f(640, 360), 
+        sf::Color(0, 0, 0, 128), 
+        ShapeType::Rectangle, 
+        true
+    );
+    container->addElement(background);
 
-    container->createUIElement<Text>(sf::Vector2f(640.f, 200.f), font, "GAME OVER", 64, sf::Color::Red, "GameOverTitle");
+    // Game Over text
+    auto gameOverText = std::make_shared<Text>(
+        sf::Vector2f(640.f, 200.f), 
+        font, 
+        "GAME OVER", 
+        64, 
+        sf::Color::Red, 
+        "GameOverTitle", 
+        true
+    );
+    container->addElement(gameOverText);
 
-    container->createUIElement<Button>(
+    // Play Again button
+    auto playAgainButton = std::make_shared<Button>(
         eventBus,
         "PlayAgainButton",
         sf::Vector2f(200.f, 60.f),
@@ -249,8 +360,10 @@ std::shared_ptr<UIContainer> GameOverUI::createUI(std::shared_ptr<EventBus> even
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<MapChoosing>()}); },
         true
     );
+    container->addElement(playAgainButton);
 
-    container->createUIElement<Button>(
+    // Main Menu button
+    auto mainMenuButton = std::make_shared<Button>(
         eventBus,
         "MainMenuButton",
         sf::Vector2f(200.f, 60.f),
@@ -262,8 +375,10 @@ std::shared_ptr<UIContainer> GameOverUI::createUI(std::shared_ptr<EventBus> even
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<InMenu>()}); },
         true
     );
+    container->addElement(mainMenuButton);
 
-    container->createUIElement<Button>(
+    // Quit Game button
+    auto quitButton = std::make_shared<Button>(
         eventBus,
         "QuitGameButton",
         sf::Vector2f(200.f, 60.f),
@@ -272,9 +387,10 @@ std::shared_ptr<UIContainer> GameOverUI::createUI(std::shared_ptr<EventBus> even
         "Quit Game",
         font,
         24,
-        [weakBus](){ if (auto bus = weakBus.lock()) {/* bus->publish(QuitGameEvent{}); */} },
+        [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(QuitGameEvent{}); },
         true
     );
+    container->addElement(quitButton);
 
     container->subscribeToEvents();
     return container;

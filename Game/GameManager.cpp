@@ -17,6 +17,7 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
 {
     // Bus for events in game
     eventBus = std::make_shared<EventBus>();
+    inputManager = std::make_shared<InputManager>(eventBus, gameWindow);
     // View set up
     viewManager = std::make_shared<ViewManager>();
     // Source for all game info like level, hp, position of player...
@@ -24,7 +25,9 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     // Managers for entities like player and enemy
     playerManager = std::make_shared<PlayerManager>();
     playerManager->setGameplayInfo(gameplayInfoSource);
+    playerManager->setEventBus(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
+    // Managers for projectiles and colisions
     projectileManager = std::make_shared<ProjectileManager>();
     collisionManager = std::make_shared<CollisionManager>();
     // Spawner set up
@@ -63,12 +66,12 @@ MapManager& GameManager::getMapManager() {
     return mapManager;
 }
 
-InputManager& GameManager::getInputManager() {
-    return inputManager;
-}
-
 std::shared_ptr<EventBus> GameManager::getEventBus() {
     return eventBus;
+}
+
+std::shared_ptr<InputManager> GameManager::getInputManager() {
+    return inputManager;
 }
 
 sf::RenderWindow& GameManager::getGameWindow() {

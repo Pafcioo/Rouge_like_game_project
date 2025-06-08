@@ -51,6 +51,7 @@ public:
     sf::FloatRect getEntityGlobalBounds();
     float getHealth();
     std::shared_ptr<Weapon> getWeapon();
+    std::shared_ptr<Ability> getAbility();
 
     // Setters
     void setEntityDirection(sf::Vector2f direction);

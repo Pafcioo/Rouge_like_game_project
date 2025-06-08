@@ -29,6 +29,11 @@ public:
     void update(float deltaTime) override;
     // Draw method
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    
+    // Getters
+    sf::Vector2f getSize() const;
+    sf::Color getColor() const;
+    
 private:
     ShapeType elementType_;
     sf::RectangleShape elementRect_;
