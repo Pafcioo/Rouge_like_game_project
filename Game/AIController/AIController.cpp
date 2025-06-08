@@ -20,9 +20,6 @@ void EnemyAIController::update(float deltaTime)
     if (decisionComponent){
         decisionComponent->update(shared_from_this(), deltaTime);
     }
-    if (cooldownComponent){
-        cooldownComponent->update(shared_from_this(), deltaTime);
-    }
 }
 //Setters
 void AbstractAIController::setDecisionComponent(std::shared_ptr<AbstractAIDecision> decision)
