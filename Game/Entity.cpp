@@ -53,6 +53,10 @@ std::shared_ptr<Weapon> Entity::getWeapon() {
     return entityWeapon;
 }
 
+std::shared_ptr<Ability> Entity::getAbility() {
+    return entityAbility;
+}
+
 void Entity::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
     gameplayInfo = gameplayInfoSource;

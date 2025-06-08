@@ -33,15 +33,6 @@ public:
     bool getIsUIActive() const { return isUIActive_; }
     void setIsUIActive(bool isUIActive) { isUIActive_ = isUIActive; }
 
-    // Generic method for creating UIElement
-    template<typename TypeOfUIElement, typename... ArgsForUIElement>
-    void createUIElement(ArgsForUIElement&&... args)
-    {
-        addElement(std::static_pointer_cast<UIElement>(
-            std::make_shared<TypeOfUIElement>(std::forward<ArgsForUIElement>(args)...)
-        ));
-    }
-
     // Drawing method
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void update(float deltaTime);

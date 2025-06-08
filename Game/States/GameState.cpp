@@ -58,7 +58,12 @@ void GameState::onResume()
 void GameState::update(float deltaTime) const
 {
     gameManager->getInputManager()->handleInput(deltaTime);
-    gameManager->getUIManager()->updateAll(deltaTime);    
+    // Update all UI containers in the state
+    for (const auto& [layer, container] : uiContainers) {
+        if (container) {
+            container->update(deltaTime);
+        }
+    }
 }
 
 // Draw all UI containers
@@ -76,7 +81,10 @@ void GameState::draw(sf::RenderTarget& target) const
 void InMenu::onEnter()
 {
    auto uiFactory = std::make_unique<MainMenuUI>();
-   uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
+   uiContainers.push_back({UILayer::State, uiFactory->createUI(
+       eventBus, 
+       gameManager->getFont(),
+       gameManager->getGameplayInfoSource())});
 }
 
 void InMenu::onExit() 
@@ -119,7 +127,10 @@ bool InMenu::isTransparent() const
 void MapChoosing::onEnter() 
 {
     auto uiFactory = std::make_unique<MapChoiceUI>();
-    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(
+        eventBus, 
+        gameManager->getFont(),
+        gameManager->getGameplayInfoSource())});
     gameManager->getMapManager().subscribeToEvents(eventBus);
 }
 
@@ -162,9 +173,11 @@ bool MapChoosing::isTransparent() const
 
 void InGame::onEnter() 
 {
-    // Setup game UI and activate entity systems
     auto uiFactory = std::make_unique<InGameUI>();
-    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(
+        eventBus, 
+        gameManager->getFont(),
+        gameManager->getGameplayInfoSource())});
     gameManager->getPlayerManager()->subscribeToEvents();
 }
 
@@ -226,7 +239,10 @@ bool InGame::isTransparent() const
 void Paused::onEnter() 
 {
     auto uiFactory = std::make_unique<PauseUI>();
-    auto container = uiFactory->createUI(eventBus, gameManager->getFont());
+    auto container = uiFactory->createUI(
+        eventBus, 
+        gameManager->getFont(),
+        gameManager->getGameplayInfoSource());
     container->subscribeToEvents();
     uiContainers.push_back({UILayer::State, container});
 }
@@ -272,7 +288,10 @@ bool Paused::isTransparent() const
 void GameOver::onEnter() 
 {
     auto uiFactory = std::make_unique<GameOverUI>();
-    uiContainers.push_back({UILayer::State, uiFactory->createUI(eventBus, gameManager->getFont())});
+    uiContainers.push_back({UILayer::State, uiFactory->createUI(
+        eventBus, 
+        gameManager->getFont(),
+        gameManager->getGameplayInfoSource())});
 }
 
 void GameOver::onExit() 

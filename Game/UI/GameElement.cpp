@@ -82,3 +82,21 @@ void GameElement::draw(sf::RenderTarget& target, sf::RenderStates states) const 
     else if (elementType_ == ShapeType::Circle)
         target.draw(elementCircle_, states);
 }
+
+sf::Vector2f GameElement::getSize() const {
+    if (elementType_ == ShapeType::Rectangle) {
+        return elementRect_.getSize();
+    } else if (elementType_ == ShapeType::Circle) {
+        float diameter = elementCircle_.getRadius() * 2.f;
+        return sf::Vector2f(diameter, diameter);
+    }
+    return sf::Vector2f();
+}
+
+sf::Color GameElement::getColor() const {
+    if (elementType_ == ShapeType::Rectangle)
+        return elementRect_.getFillColor();
+    else if (elementType_ == ShapeType::Circle)
+        return elementCircle_.getFillColor();
+    return sf::Color::White; // Default color if no shape is set
+}

@@ -1,51 +1,76 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Game/UI/UIContainer.h"
+#include "Game/GameplayInfoSource.h"
 
 class UIFactory
 {
     public:
         UIFactory();
         virtual ~UIFactory() = default;
-        virtual std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) = 0;
+        virtual std::shared_ptr<UIContainer> createUI(
+            std::shared_ptr<EventBus> eventBus, 
+            sf::Font& font,
+            std::shared_ptr<GameplayInfoSource> gameplayInfo = nullptr
+        ) = 0;
 };
 
 class MainMenuUI : public UIFactory
 {
     public:
         MainMenuUI();
-        ~MainMenuUI();
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
+        ~MainMenuUI() = default;
+        std::shared_ptr<UIContainer> createUI(
+            std::shared_ptr<EventBus> eventBus, 
+            sf::Font& font,
+            std::shared_ptr<GameplayInfoSource> gameplayInfo = nullptr
+        ) override;
 };
 
 class MapChoiceUI : public UIFactory
 {
     public:
         MapChoiceUI();
-        ~MapChoiceUI();
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
+        ~MapChoiceUI() = default;
+        std::shared_ptr<UIContainer> createUI(
+            std::shared_ptr<EventBus> eventBus, 
+            sf::Font& font,
+            std::shared_ptr<GameplayInfoSource> gameplayInfo = nullptr
+        ) override;
 };
 
 class InGameUI : public UIFactory
 {
     public:
         InGameUI();
-        ~InGameUI();
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
+        ~InGameUI() = default;
+        std::shared_ptr<UIContainer> createUI(
+            std::shared_ptr<EventBus> eventBus, 
+            sf::Font& font,
+            std::shared_ptr<GameplayInfoSource> gameplayInfo = nullptr
+        ) override;
 };
 
 class PauseUI : public UIFactory
 {
     public:
         PauseUI();
-        ~PauseUI();
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
+        ~PauseUI() = default;
+        std::shared_ptr<UIContainer> createUI(
+            std::shared_ptr<EventBus> eventBus, 
+            sf::Font& font,
+            std::shared_ptr<GameplayInfoSource> gameplayInfo = nullptr
+        ) override;
 };
 
 class GameOverUI : public UIFactory
 {
     public:
         GameOverUI();
-        ~GameOverUI();
-        std::shared_ptr<UIContainer> createUI(std::shared_ptr<EventBus> eventBus, sf::Font& font) override;
+        ~GameOverUI() = default;
+        std::shared_ptr<UIContainer> createUI(
+            std::shared_ptr<EventBus> eventBus, 
+            sf::Font& font,
+            std::shared_ptr<GameplayInfoSource> gameplayInfo = nullptr
+        ) override;
 };
