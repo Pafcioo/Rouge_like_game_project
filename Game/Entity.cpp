@@ -88,42 +88,26 @@ sf::FloatRect Entity::getEntityGlobalBounds() {
 
 void Entity::attack(sf::Vector2f direction)
 {
-    std::cout << "[DEBUG] Entity::attack() called with direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
-    
     // Check if entity has a weapon equipped
     if (!entityWeapon) {
-        std::cout << "[WARNING] Entity::attack() - No weapon equipped, attack cancelled" << std::endl;
         return; // Cannot attack without a weapon
     }
-    
-    std::cout << "[DEBUG] Entity position: (" << entityPosition.x << ", " << entityPosition.y << ")" << std::endl;
-    std::cout << "[DEBUG] Entity texture size: " << entityTexture.getSize().x << "x" << entityTexture.getSize().y << std::endl;
-    std::cout << "[DEBUG] Entity sprite scale: (" << entitySprite.getScale().x << ", " << entitySprite.getScale().y << ")" << std::endl;
-
     sf::Vector2f initialPosition;
     // Projectiles are shot outside player bounds, otherwise they would immediately deactivate
-    initialPosition.x = entityPosition.x + (static_cast<float>(entityTexture.getSize().x)/2.f * entitySprite.getScale().x + 10) * direction.x;
-    initialPosition.y = entityPosition.y + (static_cast<float>(entityTexture.getSize().y)/2.f * entitySprite.getScale().y + 10) * direction.y;
-    
-    std::cout << "[DEBUG] Calculated initial projectile position: (" << initialPosition.x << ", " << initialPosition.y << ")" << std::endl;
+    initialPosition.x = (static_cast<float>(entityTexture.getSize().x)/2.f * entitySprite.getScale().x + 10);
+    initialPosition.y = (static_cast<float>(entityTexture.getSize().y)/2.f * entitySprite.getScale().y + 10);
     
     // Normalize the direction vector
     float magnitude = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-    std::cout << "[DEBUG] Direction vector magnitude: " << magnitude << std::endl;
     
     if (magnitude != 0.f) {
         direction /= magnitude; // Normalize the vector
-        std::cout << "[DEBUG] Normalized direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
-    } else {
-        std::cout << "[WARNING] Direction vector has zero magnitude, using original direction" << std::endl;
+        initialPosition.x *= direction.x;
+        initialPosition.x += entityPosition.x;
+        initialPosition.y *= direction.y;
+        initialPosition.y += entityPosition.y;
     }
-    
-    std::cout << "[DEBUG] Calling weapon->shoot() with position: (" << initialPosition.x << ", " << initialPosition.y 
-              << ") and direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
-    
-    entityWeapon->shoot(initialPosition, direction);
-    
-    std::cout << "[DEBUG] Entity::attack() completed successfully" << std::endl;
+    entityWeapon->shoot(initialPosition, direction, &typeid(*this));
 }
 
 void Entity::useItem(std::shared_ptr<Item> item)

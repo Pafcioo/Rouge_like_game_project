@@ -18,6 +18,7 @@ void InputManager::handleInput(float deltaTime)
 {   
     // Section responsible for movement
     sf::Vector2f inputDirection(0,0);
+    sf::Vector2f shootDirection(0, 0);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
             inputDirection.x--;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
@@ -30,8 +31,17 @@ void InputManager::handleInput(float deltaTime)
         //std::cout << "Move event published" << std::endl;
         eventBus->publish<MoveEvent>({inputDirection, deltaTime});
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
-        eventBus->publish<AttackEvent>({inputDirection});
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+            shootDirection.y--;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+            shootDirection.y++;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+            shootDirection.x--;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+            shootDirection.x++;
+    if (shootDirection != sf::Vector2f(0, 0)) {
+        eventBus->publish<AttackEvent>({shootDirection});
+    }
     while(const std::optional event = window.pollEvent())
     {
         if(event->is<sf::Event::Closed>())

@@ -17,11 +17,11 @@ BasicWeapon::BasicWeapon(): Weapon(0.25f) {
     projDamage = 20;
 }
 
-void BasicWeapon::shoot(sf::Vector2f position, sf::Vector2f velocity) {
+void BasicWeapon::shoot(sf::Vector2f position, sf::Vector2f velocity, const std::type_info* type) {
     
     if (timeSinceLastShot >= weaponFireCooldown) {
         //std::cout << "Shooting from position: " << position.x << " " << position.y << std::endl;
-        ProjectileManager::projectiles.emplace_back(new Projectile(position, velocity, projSpeed, projDamage));
+        ProjectileManager::projectiles.emplace_back(new Projectile(position, velocity, projSpeed, projDamage, type));
         timeSinceLastShot = 0.f;
     }
 }

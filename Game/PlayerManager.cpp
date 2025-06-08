@@ -34,15 +34,16 @@ void PlayerManager::subscribeToEvents()
     eventBus->subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
         if (player) {
             player->move(moveEvent.direction * moveEvent.deltaTime);
-            player->setEntityDirection(moveEvent.direction);
+            //player->setEntityDirection(moveEvent.direction);
         }
     });
     eventBus->subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
         if (player) {
             if (attackEvent.direction != sf::Vector2f(0, 0)) {
                 player->setEntityDirection(attackEvent.direction);
+                player->attack(attackEvent.direction);
             }
-            player->attack(player->getEntityDirection());
+            //player->attack(player->getEntityDirection());
         }
     });
     eventBus->subscribe<useAbilityEvent>([this](const useAbilityEvent&) {
