@@ -95,11 +95,12 @@ void Entity::attack(sf::Vector2f direction)
     std::cout << "[DEBUG] Entity position: (" << entityPosition.x << ", " << entityPosition.y << ")" << std::endl;
     std::cout << "[DEBUG] Entity texture size: " << entityTexture.getSize().x << "x" << entityTexture.getSize().y << std::endl;
     std::cout << "[DEBUG] Entity sprite scale: (" << entitySprite.getScale().x << ", " << entitySprite.getScale().y << ")" << std::endl;
+    std::cout << "[DEBUG] Direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
 
     sf::Vector2f initialPosition;
     // Projectiles are shot outside player bounds, otherwise they would immediately deactivate
-    initialPosition.x = entityPosition.x + (static_cast<float>(entityTexture.getSize().x)/2.f * entitySprite.getScale().x + 10) * direction.x;
-    initialPosition.y = entityPosition.y + (static_cast<float>(entityTexture.getSize().y)/2.f * entitySprite.getScale().y + 10) * direction.y;
+    initialPosition.x = /*entityPosition.x*/ + (static_cast<float>(entityTexture.getSize().x)/2.f * entitySprite.getScale().x + 10); //* direction.x;
+    initialPosition.y = /*entityPosition.y*/ + (static_cast<float>(entityTexture.getSize().y)/2.f * entitySprite.getScale().y + 10); //* direction.y;
     
     std::cout << "[DEBUG] Calculated initial projectile position: (" << initialPosition.x << ", " << initialPosition.y << ")" << std::endl;
     
@@ -110,6 +111,10 @@ void Entity::attack(sf::Vector2f direction)
     if (magnitude != 0.f) {
         direction /= magnitude; // Normalize the vector
         std::cout << "[DEBUG] Normalized direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
+        initialPosition.x *= direction.x;
+        initialPosition.x += entityPosition.x;
+        initialPosition.y *= direction.y;
+        initialPosition.y += entityPosition.y;
     } else {
         std::cout << "[WARNING] Direction vector has zero magnitude, using original direction" << std::endl;
     }
@@ -117,7 +122,7 @@ void Entity::attack(sf::Vector2f direction)
     std::cout << "[DEBUG] Calling weapon->shoot() with position: (" << initialPosition.x << ", " << initialPosition.y 
               << ") and direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
     
-    entityWeapon->shoot(initialPosition, direction);
+    entityWeapon->shoot(initialPosition, direction, &typeid(*this));
     
     std::cout << "[DEBUG] Entity::attack() completed successfully" << std::endl;
 }
