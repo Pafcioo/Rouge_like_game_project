@@ -86,7 +86,6 @@ void Entity::attack(sf::Vector2f direction)
 {
     // Check if entity has a weapon equipped
     if (!entityWeapon) {
-        std::cout << "[WARNING] Entity::attack() - No weapon equipped, attack cancelled" << std::endl;
         return; // Cannot attack without a weapon
     }
     sf::Vector2f initialPosition;
@@ -103,8 +102,6 @@ void Entity::attack(sf::Vector2f direction)
         initialPosition.x += entityPosition.x;
         initialPosition.y *= direction.y;
         initialPosition.y += entityPosition.y;
-    } else {
-        std::cout << "[WARNING] Direction vector has zero magnitude, using original direction" << std::endl;
     }
     entityWeapon->shoot(initialPosition, direction, &typeid(*this));
 }
