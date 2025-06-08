@@ -14,7 +14,7 @@ CollisionManager::CollisionManager() {
 
 void CollisionManager::manageCollision(Entity* entity, Projectile* proj) {
     auto intersection = entity->getEntityGlobalBounds().findIntersection(proj->getShape().getGlobalBounds());
-    if (intersection.has_value()) {
+    if (intersection.has_value() && static_cast<std::type_index>(typeid(*entity)) != proj->getProjectileType()) {
         entity->setHealth(entity->getHealth()-proj->getDamage());
         proj->deactivate();
     }
@@ -58,7 +58,7 @@ void CollisionManager::manageCollision(Entity *entity1, std::shared_ptr<Entity>&
 
 void CollisionManager::manageCollision(std::shared_ptr<Entity> entity, Projectile *proj) {
     auto intersection = entity->getEntityGlobalBounds().findIntersection(proj->getShape().getGlobalBounds());
-    if (intersection.has_value() && typeid(*entity) != *proj->getProjectileType()) {
+    if (intersection.has_value() && static_cast<std::type_index>(typeid(*entity)) != proj->getProjectileType()) {
         entity->setHealth(entity->getHealth()-proj->getDamage());
         proj->deactivate();
     }

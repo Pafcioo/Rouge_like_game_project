@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Projectile.h"
 
-Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float damage, const std::type_info* type, float radius, sf::Color color):
+Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float damage, std::type_index type, float radius, sf::Color color):
         projectileInitialPosition(position), projectileVelocity(velocity), projectileSpeed(speed), projectileIsActive(true), projectileType(type) {
     projectileShape.setRadius(radius);
     projectileShape.setFillColor(color);
@@ -42,6 +42,6 @@ float Projectile::getDamage() const {
     return projectileDamage;
 }
 
-const std::type_info *Projectile::getProjectileType() {
+std::type_index Projectile::getProjectileType() {
     return projectileType;
 }

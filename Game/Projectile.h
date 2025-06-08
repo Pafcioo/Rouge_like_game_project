@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <typeinfo>
+#include <typeindex>
 
 class Projectile : public sf::Drawable {
 private:
@@ -10,9 +10,9 @@ private:
     bool projectileIsActive;
     sf::CircleShape projectileShape;
     float projectileDamage;
-    const std::type_info* projectileType;
+    const std::type_index projectileType;
 public:
-    Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float damage, const std::type_info* type, float radius = 5.f, sf::Color color = sf::Color::White);
+    Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float damage, std::type_index type, float radius = 5.f, sf::Color color = sf::Color::White);
     ~Projectile() override = default;
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void update(float deltaTime);
@@ -22,5 +22,5 @@ public:
     sf::CircleShape getShape() const;
     sf::FloatRect getGlobalBounds();
     float getDamage() const;
-    const std::type_info* getProjectileType();
+    std::type_index getProjectileType();
 };
