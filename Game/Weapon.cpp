@@ -14,7 +14,7 @@ std::string Weapon::getWeaponName() {
 BasicWeapon::BasicWeapon(): Weapon(0.25f) {
     weaponName = "Basic Weapon";
     projSpeed = 500;
-    projDamage = 20;
+    projDamage = 10;
 }
 
 void BasicWeapon::shoot(sf::Vector2f position, sf::Vector2f velocity, std::type_index type) {

@@ -51,6 +51,11 @@ void PlayerManager::subscribeToEvents()
             player->useAbility();
         }
     });
+    eventBus->subscribe<useItemEvent>([this](const useItemEvent&) {
+        if (player) {
+            player->useItem();
+        }
+    });
 }
 
 void PlayerManager::unsubscribeToEvents()

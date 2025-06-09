@@ -52,6 +52,7 @@ public:
     float getHealth();
     std::shared_ptr<Weapon> getWeapon();
     std::shared_ptr<Ability> getAbility();
+    std::shared_ptr<Item> getItem();
 
     // Setters
     void setEntityDirection(sf::Vector2f direction);
@@ -65,7 +66,7 @@ public:
     // Actions
     virtual void move(sf::Vector2f direction);
     virtual void attack(sf::Vector2f direction);
-    virtual void useItem(std::shared_ptr<Item> item);
+    virtual void useItem();
     virtual void useAbility();
     virtual void update(float deltaTime);
 };

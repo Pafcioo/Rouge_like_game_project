@@ -46,6 +46,8 @@ struct QuitGameEvent {};
 
 struct useAbilityEvent {};
 
+struct useItemEvent  {};
+
 // Base class for events, needed for storing pointers to this base class
 class EventBase {
 public:

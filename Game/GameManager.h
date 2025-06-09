@@ -24,7 +24,7 @@ private:
     sf::RenderWindow gameWindow;
     sf::Clock gameClock;
     std::shared_ptr<InputManager> inputManager;
-    MapManager mapManager;
+    std::shared_ptr<MapManager> mapManager;
     
     // Shared resources
     std::shared_ptr<EventBus> eventBus;
@@ -52,7 +52,7 @@ public:
     
     // System getters
     std::shared_ptr<UIManager> getUIManager();
-    MapManager& getMapManager();
+    std::shared_ptr<MapManager> getMapManager();
     std::shared_ptr<StateManager> getStateManager();
     std::shared_ptr<SpawnManager> getSpawnManager();
     std::shared_ptr<GameplayInfoSource> getGameplayInfoSource();
