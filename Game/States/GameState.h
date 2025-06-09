@@ -28,7 +28,7 @@ public:
     virtual void onExit();
     virtual void onPause();
     virtual void onResume();
-    virtual void update(float deltaTime) const;
+    virtual void update(float deltaTime);
     virtual void draw(sf::RenderTarget& target) const;
     
     // Dependency injection
@@ -53,7 +53,7 @@ public:
     void onExit() override;
     void onPause() override;
     void onResume() override;
-    void update(float deltaTime) const override;
+    void update(float deltaTime) override;
     void draw(sf::RenderTarget& target) const override;
 };
 
@@ -69,15 +69,17 @@ public:
     void onExit() override;
     void onPause() override;
     void onResume() override;
-    void update(float deltaTime) const override;
+    void update(float deltaTime) override;
     void draw(sf::RenderTarget& target) const override;
 };
 
 // Active gameplay state - Main game loop
 class InGame : public GameState
 {
+private:
+    float gameTime;
 public:
-    InGame() = default;
+    InGame();
     ~InGame() = default;
     bool isTransparent() const override;
     bool isTranscendent() const override;
@@ -85,7 +87,7 @@ public:
     void onExit() override;
     void onPause() override;
     void onResume() override;
-    void update(float deltaTime) const override;
+    void update(float deltaTime) override;
     void draw(sf::RenderTarget& target) const override;
 };
 
@@ -101,7 +103,7 @@ public:
     void onExit() override;
     void onPause() override;
     void onResume() override;
-    void update(float deltaTime) const override;
+    void update(float deltaTime) override;
     void draw(sf::RenderTarget& target) const override;
 };
 
@@ -117,6 +119,6 @@ public:
     void onExit() override;
     void onPause() override;
     void onResume() override;
-    void update(float deltaTime) const override;
+    void update(float deltaTime) override;
     void draw(sf::RenderTarget& target) const override;
 };
