@@ -62,10 +62,14 @@ void InputManager::handleInput(float deltaTime)
             if (keyPressed->scancode == sf::Keyboard::Scancode::Up || keyPressed->scancode == sf::Keyboard::Scancode::Down || keyPressed->scancode == sf::Keyboard::Scancode::Enter) {
                 eventBus->publish<sf::Event::KeyPressed>(*keyPressed); // Navigating UI with arrows
             }
-            if(keyPressed->scancode == sf::Keyboard::Scancode::Space)
+            if(keyPressed->scancode == sf::Keyboard::Scancode::Space) {
                 eventBus->publish<DashEvent>({inputDirection}); // Dashing
+            }
             if (keyPressed->scancode == sf::Keyboard::Scan::LShift) {
                 eventBus->publish<useAbilityEvent>({});
+            }
+            if (keyPressed->scancode == sf::Keyboard::Scan::Num1) {
+                eventBus->publish<useItemEvent>({});
             }
         }
     }

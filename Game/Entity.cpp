@@ -57,6 +57,10 @@ std::shared_ptr<Ability> Entity::getAbility() {
     return entityAbility;
 }
 
+std::shared_ptr<Item> Entity::getItem() {
+    return entityItem;
+}
+
 void Entity::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
     gameplayInfo = gameplayInfoSource;
@@ -110,15 +114,15 @@ void Entity::attack(sf::Vector2f direction)
     entityWeapon->shoot(initialPosition, direction, typeid(*this));
 }
 
-void Entity::useItem(std::shared_ptr<Item> item)
+void Entity::useItem()
 {
     // Check if item exists
-    if (!item) {
+    if (!entityItem) {
         return; // Cannot use null item
     }
     
-    item->activate(this);
-    item->setIsUsed(true);
+    entityItem->activate(this);
+    entityItem->setIsUsed(true);
 }
 
 void Entity::useAbility() 

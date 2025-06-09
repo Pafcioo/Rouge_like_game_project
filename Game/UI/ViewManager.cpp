@@ -30,8 +30,8 @@ void ViewManager::setGameplayView(std::shared_ptr<GameManager> gameManager) {
     sf::Vector2f playerPosition = player->getPosition();
 
     // If map exists, clamp camera to stay within map boundaries
-    if (!gameManager->getMapManager().getCurrentMapLabel().empty()) {
-        sf::Vector2f halfMapSize = gameManager->getMapManager().getCurrentMap().getSize() / 2.f;
+    if (!gameManager->getMapManager()->getCurrentMapLabel().empty()) {
+        sf::Vector2f halfMapSize = gameManager->getMapManager()->getCurrentMap().getSize() / 2.f;
         sf::Vector2f viewSize = gameplayView.getSize();
         sf::Vector2f halfViewSize = viewSize / 2.f;
 

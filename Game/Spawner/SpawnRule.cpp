@@ -9,9 +9,14 @@
 void TimeBasedRule::update(float deltaTime, std::shared_ptr<AbstractSpawner> spawner, std::shared_ptr<SpawnConfig> config)
 {
     timeRule.spawnTime -= deltaTime;
-    timeRule.endTime -= deltaTime;
-    // Check if the end time has been reached
-    if (timeRule.endTime >= 0) {
+    
+    // Only decrease endTime if it's positive (finite duration)
+    if (timeRule.endTime > 0) {
+        timeRule.endTime -= deltaTime;
+    }
+
+    // Spawn if either endTime is negative (infinite) or hasn't reached zero yet
+    if (timeRule.endTime < 0 || timeRule.endTime >= 0) {
         if (timeRule.spawnTime <= 0) {
             if (spawner) {
                 spawner->spawn(config);

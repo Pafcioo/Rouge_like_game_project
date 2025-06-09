@@ -131,7 +131,7 @@ void MapChoosing::onEnter()
         eventBus, 
         gameManager->getFont(),
         gameManager->getGameplayInfoSource())});
-    gameManager->getMapManager().subscribeToEvents(eventBus);
+    gameManager->getMapManager()->subscribeToEvents(eventBus);
 }
 
 void MapChoosing::onExit() 
@@ -179,6 +179,7 @@ void InGame::onEnter()
         gameManager->getFont(),
         gameManager->getGameplayInfoSource())});
     gameManager->getPlayerManager()->subscribeToEvents();
+    gameManager->getSpawnManager()->setUpStrategies(gameManager->getGameplayInfoSource(),gameManager->getEnemyManager(),gameManager->getMapManager());
 }
 
 void InGame::onExit() 
@@ -214,7 +215,7 @@ void InGame::draw(sf::RenderTarget& target) const
 {
     // Draw world elements with gameplay view (follows player)
     gameManager->getViewManager()->setGameplayView(gameManager);
-    gameManager->getMapManager().drawMap(target);
+    gameManager->getMapManager()->drawMap(target);
     gameManager->getProjectileManager()->drawProjectiles(target);
     gameManager->getPlayerManager()->draw(target);
     gameManager->getEnemyManager()->draw(target);

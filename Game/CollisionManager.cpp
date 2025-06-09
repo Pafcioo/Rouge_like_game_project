@@ -80,8 +80,8 @@ void CollisionManager::manageCollisions(std::shared_ptr<GameManager> gameManager
     for (auto& enemy: gameManager->getEnemyManager()->getEnemies()) {
         manageCollision(gameManager->getPlayerManager()->getPlayer(), enemy);
     }
-    if (!gameManager->getMapManager().getCurrentMapLabel().empty()) {
-        sf::Vector2f size = gameManager->getMapManager().getCurrentMap().getSize();
+    if (!gameManager->getMapManager()->getCurrentMapLabel().empty()) {
+        sf::Vector2f size = gameManager->getMapManager()->getCurrentMap().getSize();
         for (auto& barrier : barriers) {
             barrier.setSize(size);
             barrier.setOrigin(size / 2.f);

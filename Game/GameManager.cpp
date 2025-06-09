@@ -30,9 +30,11 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     // Managers for projectiles and colisions
     projectileManager = std::make_shared<ProjectileManager>();
     collisionManager = std::make_shared<CollisionManager>();
+
+    mapManager = std::make_shared<MapManager>();
     // Spawner set up
     spawnManager = std::make_shared<SpawnManager>();
-    spawnManager->setUpStrategies(gameplayInfoSource,enemyManager);
+    
     // UIManager set up
     uiManager = std::make_shared<UIManager>();
 }
@@ -62,7 +64,7 @@ std::shared_ptr<UIManager> GameManager::getUIManager() {
     return uiManager;
 }
 
-MapManager& GameManager::getMapManager() {
+std::shared_ptr<MapManager> GameManager::getMapManager() {
     return mapManager;
 }
 
