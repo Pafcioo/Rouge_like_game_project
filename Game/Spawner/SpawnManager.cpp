@@ -50,9 +50,6 @@ std::vector<TimeBasedRule::TimeRule> SpawnManager::createTimeRules() {
         {3.f, 15.f, -1.f},
         {1.f, 10.f, -1.f},
         {0.5f, 5.f, -1.f},
-        {180.0f, 3.f, -1.f},
-        {300.0f, 2.f, -1.f},
-        {600.0f, 0.5f, -1.f}
     };
 }
 
