@@ -34,7 +34,6 @@ void PlayerManager::subscribeToEvents()
     eventBus->subscribe<MoveEvent>([this](const MoveEvent& moveEvent) {
         if (player) {
             player->move(moveEvent.direction * moveEvent.deltaTime);
-            //player->setEntityDirection(moveEvent.direction);
         }
     });
     eventBus->subscribe<AttackEvent>([this](const AttackEvent& attackEvent) {
@@ -43,7 +42,6 @@ void PlayerManager::subscribeToEvents()
                 player->setEntityDirection(attackEvent.direction);
                 player->attack(attackEvent.direction);
             }
-            //player->attack(player->getEntityDirection());
         }
     });
     eventBus->subscribe<useAbilityEvent>([this](const useAbilityEvent&) {
@@ -63,6 +61,7 @@ void PlayerManager::unsubscribeToEvents()
     eventBus->unsubscribeAll<MoveEvent>();
     eventBus->unsubscribeAll<AttackEvent>();
     eventBus->unsubscribeAll<useAbilityEvent>();
+    eventBus->unsubscribeAll<useItemEvent>();
 }
 
 void PlayerManager::draw(sf::RenderTarget& target)
