@@ -21,7 +21,9 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     // View set up
     viewManager = std::make_shared<ViewManager>();
     // Source for all game info like level, hp, position of player...
+    fileManager = std::make_shared<FileManager>("../GameData.txt");
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
+    gameplayInfoSource->setGameplayInfo(fileManager->readFile());
     // Managers for entities like player and enemy
     playerManager = std::make_shared<PlayerManager>();
     playerManager->setGameplayInfo(gameplayInfoSource);
@@ -36,6 +38,7 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     // UIManager set up
     uiManager = std::make_shared<UIManager>();
 }
+
 
 // Initialize state manager after construction (requires shared_from_this)
 void GameManager::initStateManager()
@@ -113,11 +116,10 @@ std::shared_ptr<CollisionManager> GameManager::getCollisionManager() {
 // Main game loop - handles window creation, timing, and rendering
 void GameManager::Play()
 {
-    // Create SFML window with 720p resolution and 60fps limit
+    // Create SFML window with 720p resolution and 60 fps limit
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
     initStateManager();
-    
     // Main game loop
     while (gameWindow.isOpen())
     {
@@ -133,4 +135,5 @@ void GameManager::Play()
         stateManager->draw(gameWindow);
         gameWindow.display();
     }
+    fileManager->writeFile(this->gameplayInfoSource->getGameplayInfo());
 }
