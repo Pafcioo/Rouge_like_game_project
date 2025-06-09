@@ -1,6 +1,8 @@
 #include "Game/Factory/UIFactory.h"
 #include "Game/States/GameState.h"
 #include "Game/UI/DynamicGameElement.h"
+#include "Game/UI/DynamicText.h"
+#include <sstream>
 
 UIFactory::UIFactory(){}
 
@@ -243,6 +245,32 @@ std::shared_ptr<UIContainer> InGameUI::createUI(
         [weakBus](){ if (auto bus = weakBus.lock()) bus->publish(ChangeStateEvent{std::make_shared<Paused>()}); }
     );
     container->addElement(optionsButton);
+
+    auto gameTimer = std::make_shared<DynamicText>(
+    [](std::shared_ptr<GameplayInfoSource> info, DynamicText* text) {
+        if (info->hasInfo("gameTime")) {
+            float totalSeconds = info->getInfo<float>("gameTime");
+            int minutes = static_cast<int>(totalSeconds) / 60;
+            int seconds = static_cast<int>(totalSeconds) % 60;
+            
+            std::stringstream ss;
+            ss << "Time: " << std::setfill('0') << std::setw(2) << minutes 
+               << ":" << std::setfill('0') << std::setw(2) << seconds;
+            
+            text->setString(ss.str());
+        }
+    },
+    gameplayInfo,
+    sf::Vector2f(1100.f, 20.f),  // Position in top-right corner
+    font,
+    "Time: 00:00",  // Initial text
+    24,             // Font size
+    sf::Color::White,
+    "GameTimer",
+    false           // Not centered
+);
+
+container->addElement(gameTimer);
 
     container->subscribeToEvents();
     return container;

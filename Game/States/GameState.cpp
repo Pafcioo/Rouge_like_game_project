@@ -55,7 +55,7 @@ void GameState::onResume()
 }
 
 // Base update logic - handle input and UI
-void GameState::update(float deltaTime) const
+void GameState::update(float deltaTime)
 {
     gameManager->getInputManager()->handleInput(deltaTime);
     // Update all UI containers in the state
@@ -102,7 +102,7 @@ void InMenu::onResume()
    GameState::onResume();
 }
 
-void InMenu::update(float deltaTime) const
+void InMenu::update(float deltaTime)
 {   
    GameState::update(deltaTime);
 }
@@ -139,7 +139,7 @@ void MapChoosing::onExit()
     GameState::onExit();
 }
 
-void MapChoosing::update(float deltaTime) const
+void MapChoosing::update(float deltaTime)
 {
     GameState::update(deltaTime);
 }
@@ -171,6 +171,11 @@ bool MapChoosing::isTransparent() const
 
 // InGame state - Active gameplay
 
+InGame::InGame()
+{
+    gameTime = 0.f;
+}
+
 void InGame::onEnter() 
 {
     auto uiFactory = std::make_unique<InGameUI>();
@@ -201,9 +206,11 @@ void InGame::onResume()
 }
 
 // Update all game systems
-void InGame::update(float deltaTime) const
+void InGame::update(float deltaTime)
 {
     GameState::update(deltaTime);
+    gameTime+=deltaTime;
+    gameManager->getGameplayInfoSource()->setInfo<float>("gameTime",gameTime);
     gameManager->getSpawnManager()->update(deltaTime);
     gameManager->getPlayerManager()->update(deltaTime);
     gameManager->getEnemyManager()->update(deltaTime);
@@ -263,7 +270,7 @@ void Paused::onResume()
     GameState::onResume();
 }
 
-void Paused::update(float deltaTime) const
+void Paused::update(float deltaTime)
 {
     GameState::update(deltaTime);
 }
@@ -310,7 +317,7 @@ void GameOver::onResume()
     GameState::onResume();
 }
 
-void GameOver::update(float deltaTime) const
+void GameOver::update(float deltaTime)
 {
     GameState::update(deltaTime);
 }
