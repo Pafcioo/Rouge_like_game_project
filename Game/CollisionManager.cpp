@@ -20,6 +20,12 @@ void CollisionManager::manageCollision(Entity* entity, Projectile* proj) {
     }
 }
 
+std::pair<bool, bool> operator< (Entity* entity, sf::RectangleShape& wall) {
+    bool x = entity->getPosition().x < wall.getPosition().x;
+    bool y = entity->getPosition().y < wall.getPosition().y;
+    return {x, y};
+}
+
 void CollisionManager::manageCollision(Entity* entity, sf::RectangleShape& wall, float deltaTime) {
     auto intersection = entity->getEntityGlobalBounds().findIntersection(wall.getGlobalBounds());
     if (intersection.has_value()) {
@@ -35,9 +41,9 @@ void CollisionManager::manageCollision(Entity* entity, sf::RectangleShape& wall,
 
         //Choose axis with smaller intersection
         if (overlapX < overlapY) {
-            pushX = (entity->getPosition().x < wall.getPosition().x) ? -1 : 1;
+            pushX = (entity < wall).first ? -1 : 1;
         } else {
-            pushY = (entity->getPosition().y < wall.getPosition().y) ? -1 : 1;
+            pushY = (entity < wall).second ? -1 : 1;
         }
 
         entity->move(sf::Vector2f(pushX, pushY) * deltaTime);
