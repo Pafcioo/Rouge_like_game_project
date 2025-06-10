@@ -1,7 +1,8 @@
 #include "FileManager.h"
-
+#include "Game/GameplayInfoSource.h"
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <utility>
 #include <vector>
 
@@ -12,6 +13,10 @@ std::unordered_map<std::string, std::any> FileManager::readFile() {
     std::ifstream file(path);
     if (!file.is_open()) {
         std::cout << "Error opening file" << std::endl;
+        // Initialize with default values if file cannot be opened
+        info["EnemiesKilled"] = 0;
+        info["Deaths"] = 0;
+        return info;
     }
     std::string line;
     while (std::getline(file, line)) {
@@ -27,14 +32,18 @@ std::unordered_map<std::string, std::any> FileManager::readFile() {
     return info;
 }
 
-void FileManager::writeFile(std::unordered_map<std::string, std::any> info) {
+void FileManager::writeFile(std::shared_ptr<GameplayInfoSource> infoSource) {
     std::ofstream file(path);
     if (!file.is_open()) {
         std::cout << "Error opening file" << std::endl;
         return;
     }
-    file << "EnemiesKilled " << std::any_cast<int>(info["EnemiesKilled"]) << std::endl;
-    file << "Deaths " << std::any_cast<int>(info["Deaths"]);
+    try {
+        file << "EnemiesKilled " << infoSource->getInfo<int>("EnemiesKilled") << std::endl;
+        file << "Deaths " << infoSource->getInfo<int>("Deaths");
+    } catch (const std::runtime_error& e) {
+        std::cout << "Error writing file: " << e.what() << std::endl;
+    }
     file.close();
     std::cout << "File written" << std::endl;
 }

@@ -1,8 +1,11 @@
 #pragma once
-#include <any>
 #include <string>
-#include <fstream>
 #include <unordered_map>
+#include <any>
+#include <memory>
+
+// Forward declaration
+class GameplayInfoSource;
 
 class FileManager {
 private:
@@ -11,5 +14,5 @@ public:
     FileManager(std::string path);
     ~FileManager() = default;
     std::unordered_map<std::string, std::any> readFile();
-    void writeFile(std::unordered_map<std::string, std::any> info);
+    void writeFile(std::shared_ptr<GameplayInfoSource> infoSource);
 };

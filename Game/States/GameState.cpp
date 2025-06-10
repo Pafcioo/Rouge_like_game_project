@@ -4,6 +4,7 @@
 #include "Game/PlayerManager.h"
 #include "Game/CollisionManager.h"
 #include "Game/ProjectileManager.h"
+#include "Game/FileManager.h"
 
 // Base GameState implementation
 
@@ -185,12 +186,18 @@ void InGame::onEnter()
         gameManager->getGameplayInfoSource())});
     gameManager->getPlayerManager()->subscribeToEvents();
     gameManager->getSpawnManager()->setUpStrategies(gameManager->getGameplayInfoSource(),gameManager->getEnemyManager(),gameManager->getMapManager());
+    auto initialData = gameManager->getFileManager()->readFile();
+    for (const auto& [key, value] : initialData) {
+        gameManager->getGameplayInfoSource()->setInfo(key, std::any_cast<int>(value));
+    }
+    
 }
 
 void InGame::onExit() 
 {
     GameState::onExit();
     gameManager->getPlayerManager()->unsubscribeToEvents();
+    //gameManager->getFileManager()->writeFile(gameManager->getGameplayInfoSource());
 }
 
 void InGame::onPause()

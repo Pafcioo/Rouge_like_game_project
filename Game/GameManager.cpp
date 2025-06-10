@@ -23,7 +23,7 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     // Source for all game info like level, hp, position of player...
     fileManager = std::make_shared<FileManager>("../../GameData.txt");
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
-    gameplayInfoSource->setGameplayInfo(fileManager->readFile());
+
     // Managers for entities like player and enemy
     playerManager = std::make_shared<PlayerManager>();
     playerManager->setGameplayInfo(gameplayInfoSource);
@@ -116,6 +116,10 @@ std::shared_ptr<CollisionManager> GameManager::getCollisionManager() {
     return collisionManager;
 }
 
+std::shared_ptr<FileManager> GameManager::getFileManager() {
+    return fileManager;
+}
+
 // Main game loop - handles window creation, timing, and rendering
 void GameManager::Play()
 {
@@ -138,5 +142,5 @@ void GameManager::Play()
         stateManager->draw(gameWindow);
         gameWindow.display();
     }
-    fileManager->writeFile(this->gameplayInfoSource->getGameplayInfo());
+    fileManager->writeFile(gameplayInfoSource);
 }

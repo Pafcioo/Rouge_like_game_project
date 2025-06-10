@@ -1,2 +1,2 @@
-EnemiesKilled 1
+EnemiesKilled 16
 Deaths 1

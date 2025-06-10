@@ -63,6 +63,7 @@ public:
     std::shared_ptr<PlayerManager> getPlayerManager();
     std::shared_ptr<ProjectileManager> getProjectileManager();
     std::shared_ptr<CollisionManager> getCollisionManager();
+    std::shared_ptr<FileManager> getFileManager();
     
     // Game lifecycle
     void initStateManager();
