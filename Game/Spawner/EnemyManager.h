@@ -6,6 +6,7 @@ class EnemyManager
 {
     private:
         std::vector<std::shared_ptr<Entity>> vectorOfEnemies;
+        std::shared_ptr<GameplayInfoSource> gameplayInfo;
     public:
         EnemyManager() = default;
         ~EnemyManager() = default;
@@ -13,4 +14,5 @@ class EnemyManager
         void draw(sf::RenderTarget& target);
         void update(float deltaTime);
         std::vector<std::shared_ptr<Entity>> getEnemies();
+        void setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfo);
 };

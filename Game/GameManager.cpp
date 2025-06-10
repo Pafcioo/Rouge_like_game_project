@@ -29,6 +29,7 @@ GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
     playerManager->setGameplayInfo(gameplayInfoSource);
     playerManager->setEventBus(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
+    enemyManager->setGameplayInfo(gameplayInfoSource);
     // Managers for projectiles and colisions
     projectileManager = std::make_shared<ProjectileManager>();
     collisionManager = std::make_shared<CollisionManager>();
