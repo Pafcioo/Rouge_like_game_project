@@ -1,0 +1,2 @@
+EnemiesKilled 1
+Deaths 1
