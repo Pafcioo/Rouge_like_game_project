@@ -1,14 +1,14 @@
 # Game/AIController/CMakeLists.txt
-file(GLOB AI_SOURCES
+file(GLOB ALGORITHM_SOURCES
     CONFIGURE_DEPENDS
-    *.cpp
-    *.h
+    src/*.cpp
+    inc/*.h
 )
 
-add_library(AIController STATIC ${AI_SOURCES})
-target_include_directories(AIController PUBLIC ${CMAKE_SOURCE_DIR})
+add_library(algorithm STATIC ${ALGORITHM_SOURCES})
+target_include_directories(algorithm PUBLIC ${CMAKE_SOURCE_DIR})
 
-target_link_libraries(AIController
+target_link_libraries(algorithm
     PUBLIC
         SFML::Graphics
         SFML::Window

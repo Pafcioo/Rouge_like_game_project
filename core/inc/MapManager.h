@@ -1,6 +1,7 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <unordered_map>
-#include <memory> // For smart pointers
+#include <memory>
 #include "Event.h"
 #include "GameMap.h"
 

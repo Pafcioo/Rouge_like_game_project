@@ -1,5 +1,5 @@
-#include "Game/AIController/AIControllerDifficulty.h"
-#include "Game/AIController/AIController.h"
+#include "../inc/AIControllerDifficulty.h"
+#include "../inc/AIController.h"
 
 void AIControllerDifficulty::setAIController(std::shared_ptr<AbstractAIController> controller)
 {

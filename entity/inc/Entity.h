@@ -1,12 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include "entity/inc/Weapon.h"
-#include "core/inc/GameplayInfoSource.h"
-#include "entity/inc/Item.h"
-#include "entity/inc/Potion.h"
-#include "factory/inc/ItemBuilder.h"
-#include "entity/inc/Ability.h"
+#include "Weapon.h"
+#include "../../core/inc/GameplayInfoSource.h"
+#include "Item.h"
+#include "Potion.h"
+#include "../../factory/inc/ItemBuilder.h"
+#include "Ability.h"
 
 // Abstract base class for all game entities
 class Entity : public sf::Drawable

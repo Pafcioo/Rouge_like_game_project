@@ -1,8 +1,8 @@
 #include <iostream>
-#include "UIContainer.h"
-#include "Text.h"
-#include "Image.h"
-#include "GameElement.h"
+#include "../inc/UIContainer.h"
+#include "../inc/Text.h"
+#include "../inc/Image.h"
+#include "../inc/GameElement.h"
 
 // Constructor for UI container
 UIContainer::UIContainer(std::shared_ptr<EventBus> eventBus) {

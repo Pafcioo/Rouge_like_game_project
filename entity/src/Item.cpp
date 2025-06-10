@@ -1,4 +1,4 @@
-#include "Item.h"
+#include "../inc/Item.h"
 
 void Item::setId(int id) {this->id = id;}
 void Item::setName(std::string name) {this->name = name;}

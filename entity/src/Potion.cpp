@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
-#include "Potion.h"
-#include "Entity.h"
+#include "../inc/Potion.h"
+#include "../inc/Entity.h"
 
 void HealPotion::activate(Entity *entity) {
     entity->setHealth(entity->getHealth()+effectAmount);

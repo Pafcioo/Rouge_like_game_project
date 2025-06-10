@@ -1,4 +1,4 @@
-#include "GameElement.h"
+#include "../inc/GameElement.h"
 
 // Default constructor
 GameElement::GameElement(std::string label,

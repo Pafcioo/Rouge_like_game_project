@@ -1,16 +1,15 @@
 # Game/Factory/CMakeLists.txt
 file(GLOB FACTORY_SOURCES
     CONFIGURE_DEPENDS
-    *.cpp
-    *.h
+    src/*.cpp
+    inc/*.h
 )
 
-add_library(Factory STATIC ${FACTORY_SOURCES})
-target_include_directories(Factory PUBLIC ${CMAKE_SOURCE_DIR})
+add_library(factory STATIC ${FACTORY_SOURCES})
+target_include_directories(factory PUBLIC ${CMAKE_SOURCE_DIR})
 
-target_link_libraries(Factory
+target_link_libraries(factory
     PUBLIC
-        AIController
         SFML::Graphics
         SFML::Window
         SFML::System

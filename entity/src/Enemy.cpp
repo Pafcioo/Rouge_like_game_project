@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Enemy.h"
+#include "../inc/Enemy.h"
 
 Enemy::Enemy(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
         Entity(health, speed, position, texture) {}

@@ -1,14 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "core/inc/GameplayInfoSource.h"
-#include "algorithm/inc/AICooldown.h"
-#include "algorithm/inc/AIDecision.h"
-#include "algorithm/inc/AIMovement.h"
-#include "algorithm/inc/AISensing.h"
-#include "algorithm/inc/AIState.h"
-#include "algorithm/inc/AIAttack.h"
-#include "algorithm/inc/AIControllerDifficulty.h"
-#include "entity/inc/Entity.h"
+#include "../../core/inc/GameplayInfoSource.h"
+#include "AICooldown.h"
+#include "AIDecision.h"
+#include "AIMovement.h"
+#include "AISensing.h"
+#include "AIState.h"
+#include "AIAttack.h"
+#include "AIControllerDifficulty.h"
+#include "../../entity/inc/Entity.h"
 
 
 class AbstractAIController : public std::enable_shared_from_this<AbstractAIController>

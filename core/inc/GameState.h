@@ -1,9 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "ui/inc/UIManager.h"
-#include "factory/inc/UIFactory.h"
-#include "ui/inc/UIContainer.h"
-#include "core/inc/GameManager.h"
+#include "../../ui/inc/UIManager.h"
+#include "../../factory/inc/UIFactory.h"
+#include "../../ui/inc/UIContainer.h"
+#include "GameManager.h"
 
 // Base class for all game states with UI management and event handling
 class GameState

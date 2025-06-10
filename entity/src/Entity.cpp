@@ -1,6 +1,5 @@
-#include "Entity.h"
 #include <cmath>
-#include <iostream>
+#include "../inc/Entity.h"
 
 Entity::Entity(const float health, const float speed, const sf::Vector2f position, const sf::Texture &texture):
             entityTexture(texture), entitySprite(entityTexture)

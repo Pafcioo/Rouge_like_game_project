@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Game/UI/UIContainer.h"
-#include "Game/GameplayInfoSource.h"
+#include "../../ui/inc/UIContainer.h"
+#include "../../core/inc/GameplayInfoSource.h"
 
 class UIFactory
 {

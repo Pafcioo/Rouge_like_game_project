@@ -1,7 +1,7 @@
-#include "Ability.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
+#include "../inc/Entity.h"
+#include "../inc/Ability.h"
 
 Ability::Ability() {
     isActive = false;

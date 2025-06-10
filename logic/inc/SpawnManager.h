@@ -3,11 +3,11 @@
 #include <algorithm>
 #include <memory>
 #include <string>
-#include "Game/Spawner/Spawner.h"
-#include "Game/Spawner/SpawnStrategy.h"
-#include "Game/Event.h"
-#include "Game/Spawner/SpawnComponent.h"
-#include "Game/Spawner/SpawnRule.h"
+#include "../inc/Spawner.h"
+#include "../inc/SpawnStrategy.h"
+#include "../../core/inc/Event.h"
+#include "../inc/SpawnComponent.h"
+#include "../inc/SpawnRule.h"
 
 // Forward declarations for types used as pointers/references
 class GameplayInfoSource;

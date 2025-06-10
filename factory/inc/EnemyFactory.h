@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Game/Enemy.h"
+#include "../../entity/inc/Enemy.h"
 
 class EntityFactory
 {

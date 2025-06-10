@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Projectile.h"
+#include "../inc/Projectile.h"
 
 Projectile::Projectile(sf::Vector2f position, sf::Vector2f velocity, float speed, float damage, std::type_index type, float radius, sf::Color color):
         projectileInitialPosition(position), projectileVelocity(velocity), projectileSpeed(speed), projectileIsActive(true), projectileType(type) {

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Projectile.h"
-#include "ProjectileManager.h"
+#include "../../logic/inc/ProjectileManager.h"
 
 class Weapon {
 protected:

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Command.h"
+#include "../inc/Command.h"
 
 void MoveCommand::executeCommand(Entity* player, float deltaTime)
 {

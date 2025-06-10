@@ -1,5 +1,5 @@
-#include "Game/AIController/AICooldown.h"
-#include "Game/AIController/AIController.h"
+#include "../inc/AICooldown.h"
+#include "../inc/AIController.h"
 
 AICooldown::AICooldown(float cooldown)
 {

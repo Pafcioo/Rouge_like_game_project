@@ -1,12 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "core/inc/InputManager.h"
-#include "ui/inc/UIManager.h"
-#include "entity/inc/Player.h"
-#include "core/inc/Event.h"
-#include "core/inc/GameMap.h"
-#include "core/inc/MapManager.h"
-#include "core/inc/FileManager.h"
+#include "InputManager.h"
+#include "../../ui/inc/UIManager.h"
+#include "../../entity/inc/Player.h"
+#include "Event.h"
+#include "GameMap.h"
+#include "MapManager.h"
+#include "FileManager.h"
 
 class StateManager;
 class SpawnManager;

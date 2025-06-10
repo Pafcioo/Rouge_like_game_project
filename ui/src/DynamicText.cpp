@@ -1,4 +1,4 @@
-#include "DynamicText.h"
+#include "../inc/DynamicText.h"
 #include <iomanip>
 #include <sstream>
 

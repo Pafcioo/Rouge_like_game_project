@@ -1,5 +1,5 @@
-#include "Game/AIController/AIDecision.h"
-#include "Game/AIController/AIController.h"
+#include "../inc/AIDecision.h"
+#include "../inc/AIController.h"
 
 AIDecision::AIDecision()
 {

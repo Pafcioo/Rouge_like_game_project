@@ -1,19 +1,19 @@
 #include <iostream>
-#include "core/inc/GameManager.h"
-#include "entity/inc/Entity.h"
-#include "entity/inc/Player.h"
-#include "entity/inc/Projectile.h"
-#include "logic/inc/EnemyManager.h"
-#include "core/inc/GameplayInfoSource.h"
-#include "core/inc/StateManager.h"
-#include "logic/inc/SpawnManager.h"
-#include "ui/inc/ViewManager.h"
-#include "logic/inc/PlayerManager.h"
-#include "logic/inc/ProjectileManager.h"
-#include "logic/inc/CollisionManager.h"
+#include "../inc/GameManager.h"
+#include "../../entity/inc/Entity.h"
+#include "../../entity/inc/Player.h"
+#include "../../entity/inc/Projectile.h"
+#include "../../logic/inc/EnemyManager.h"
+#include "../inc/GameplayInfoSource.h"
+#include "../inc/StateManager.h"
+#include "../../logic/inc/SpawnManager.h"
+#include "../../logic/inc/ViewManager.h"
+#include "../../logic/inc/PlayerManager.h"
+#include "../../logic/inc/ProjectileManager.h"
+#include "../../logic/inc/CollisionManager.h"
 
 // Constructor initializes all core game systems and managers
-GameManager::GameManager() : font("Assets/Roboto_Condensed-Black.ttf")
+GameManager::GameManager() : font("../../Roboto_Condensed-Black.ttf")
 {
     // Bus for events in game
     eventBus = std::make_shared<EventBus>();
@@ -142,5 +142,5 @@ void GameManager::Play()
         stateManager->draw(gameWindow);
         gameWindow.display();
     }
-    
+    fileManager->writeFile(gameplayInfoSource);
 }

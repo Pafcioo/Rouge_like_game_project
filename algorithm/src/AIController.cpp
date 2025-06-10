@@ -1,5 +1,4 @@
-#include "Game/AIController/AIController.h"
-#include <iostream>
+#include "../inc/AIController.h"
 
 EnemyAIController::EnemyAIController(std::shared_ptr<Entity> entity, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {

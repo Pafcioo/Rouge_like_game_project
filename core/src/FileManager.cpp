@@ -1,5 +1,5 @@
-#include "FileManager.h"
-#include "Game/GameplayInfoSource.h"
+#include "../inc/FileManager.h"
+#include "../inc/GameplayInfoSource.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>

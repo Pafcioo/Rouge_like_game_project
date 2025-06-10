@@ -4,8 +4,8 @@
 #include <vector>
 #include <string>
 #include <regex>
-#include "MapManager.h"
-#include "Game/UI/UIManager.h"
+#include "../inc/MapManager.h"
+#include "../../ui/inc/UIManager.h"
 
 // Constructor loads maps from CSV file
 MapManager::MapManager()

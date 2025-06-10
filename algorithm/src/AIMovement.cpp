@@ -1,6 +1,5 @@
-#include "Game/AIController/AIMovement.h"
-#include "Game/AIController/AIController.h"
-#include <iostream>
+#include "../inc/AIMovement.h"
+#include "../inc/AIController.h"
 
 AIMovement::AIMovement(int movement)
 {

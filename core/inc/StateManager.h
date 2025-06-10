@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
-#include "Game/States/GameState.h"
+#include "GameState.h"
 
 class GameManager;
 class UIManager;

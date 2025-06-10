@@ -1,6 +1,6 @@
 #include <iostream>
-#include "factory/inc/EntityBuilder.h"
-#include "logic/inc/SpawnRule.h"
+#include "../inc/EntityBuilder.h"
+#include "../../logic/inc/SpawnRule.h"
 
 void EnemyBuilder::reset(std::shared_ptr<SpawnConfig> config, std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {

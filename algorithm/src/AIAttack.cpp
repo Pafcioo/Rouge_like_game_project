@@ -1,6 +1,5 @@
-#include "algorithm/inc/AIController.h"
-#include "algorithm/inc/AIAttack.h"
-#include <iostream>
+#include "../inc/AIController.h"
+#include "../inc/AIAttack.h"
 
 AIAttack::AIAttack(int attack)
 {

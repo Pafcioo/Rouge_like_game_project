@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Item.h"
 #include <memory>
+#include "../../entity/inc/Item.h"
 
 class ItemBuilder {
 public:

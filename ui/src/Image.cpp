@@ -1,4 +1,4 @@
-#include "Image.h"
+#include "../inc/Image.h"
 #include <iostream>
 
 // Constructor with scale

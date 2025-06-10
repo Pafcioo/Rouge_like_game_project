@@ -1,4 +1,4 @@
-#include "DynamicGameElement.h"
+#include "../inc/DynamicGameElement.h"
 #include <algorithm>
 
 DynamicGameElement::DynamicGameElement(

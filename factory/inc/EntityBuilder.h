@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Game/Entity.h"
+#include "../../entity/inc/Entity.h"
 #include "EnemyFactory.h"
-#include "Game/Spawner/SpawnRule.h"
+#include "../../logic/inc/SpawnRule.h"
 
 class EntityBuilder
 {
@@ -31,16 +31,3 @@ class EnemyBuilder : public EntityBuilder
         void reset(std::shared_ptr<SpawnConfig> config, std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
         std::shared_ptr<Entity> getEnemy() const;
 };
-
-// class PlayerBuilder : public EntityBuilder
-// {
-//     private:
-//         std::shared_ptr<Entity> player;
-//     public:
-//         PlayerBuilder() = default;
-//         ~PlayerBuilder() override = default;
-//         void setWeapon() const override;
-//         void setItem() const override;
-//         void setAbility() const override;
-//         std::shared_ptr<Entity> getPlayer() const { return player; }
-// };

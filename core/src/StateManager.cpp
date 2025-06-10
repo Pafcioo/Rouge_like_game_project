@@ -1,9 +1,8 @@
 #include <iostream>
 #include <algorithm>
-#include "core/inc/StateManager.h"
-#include "core/inc/GameState.h"
-#include "core/inc/GameManager.h"
-
+#include "../inc/StateManager.h"
+#include "../inc/GameState.h"
+#include "../inc/GameManager.h"
 
 // Push new state onto stack, pausing current state
 void StateManager::pushState(std::shared_ptr<GameState> newState)

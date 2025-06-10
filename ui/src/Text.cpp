@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Text.h"
+#include "../inc/Text.h"
 
 // Constructor for UIElement
 Text::Text(

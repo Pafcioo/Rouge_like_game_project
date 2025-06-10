@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
-#include "core/inc/InputManager.h"
-#include "core/inc/Event.h"
-#include "core/inc/GameState.h"
+#include "../inc/InputManager.h"
+#include "../inc/Event.h"
+#include "../inc/GameState.h"
 
 
 InputManager::InputManager(std::shared_ptr<EventBus> eventBus, sf::RenderWindow& gameWindow)

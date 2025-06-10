@@ -1,5 +1,5 @@
-#include "algorithm/inc/AISensing.h"
-#include "algorithm/inc/AIController.h"
+#include "../inc/AISensing.h"
+#include "../inc/AIController.h"
 
 VisionSensing::VisionSensing(float vision, float attack)
 {

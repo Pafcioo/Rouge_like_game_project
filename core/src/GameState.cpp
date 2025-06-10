@@ -1,10 +1,10 @@
-#include "Game/States/GameState.h"
-#include "Game/Spawner/SpawnManager.h"
-#include "Game/UI/ViewManager.h"
-#include "Game/PlayerManager.h"
-#include "Game/CollisionManager.h"
-#include "Game/ProjectileManager.h"
-#include "Game/FileManager.h"
+#include "../inc/GameState.h"
+#include "../../logic/inc/SpawnManager.h"
+#include "../../logic/inc/ViewManager.h"
+#include "../../logic/inc/PlayerManager.h"
+#include "../../logic/inc/CollisionManager.h"
+#include "../../logic/inc/ProjectileManager.h"
+#include "../inc/FileManager.h"
 
 // Base GameState implementation
 

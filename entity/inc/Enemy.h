@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
-#include "Game/AIController/AIController.h"
+#include "../../algorithm/inc/AIController.h"
 
 class Enemy : public Entity, public std::enable_shared_from_this<Enemy>
 {

@@ -1,6 +1,5 @@
-#include "ItemBuilder.h"
-#include "Potion.h"
-
+#include "../inc/ItemBuilder.h"
+#include "../../entity/inc/Potion.h"
 
 void HealPotionBuilder::reset() {
     this->healPotion = std::make_shared<HealPotion>();

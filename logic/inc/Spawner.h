@@ -2,13 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <string>
-#include "Game/GameplayInfoSource.h"
-#include "Game/Spawner/EnemyManager.h"
-#include "Game/Factory/EnemyFactory.h"
-#include "Game/Factory/EntityBuilder.h"
-#include "Game/Event.h"
-#include "Game/Spawner/SpawnRule.h"
 #include <unordered_map>
+#include "../../core/inc/GameplayInfoSource.h"
+#include "../inc/EnemyManager.h"
+#include "../../factory/inc/EnemyFactory.h"
+#include "../../factory/inc/EntityBuilder.h"
+#include "../../core/inc/Event.h"
+#include "../inc/SpawnRule.h"
 
 // Abstract base class
 class AbstractSpawner {

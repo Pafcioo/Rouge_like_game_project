@@ -1,8 +1,8 @@
 #include <sstream>
-#include "factory/inc/UIFactory.h"
-#include "logic/inc/GameState.h"
-#include "ui/inc/DynamicGameElement.h"
-#include "ui/inc/DynamicText.h"
+#include "../inc/UIFactory.h"
+#include "../../core/inc/GameState.h"
+#include "../../ui/inc/DynamicGameElement.h"
+#include "../../ui/inc/DynamicText.h"
 
 UIFactory::UIFactory(){}
 

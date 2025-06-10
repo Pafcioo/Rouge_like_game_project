@@ -1,6 +1,5 @@
 #include <utility>
-
-#include "Game/GameplayInfoSource.h"
+#include "../inc/GameplayInfoSource.h"
 
 bool GameplayInfoSource::hasInfo(const std::string& key) const
 {
