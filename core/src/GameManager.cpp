@@ -21,7 +21,7 @@ GameManager::GameManager() : font("resources/fonts/Roboto_Condensed-Black.ttf")
     // View set up
     viewManager = std::make_shared<ViewManager>();
     // Source for all game info like level, hp, position of player...
-    fileManager = std::make_shared<FileManager>("resources/data/GameData.txt");
+    fileManager = std::make_shared<FileManager>("../../resources/data/GameData.txt");
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
 
     // Managers for entities like player and enemy
