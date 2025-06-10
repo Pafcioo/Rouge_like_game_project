@@ -22,5 +22,7 @@ class GameplayInfoSource
             }
             return std::any_cast<T>(gameplayInfo.at(key));
         }
+        void setGameplayInfo(std::unordered_map<std::string, std::any> gameplayInfoSource);
+        std::unordered_map<std::string, std::any> getGameplayInfo();
         bool hasInfo(const std::string& key) const;
 };

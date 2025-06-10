@@ -25,4 +25,5 @@ class PlayerManager
         void setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
         void setEventBus(std::shared_ptr<EventBus> eventBus);
         Entity* getPlayer();
+        std::shared_ptr<GameplayInfoSource> getGameplayInfo();
 };

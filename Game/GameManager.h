@@ -6,6 +6,7 @@
 #include "Game/Event.h"
 #include "Game/GameMap.h"
 #include "Game/MapManager.h"
+#include "FileManager.h"
 
 class StateManager;
 class SpawnManager;
@@ -40,6 +41,7 @@ private:
     std::shared_ptr<PlayerManager> playerManager;
     std::shared_ptr<ProjectileManager> projectileManager;
     std::shared_ptr<CollisionManager> collisionManager;
+    std::shared_ptr<FileManager> fileManager;
 public:
     GameManager();
     ~GameManager() = default;

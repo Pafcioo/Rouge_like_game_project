@@ -82,7 +82,12 @@ void PlayerManager::update(float deltaTime)
     if(player->getHealth() <= 0)
     {
         eventBus->publish(ChangeStateEvent{std::make_shared<GameOver>()});
+        gameplayInfo->setInfo("Deaths", gameplayInfo->getInfo<int>("Deaths") + 1);
     }
 }
 
 Entity* PlayerManager::getPlayer() {return player;}
+
+std::shared_ptr<GameplayInfoSource> PlayerManager::getGameplayInfo() {
+    return gameplayInfo;
+}
