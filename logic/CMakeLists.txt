@@ -10,6 +10,8 @@ target_include_directories(logic PUBLIC ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(logic
     PUBLIC
+        entity
+        factory
         SFML::Graphics
         SFML::Window
         SFML::System

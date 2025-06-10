@@ -10,6 +10,8 @@ target_include_directories(factory PUBLIC ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(factory
     PUBLIC
+        entity
+        algorithm
         SFML::Graphics
         SFML::Window
         SFML::System

@@ -8,7 +8,7 @@
 
 PlayerManager::PlayerManager()
 {
-    player = new Player(100, 250, {0, 0}, sf::Texture("Assets/player.png"));
+    player = new Player(100, 250, {0, 0}, sf::Texture("resources/images/player.png"));
     ItemBuilder* builder = new HealPotionBuilder();
     player->setItem(builder->build());
     delete builder;

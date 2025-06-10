@@ -197,13 +197,13 @@ void InGame::onExit()
 {
     GameState::onExit();
     gameManager->getPlayerManager()->unsubscribeToEvents();
-    //gameManager->getFileManager()->writeFile(gameManager->getGameplayInfoSource());
 }
 
-void InGame::onPause()
+void InGame::onPause()  
 {
     GameState::onPause();
     gameManager->getPlayerManager()->unsubscribeToEvents();
+    
 }
 
 void InGame::onResume()
@@ -307,6 +307,7 @@ void GameOver::onEnter()
         eventBus, 
         gameManager->getFont(),
         gameManager->getGameplayInfoSource())});
+    gameManager->getFileManager()->writeFile(gameManager->getGameplayInfoSource());
 }
 
 void GameOver::onExit() 

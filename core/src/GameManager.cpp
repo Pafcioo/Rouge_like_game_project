@@ -13,7 +13,7 @@
 #include "../../logic/inc/CollisionManager.h"
 
 // Constructor initializes all core game systems and managers
-GameManager::GameManager() : font("../../Roboto_Condensed-Black.ttf")
+GameManager::GameManager() : font("resources/fonts/Roboto_Condensed-Black.ttf")
 {
     // Bus for events in game
     eventBus = std::make_shared<EventBus>();
@@ -21,7 +21,7 @@ GameManager::GameManager() : font("../../Roboto_Condensed-Black.ttf")
     // View set up
     viewManager = std::make_shared<ViewManager>();
     // Source for all game info like level, hp, position of player...
-    fileManager = std::make_shared<FileManager>("../../GameData.txt");
+    fileManager = std::make_shared<FileManager>("resources/data/GameData.txt");
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
 
     // Managers for entities like player and enemy
@@ -142,5 +142,5 @@ void GameManager::Play()
         stateManager->draw(gameWindow);
         gameWindow.display();
     }
-    fileManager->writeFile(gameplayInfoSource);
+    
 }

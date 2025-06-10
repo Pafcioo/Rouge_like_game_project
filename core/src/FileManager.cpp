@@ -45,5 +45,4 @@ void FileManager::writeFile(std::shared_ptr<GameplayInfoSource> infoSource) {
         std::cout << "Error writing file: " << e.what() << std::endl;
     }
     file.close();
-    std::cout << "File written" << std::endl;
 }
