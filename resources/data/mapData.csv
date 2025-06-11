@@ -1,0 +1,4 @@
+labelOfMap,pathToMap,sizeOfPreviewMap,sizeOfGameplayMap
+Desert Strike,resources/images/desert_map.png,[200x150],[1920x1080]
+Castle,resources/images/castle_map.png,[200x150],[3840x2160]
+Forest Valley,resources/images/forest_map.png,[200x150],[2560x1440]

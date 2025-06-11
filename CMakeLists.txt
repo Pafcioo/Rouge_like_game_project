@@ -20,48 +20,43 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
-# 4) Zbieramy wszystkie pliki .cpp/.hpp z src/
-file(GLOB GAME_SOURCES
-    "${CMAKE_SOURCE_DIR}/Game/*.cpp"
-    "${CMAKE_SOURCE_DIR}/Game/*.h"
-)
+# 4) Dodaj moduły (każdy ma swój CMakeLists.txt)
+add_subdirectory(algorithm)
+add_subdirectory(core)
+add_subdirectory(entity)
+add_subdirectory(factory)
+add_subdirectory(logic)
+add_subdirectory(ui)
 
-add_subdirectory(Game/AIController)
-add_subdirectory(Game/Spawner)
-add_subdirectory(Game/Factory)
-add_subdirectory(Game/States)
-add_subdirectory(Game/UI)
+# 5) Tworzymy główny executable (bez własnych plików źródłowych)
+# Wszystkie pliki są w modułach, więc tworzymy "pusty" executable
+add_executable(${PROJECT_NAME} core/src/Game.cpp)
 
-# 5) Tworzymy target o nazwie projektu
-add_executable(${PROJECT_NAME} ${GAME_SOURCES})
-
+# 6) Katalogi include
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}
 )
 
-# 6) Wymagamy C++17
+# 7) Wymagamy C++17
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
-# 7) Linkujemy potrzebne moduły SFML
+# 8) Linkujemy wszystkie moduły i SFML
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        Spawner
-        AIController
-        States
-        Factory
-        UI
-        SFML::Graphics
-        SFML::Window
-        SFML::System
+        algorithm
+        core
+        entity
+        factory
+        logic
+        ui
+        sfml-graphics
+        sfml-window
+        sfml-system
 )
 
+# 9) Kopiowanie zasobów po kompilacji
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/Assets
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Assets
+            ${CMAKE_SOURCE_DIR}/resources
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
 )
-
-
-
-
-
