@@ -22,8 +22,8 @@ public:
     void update(float deltaTime) override;
 
     // Size manipulation methods
-    void setWidthPercentage(float percentage);  // 0.0f to 1.0f
-    void setHeightPercentage(float percentage); // 0.0f to 1.0f
+    void setWidthPercentage(float percentage);
+    void setHeightPercentage(float percentage);
     void setOriginalSize(const sf::Vector2f& size);
     void resetSize();
     void setAction(std::function<void(std::shared_ptr<GameplayInfoSource>)> newAction) {
@@ -32,7 +32,7 @@ public:
 
     // Color and transparency control
     void setColor(const sf::Color& color);
-    void setAlpha(uint8_t alpha);  // 0 = fully transparent, 255 = fully opaque
+    void setAlpha(uint8_t alpha);
     void setColorWithAlpha(const sf::Color& color, uint8_t alpha);
     sf::Color getColor() const;
 

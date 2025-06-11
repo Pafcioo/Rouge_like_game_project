@@ -20,11 +20,7 @@ Button::Button(
     buttonShape.setSize(buttonSize);
     buttonShape.setPosition(buttonPosition);
     buttonShape.setFillColor(buttonColor);
-
-    // Set button text attributes
     buttonText.setFillColor(sf::Color::Black);
-
-    // Adjust origin based on the centerOrigin parameter
     setOriginCentered(centerOrigin);
 
     // Subscribe to mouse click event
@@ -38,10 +34,8 @@ Button::Button(
 
 void Button::setOriginCentered(bool centerOrigin) {
     if (centerOrigin) {
-        // Center the origin of the button shape and text
         buttonShape.setOrigin({buttonShape.getSize().x / 2.f, buttonShape.getSize().y / 2.f});
     } else {
-        // Set origin to top-left
         buttonShape.setOrigin({0.f, 0.f});
     }
     buttonText.setOrigin(buttonText.getGlobalBounds().getCenter());
@@ -118,7 +112,7 @@ sf::FloatRect Button::getGlobalBoundsOfButton() const {
 }
 
 void Button::update(float deltaTime) {
-    // Add logic for updating the button if needed
+    
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {

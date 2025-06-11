@@ -98,5 +98,5 @@ sf::Color GameElement::getColor() const {
         return elementRect_.getFillColor();
     else if (elementType_ == ShapeType::Circle)
         return elementCircle_.getFillColor();
-    return sf::Color::White; // Default color if no shape is set
+    return sf::Color::White;
 }

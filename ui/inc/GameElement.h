@@ -3,7 +3,6 @@
 #include <string>
 #include "UIElement.h"
 
-// Enum for different types of shapes
 enum class ShapeType { 
     Rectangle,
     Circle,
@@ -18,7 +17,7 @@ public:
         const sf::Vector2f& position = {0.f, 0.f},
         sf::Color color = sf::Color::White,
         ShapeType type = ShapeType::Rectangle,
-        bool centerOrigin = false // New parameter
+        bool centerOrigin = false
     );
     // Setters
     void setPosition(const sf::Vector2f& position);

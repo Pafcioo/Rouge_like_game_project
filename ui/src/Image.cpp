@@ -8,13 +8,13 @@ Image::Image(const std::string& imageLabel,
     const sf::Angle& imageRotation,
     const std::string& imageTexturePath)
 : UIElement(imageLabel), imageTexturePath_(imageTexturePath),
-  imageTexture_(std::make_shared<sf::Texture>()) // Initialize shared_ptr
+  imageTexture_(std::make_shared<sf::Texture>())
 {
     if (!imageTexture_->loadFromFile(imageTexturePath_)) {
         std::cerr << "Failed to load texture: " << imageTexturePath_ << std::endl;
         return;
     }
-    imageSprite_ = std::make_unique<sf::Sprite>(*imageTexture_); // Initialize unique_ptr with texture
+    imageSprite_ = std::make_unique<sf::Sprite>(*imageTexture_);
     
     imageSprite_->setOrigin({imageSprite_->getGlobalBounds().size.x / 2.f,
                             imageSprite_->getGlobalBounds().size.y / 2.f});
@@ -30,13 +30,13 @@ Image::Image(const std::string& imageLabel,
     const sf::Angle& imageRotation,
     const std::string& imageTexturePath)
 : UIElement(imageLabel), imageTexturePath_(imageTexturePath),
-  imageTexture_(std::make_shared<sf::Texture>()) // Initialize shared_ptr
+  imageTexture_(std::make_shared<sf::Texture>())
 {
     if (!imageTexture_->loadFromFile(imageTexturePath_)) {
         std::cerr << "Failed to load texture: " << imageTexturePath_ << std::endl;
         return;
     }
-    imageSprite_ = std::make_unique<sf::Sprite>(*imageTexture_); // Initialize unique_ptr with texture
+    imageSprite_ = std::make_unique<sf::Sprite>(*imageTexture_);
     sf::Vector2u textureSize = imageTexture_->getSize();
     imageSprite_->setOrigin({imageSprite_->getGlobalBounds().size.x / 2.f,
                             imageSprite_->getGlobalBounds().size.y / 2.f});

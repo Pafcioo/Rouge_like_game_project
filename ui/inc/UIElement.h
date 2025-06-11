@@ -5,7 +5,7 @@
 // Base class for UIElements, created for storing UIElements in map/vector as pointers to this class
 class UIElement : public sf::Drawable {
 private:
-    std::string label_; // All the elements have label in common
+    std::string label_;
 public:
     UIElement(const std::string& label = "") : label_(label) {}
     virtual ~UIElement() = 0;

@@ -73,7 +73,6 @@ void PlayerManager::update(float deltaTime)
 {
     player->update(deltaTime);
     
-    // Add these lines to update the ability cooldown info
     if (auto ability = player->getAbility()) {
         gameplayInfo->setInfo("playerAbilityCooldown", ability->getCurrentCooldown());
         gameplayInfo->setInfo("playerAbilityMaxCooldown", ability->getCooldown());

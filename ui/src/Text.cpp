@@ -33,7 +33,7 @@ void Text::setPosition(const sf::Vector2f& position) {
 void Text::setString(const std::string& text) {
     text_.setString(text);
     if (centerText_) {
-        updatePosition(); // Recalculate position when text changes
+        updatePosition();
     }
 }
 
@@ -41,7 +41,7 @@ void Text::setCharacterSize(unsigned int size) {
     characterSize_ = size;
     text_.setCharacterSize(characterSize_);
     if (centerText_) {
-        updatePosition(); // Recalculate position when size changes
+        updatePosition();
     }
 }
 

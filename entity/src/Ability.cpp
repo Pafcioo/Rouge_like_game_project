@@ -119,7 +119,6 @@ void SprintAbility::influence(Entity *entity)
 {
     if (isActive) 
     {
-        std::cout << "Sprinting" << std::endl;
         entity->setSpeed(entity->getEntityBaseSpeed()+boost);
     }
     else 

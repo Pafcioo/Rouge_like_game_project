@@ -64,9 +64,9 @@ class TimeBasedRule : public SpawnRule
 public:
     struct TimeRule
     {
-        float spawnTime;       // Time until the first spawn
-        float spawnInterval;   // Interval between subsequent spawns
-        float endTime;         // Time after which spawning stops
+        float spawnTime;
+        float spawnInterval;
+        float endTime;
     };
 private:
     TimeRule timeRule;
