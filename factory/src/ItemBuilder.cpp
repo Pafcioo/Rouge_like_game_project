@@ -13,5 +13,6 @@ std::shared_ptr<Item> HealPotionBuilder::build(std::shared_ptr<GameplayInfoSourc
     this->healPotion->setRarity(COMMON);
     this->healPotion->setUseCounter(3);
     this->healPotion->setGameplayInfo(info);
+    info->setInfo<int>("potionAmount",this->healPotion->getUseCounter());
     return healPotion;
 }

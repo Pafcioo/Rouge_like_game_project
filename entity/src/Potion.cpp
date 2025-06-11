@@ -1,8 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "../inc/Potion.h"
-
-#include <iostream>
-
 #include "../inc/Entity.h"
 
 void HealPotion::activate(Entity *entity) {
@@ -15,5 +12,4 @@ void HealPotion::activate(Entity *entity) {
     }
     useCounter--;
     gameplayInfo->setInfo("potionAmount", useCounter);
-    std::cout << useCounter << std::endl;
 }
