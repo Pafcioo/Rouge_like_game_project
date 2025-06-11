@@ -157,12 +157,12 @@ std::shared_ptr<UIContainer> MapChoiceUI::createUI(
         sf::Vector2f(100.f, 100.f),
         sf::Vector2f(780.f, 360.f),
         sf::Color::White,
-        "Castle",
+        "Parking",
         font,
         24,
         [weakBus](){
             if (auto bus = weakBus.lock()) {
-                bus->publish(MapChoiceEvent{"Castle"});
+                bus->publish(MapChoiceEvent{"Parking"});
                 bus->publish(ChangeStateEvent{std::make_shared<InGame>()});
             }
         },
