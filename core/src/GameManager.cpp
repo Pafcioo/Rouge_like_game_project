@@ -25,8 +25,7 @@ GameManager::GameManager() : font("resources/fonts/Roboto_Condensed-Black.ttf")
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
 
     // Entity managers
-    playerManager = std::make_shared<PlayerManager>();
-    playerManager->setGameplayInfo(gameplayInfoSource);
+    playerManager = std::make_shared<PlayerManager>(gameplayInfoSource);
     playerManager->setEventBus(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
     enemyManager->setGameplayInfo(gameplayInfoSource);

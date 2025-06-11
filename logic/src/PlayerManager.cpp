@@ -6,14 +6,15 @@
 #include <algorithm>
 #include <cmath>
 
-PlayerManager::PlayerManager()
+PlayerManager::PlayerManager(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)
 {
     player = new Player(100, 250, {0, 0}, sf::Texture("resources/images/player.png"));
     ItemBuilder* builder = new HealPotionBuilder();
-    player->setItem(builder->build());
+    player->setItem(builder->build(gameplayInfoSource));
     delete builder;
     player->setAbility(std::make_shared<SprintAbility>());
     player->setWeapon(std::make_shared<BasicWeapon>());
+    setGameplayInfo(gameplayInfoSource);
 }
 
 void PlayerManager::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfoSource)

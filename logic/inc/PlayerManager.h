@@ -16,7 +16,7 @@ class PlayerManager
         std::shared_ptr<GameplayInfoSource> gameplayInfo;
         std::shared_ptr<EventBus> eventBus;
     public:
-        PlayerManager();
+        PlayerManager(std::shared_ptr<GameplayInfoSource> gameplayInfoSource);
         ~PlayerManager() = default;
         void draw(sf::RenderTarget& target);
         void update(float deltaTime);
