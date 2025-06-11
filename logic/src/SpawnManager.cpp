@@ -106,12 +106,12 @@ void SpawnManager::setUpStrategies(std::shared_ptr<GameplayInfoSource> gameplayI
     std::vector<std::pair<std::shared_ptr<AbstractSpawner>, EnemyParams>> enemyTypes = {
         // Basic zombies - slow but tough
         {std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager),
-         EnemyParams(10, 15.f, "resources/images/zombie.png", 0.8, 3.f, {}, nullptr, 
+         EnemyParams(10, 15.f, "resources/images/zombie.png", 0.2, 3.f, {}, nullptr, 
                     nullptr, TimeBasedRule::TimeRule())},
          
         // Fast zombies - very fast but weak
         {std::make_shared<ZombieSpawner>(gameplayInfoSource, enemyManager),
-         EnemyParams(6, 30.f, "resources/images/zombie_soldier.png", 0.5, 5.f, {}, nullptr, 
+         EnemyParams(5, 30.f, "resources/images/zombie_soldier.png", 0.1, 5.f, {}, nullptr, 
                     std::make_shared<BasicWeapon>(), TimeBasedRule::TimeRule())},
     };
 

@@ -1,2 +1,0 @@
-EnemiesKilled 0
-Deaths 0
