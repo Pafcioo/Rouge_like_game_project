@@ -1,2 +1,2 @@
-EnemiesKilled 29
-Deaths 5
+EnemiesKilled 36
+Deaths 6
