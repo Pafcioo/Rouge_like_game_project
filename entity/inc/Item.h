@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <utility>
+#include "core/inc/GameplayInfoSource.h"
 
 class Entity;
 
@@ -18,6 +19,8 @@ protected:
     Rarity rarity;
     float effectAmount;
     bool isUsed = false;
+    int useCounter;
+    std::shared_ptr<GameplayInfoSource> gameplayInfo;
 public:
     Item() = default;
     virtual ~Item() = default;
@@ -30,6 +33,9 @@ public:
     int getId();
     std::string getName();
     Rarity getRarity();
-    void setIsUsed(bool isUsed);
+    void setIsUsed(bool isUsed = true);
     bool getIsUsed();
+    void setUseCounter(int useCounter);
+    int getUseCounter();
+    void setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfo);
 };
