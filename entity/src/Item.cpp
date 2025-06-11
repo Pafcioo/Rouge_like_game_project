@@ -51,3 +51,15 @@ bool Item::getIsUsed()
 {
     return isUsed;
 }
+
+void Item::setUseCounter(int counter) {
+    useCounter = counter;
+}
+
+int Item::getUseCounter() {
+    return useCounter;
+}
+
+void Item::setGameplayInfo(std::shared_ptr<GameplayInfoSource> gameplayInfo) {
+    this->gameplayInfo = gameplayInfo;
+}
