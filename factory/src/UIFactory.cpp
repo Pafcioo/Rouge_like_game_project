@@ -268,9 +268,30 @@ std::shared_ptr<UIContainer> InGameUI::createUI(
     sf::Color::White,
     "GameTimer",
     false           // Not centered
+    );
+
+    container->addElement(gameTimer);
+
+    auto potionCounter = std::make_shared<DynamicText>(
+    [](std::shared_ptr<GameplayInfoSource> info, DynamicText* text) {
+        if (info->hasInfo("potionAmount")) {
+            int potions = info->getInfo<int>("potionAmount");
+            std::stringstream ss;
+            ss << "Potions: " << potions;
+            text->setString(ss.str());
+        }
+    },
+    gameplayInfo,
+    sf::Vector2f(50.f, 550.f),  // Position below timer
+    font,
+    "Potions: 0",    // Initial text
+    24,              // Font size
+    sf::Color::White,
+    "PotionCounter",
+    false            // Not centered
 );
 
-container->addElement(gameTimer);
+    container->addElement(potionCounter);
 
     container->subscribeToEvents();
     return container;
