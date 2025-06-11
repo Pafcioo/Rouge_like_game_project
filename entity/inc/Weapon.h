@@ -14,7 +14,7 @@ protected:
 public:
     Weapon(float fireRate);
     virtual ~Weapon() = default;
-    virtual void shoot(sf::Vector2f position, sf::Vector2f velocity, std::type_index type) = 0; //Shooting new projectiles
+    virtual void shoot(sf::Vector2f position, sf::Vector2f velocity, std::type_index type) = 0; 
     void update(float deltaTime);
     std::string getWeaponName();
 };

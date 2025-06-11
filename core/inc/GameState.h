@@ -31,7 +31,6 @@ public:
     virtual void update(float deltaTime);
     virtual void draw(sf::RenderTarget& target) const;
     
-    // Dependency injection
     virtual void setEventBus(std::shared_ptr<EventBus> newEventBus);
     virtual void setUIManager(std::shared_ptr<UIManager> newUIManager);
     virtual void setGameManager(std::shared_ptr<GameManager> newGameManager);

@@ -47,8 +47,6 @@ void CollisionManager::manageCollision(Entity* entity, sf::RectangleShape& wall,
         }
 
         entity->move(sf::Vector2f(pushX, pushY) * deltaTime);
-
-        std::cout << "Collision detected" << std::endl;
     }
 }
 
@@ -57,7 +55,6 @@ void CollisionManager::manageCollision(Entity *entity1, std::shared_ptr<Entity>&
     if (intersection.has_value()) {
         entity1->setHealth(entity1->getHealth()-1);
         entity2->setHealth(entity2->getHealth()-1);
-        std::cout << "Collision detected" << std::endl;
     }
 }
 

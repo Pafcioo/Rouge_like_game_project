@@ -12,11 +12,11 @@ public:
     ViewManager();
     ~ViewManager() = default;
     
-    // View accessors
+    // View getters
     const sf::View& getDefaultView() const;
     const sf::View& getGameplayView() const;
     
     // Apply views to the game window
-    void setDefaultView(std::shared_ptr<GameManager> gameManager);     // For UI rendering
-    void setGameplayView(std::shared_ptr<GameManager> gameManager);    // For world rendering with camera following
+    void setDefaultView(std::shared_ptr<GameManager> gameManager);
+    void setGameplayView(std::shared_ptr<GameManager> gameManager);
 };

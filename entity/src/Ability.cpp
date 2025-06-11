@@ -3,61 +3,127 @@
 #include "../inc/Entity.h"
 #include "../inc/Ability.h"
 
-Ability::Ability() {
+// Initialize ability in ready state
+Ability::Ability() 
+{
     isActive = false;
     isReady = true;
     currentCooldown = 0;
     currentDuration = 0;
 }
-float Ability::getCooldown() {return cooldown;}
-float Ability::getCurrentCooldown() {return currentCooldown;}
-float Ability::getDuration() {return duration;}
-void Ability::setCooldown(float newCooldown) {cooldown = newCooldown;}
-void Ability::setCurrentCooldown(float newCurrentCooldown) {currentCooldown = newCurrentCooldown;}
-void Ability::setDuration(float newDuration) {duration = newDuration;}
-void Ability::activate() {
-    if (isReady) {
+
+// Getters
+float Ability::getCooldown() 
+{
+    return cooldown;
+}
+
+float Ability::getCurrentCooldown() 
+{
+    return currentCooldown;
+}
+
+float Ability::getDuration() 
+{
+    return duration;
+}
+
+bool Ability::isAbilityActive() 
+{
+    return isActive;
+}
+
+bool Ability::isAbilityReady() 
+{
+    return isReady;
+}
+
+std::string Ability::getAbilityName() 
+{
+    return abilityName;
+}
+
+// Setters
+void Ability::setCooldown(float newCooldown) 
+{
+    cooldown = newCooldown;
+}
+
+void Ability::setCurrentCooldown(float newCurrentCooldown) 
+{
+    currentCooldown = newCurrentCooldown;
+}
+
+void Ability::setDuration(float newDuration) 
+{
+    duration = newDuration;
+}
+
+void Ability::setReady(bool newReady) 
+{
+    isReady = newReady;
+}
+
+void Ability::setAbilityName(std::string &newAbilityName) 
+{
+    abilityName = newAbilityName;
+}
+
+// Activate ability if ready
+void Ability::activate() 
+{
+    if (isReady) 
+    {
         isActive = true;
         currentCooldown = cooldown;
         currentDuration = duration;
     }
 }
-bool Ability::isAbilityActive() {return isActive;}
-bool Ability::isAbilityReady() {return isReady;}
-void Ability::setReady(bool newReady) {isReady = newReady;}
-std::string Ability::getAbilityName() {return abilityName;}
-void Ability::setAbilityName(std::string &newAbilityName) {abilityName = newAbilityName;}
 
-void Ability::update(float deltaTime) {
-    if (currentCooldown <= 0) {
+// Update cooldown and duration timers
+void Ability::update(float deltaTime) 
+{
+    if (currentCooldown <= 0) 
+    {
         isReady = true;
         isActive = false;
         currentCooldown = 0;
     }
-    else {
+    else 
+    {
         currentCooldown -= deltaTime;
         isReady = false;
     }
-    if (currentDuration <= 0) {
+    
+    if (currentDuration <= 0) 
+    {
         isActive = false;
         currentDuration = 0;
     }
-    else {
+    else 
+    {
         currentDuration -= deltaTime;
     }
 }
 
-SprintAbility::SprintAbility() {
+// Sprint ability constructor
+SprintAbility::SprintAbility() 
+{
     cooldown = 10.f;
     duration = 1.f;
     boost = 200.f;
 }
-void SprintAbility::influence(Entity *entity) {
-    if (isActive) {
+
+// Apply speed boost when active
+void SprintAbility::influence(Entity *entity) 
+{
+    if (isActive) 
+    {
         std::cout << "Sprinting" << std::endl;
         entity->setSpeed(entity->getEntityBaseSpeed()+boost);
     }
-    else {
+    else 
+    {
         entity->setSpeed(entity->getEntityBaseSpeed());
     }
 }

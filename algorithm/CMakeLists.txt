@@ -1,4 +1,3 @@
-# Game/AIController/CMakeLists.txt
 file(GLOB ALGORITHM_SOURCES
     CONFIGURE_DEPENDS
     src/*.cpp

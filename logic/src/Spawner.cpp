@@ -33,7 +33,6 @@ ZombieSpawner::ZombieSpawner(std::shared_ptr<GameplayInfoSource> gameplayInfoSou
 void ZombieSpawner::spawn(std::shared_ptr<SpawnConfig> config)
 {
     EnemySpawner::spawn(config);
-    std::cout << "Zombie spawned at position: " << config->getPosition().x << ", " << config->getPosition().y << std::endl;
 }
 
 

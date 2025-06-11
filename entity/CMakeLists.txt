@@ -1,4 +1,3 @@
-# Game/AIController/CMakeLists.txt
 file(GLOB ENTITY_SOURCES
     CONFIGURE_DEPENDS
     src/*.cpp

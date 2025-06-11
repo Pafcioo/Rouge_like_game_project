@@ -1,4 +1,3 @@
-# Game/Factory/CMakeLists.txt
 file(GLOB UI_SOURCES
     CONFIGURE_DEPENDS
     src/*.cpp

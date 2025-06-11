@@ -32,10 +32,6 @@ public:
         {
             throw std::runtime_error("Failed to load texture");
         }
-        else
-        {
-            std::cout<< "Texture loaded successfully" << std::endl;
-        }
         sprite.setTexture(texture, true);
     }
     void setScale(const sf::Vector2f& scale)

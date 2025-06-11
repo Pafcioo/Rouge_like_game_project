@@ -26,7 +26,7 @@ class EntitySpawnConfig : public SpawnConfig
 protected:
     int health;
     float speed;
-    sf::Texture* texture; // Use pointer to avoid copying
+    sf::Texture* texture;
     std::vector<std::shared_ptr<SpawnComponent>> components;
 public:
     EntitySpawnConfig(int health, float speed, sf::Vector2f position, sf::Texture* texture)

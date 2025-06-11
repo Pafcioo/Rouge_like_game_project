@@ -12,45 +12,41 @@
 #include "../../logic/inc/ProjectileManager.h"
 #include "../../logic/inc/CollisionManager.h"
 
-// Constructor initializes all core game systems and managers
+// Initialize all managers and systems
 GameManager::GameManager() : font("resources/fonts/Roboto_Condensed-Black.ttf")
 {
-    // Bus for events in game
+    // Event system setup
     eventBus = std::make_shared<EventBus>();
     inputManager = std::make_shared<InputManager>(eventBus, gameWindow);
-    // View set up
+    
+    // Core systems
     viewManager = std::make_shared<ViewManager>();
-    // Source for all game info like level, hp, position of player...
-    fileManager = std::make_shared<FileManager>("../../resources/data/GameData.txt");
+    fileManager = std::make_shared<FileManager>("resources/data/GameData.txt");
     gameplayInfoSource = std::make_shared<GameplayInfoSource>();
 
-    // Managers for entities like player and enemy
+    // Entity managers
     playerManager = std::make_shared<PlayerManager>();
     playerManager->setGameplayInfo(gameplayInfoSource);
     playerManager->setEventBus(eventBus);
     enemyManager = std::make_shared<EnemyManager>();
     enemyManager->setGameplayInfo(gameplayInfoSource);
-    // Managers for projectiles and colisions
+    
+    // Game logic managers
     projectileManager = std::make_shared<ProjectileManager>();
     collisionManager = std::make_shared<CollisionManager>();
-
     mapManager = std::make_shared<MapManager>();
-    // Spawner set up
     spawnManager = std::make_shared<SpawnManager>();
-    
-    // UIManager set up
     uiManager = std::make_shared<UIManager>();
 }
 
-
-// Initialize state manager after construction (requires shared_from_this)
+// Set up state manager after construction
 void GameManager::initStateManager()
 {
-    // Create state manager with dependencies
+    // Create state manager
     stateManager = std::make_shared<StateManager>(uiManager, shared_from_this(), eventBus);
     stateManager->subscribeToEvents();
     
-    // Set up initial menu state
+    // Start with menu state
     auto newState = std::make_shared<InMenu>();
     newState->setEventBus(eventBus);
     newState->setUIManager(uiManager);
@@ -58,7 +54,7 @@ void GameManager::initStateManager()
     stateManager->pushState(newState);
 }
 
-// Getter methods for accessing game resources and managers
+// Getters for game components
 sf::Font& GameManager::getFont()
 {
     return font;
@@ -120,27 +116,26 @@ std::shared_ptr<FileManager> GameManager::getFileManager() {
     return fileManager;
 }
 
-// Main game loop - handles window creation, timing, and rendering
+// Main game loop
 void GameManager::Play()
 {
-    // Create SFML window with 720p resolution and 60 fps limit
+    // Create window and initialize
     gameWindow.create(sf::VideoMode({1280, 720}), "SFML Game");
     gameWindow.setFramerateLimit(60);
     initStateManager();
-    // Main game loop
+    
+    // Game loop
     while (gameWindow.isOpen())
     {
-        // Calculate delta time for frame-independent movement
+        // Calculate delta time
         sf::Time elapsed = gameClock.restart();
         float deltaTime = elapsed.asSeconds();
-        // Cap delta time to prevent large jumps (e.g., during debugging pauses)
-        if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; 
+        if(deltaTime > 1/60.f) deltaTime = 1.f / 60.f; // Cap delta time
         
-        // Clear, update, draw, and display frame
+        // Update and render
         gameWindow.clear();
         stateManager->update(deltaTime);
         stateManager->draw(gameWindow);
         gameWindow.display();
     }
-    
 }

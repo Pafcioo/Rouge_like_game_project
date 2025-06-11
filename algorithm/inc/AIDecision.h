@@ -6,7 +6,7 @@ class AbstractAIController;
 class AbstractAIDecision
 {
     protected:
-        float stateSwitchDelay; // seconds, adjust as needed
+        float stateSwitchDelay;
         float stateSwitchTimer;
     public:
         virtual ~AbstractAIDecision() = default;

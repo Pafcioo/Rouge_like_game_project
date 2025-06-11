@@ -9,7 +9,7 @@ class InputManager
 {
 private:
     std::shared_ptr<EventBus> eventBus;
-    sf::RenderWindow& window;  // Referencja zamiast kopii
+    sf::RenderWindow& window;
 public:
     InputManager(std::shared_ptr<EventBus> eventBus, sf::RenderWindow& gameWindow);
     ~InputManager() = default;

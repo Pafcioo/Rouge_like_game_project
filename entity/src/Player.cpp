@@ -8,8 +8,8 @@ Player::Player(const float health, const float speed, const sf::Vector2f positio
 
 void Player::update(float deltaTime)
 {
-        Entity::update(deltaTime);
-        gameplayInfo->setInfo<float>("playerHealth", entityCurrentHealth);
+    Entity::update(deltaTime);
+    gameplayInfo->setInfo<float>("playerHealth", entityCurrentHealth);
 }
 
 

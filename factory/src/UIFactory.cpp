@@ -84,7 +84,7 @@ std::shared_ptr<UIContainer> MainMenuUI::createUI(
         "Quit",
         font,
         24,
-        [weakBus](){ if (auto bus = weakBus.lock()) {/* bus->publish(QuitGameEvent{}); */} }
+        [weakBus](){ if (auto bus = weakBus.lock()) {bus->publish(QuitGameEvent{});} }
     );
     container->addElement(quitButton);
 
@@ -94,7 +94,7 @@ std::shared_ptr<UIContainer> MainMenuUI::createUI(
         0.4,
         sf::Vector2f(840.f,360.f),
         sf::degrees(0),
-        "Assets/player.png"
+        "resources/images/player.png"
     );
     container->addElement(playerImage);
 

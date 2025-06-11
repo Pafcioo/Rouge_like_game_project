@@ -3,7 +3,7 @@
 
 AIDecision::AIDecision()
 {
-    stateSwitchDelay = 0.5f; // seconds, adjust as needed
+    stateSwitchDelay = 0.5f;
     stateSwitchTimer = 0.0f;
 }
 

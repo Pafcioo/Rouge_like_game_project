@@ -16,9 +16,9 @@ struct MapData
 class MapManager
 {
 private:
-    std::unordered_map<std::string, MapData> mapDataMap; // Map label -> MapData
-    std::unordered_map<std::string, std::shared_ptr<GameMap>> gameMaps; // Map label -> GameMap (smart pointer)
-    std::string currentMapLabel; // Label of the currently active map
+    std::unordered_map<std::string, MapData> mapDataMap;
+    std::unordered_map<std::string, std::shared_ptr<GameMap>> gameMaps;
+    std::string currentMapLabel;
 
 public:
     MapManager();

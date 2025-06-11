@@ -11,7 +11,7 @@
 MapManager::MapManager()
 {
    try {
-       loadMaps("Assets/mapData.csv");
+       loadMaps("resources/data/mapData.csv");
    } catch (const std::exception& e) {
        std::cerr << "Error: " << e.what() << std::endl;
    }

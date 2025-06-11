@@ -4,7 +4,6 @@
 #include <any>
 #include <memory>
 
-// Forward declaration
 class GameplayInfoSource;
 
 class FileManager {
