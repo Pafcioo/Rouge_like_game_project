@@ -109,8 +109,8 @@ void Ability::update(float deltaTime)
 // Sprint ability constructor
 SprintAbility::SprintAbility() 
 {
-    cooldown = 10.f;
-    duration = 1.f;
+    cooldown = 1.5f;
+    duration = 0.2f;
     boost = 200.f;
 }
 
